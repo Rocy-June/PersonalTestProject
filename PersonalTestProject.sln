@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wfTest", "wfTest\wfTest.csproj", "{1DD0649B-DD9F-4230-BE17-3521688B8096}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "conTest", "conTest\conTest.csproj", "{8B0D14DB-1B3C-4B12-9D9C-ADB9088EF076}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketForm", "WebSocketForm\WebSocketForm.csproj", "{FB3AFA17-59D2-4CCC-807C-BBB22E0CD5BA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1DD0649B-DD9F-4230-BE17-3521688B8096}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DD0649B-DD9F-4230-BE17-3521688B8096}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DD0649B-DD9F-4230-BE17-3521688B8096}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DD0649B-DD9F-4230-BE17-3521688B8096}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B0D14DB-1B3C-4B12-9D9C-ADB9088EF076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B0D14DB-1B3C-4B12-9D9C-ADB9088EF076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B0D14DB-1B3C-4B12-9D9C-ADB9088EF076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B0D14DB-1B3C-4B12-9D9C-ADB9088EF076}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB3AFA17-59D2-4CCC-807C-BBB22E0CD5BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB3AFA17-59D2-4CCC-807C-BBB22E0CD5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB3AFA17-59D2-4CCC-807C-BBB22E0CD5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB3AFA17-59D2-4CCC-807C-BBB22E0CD5BA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3E73C41-B37A-498C-BC8A-E2FC6569E74B}
+	EndGlobalSection
+EndGlobal
