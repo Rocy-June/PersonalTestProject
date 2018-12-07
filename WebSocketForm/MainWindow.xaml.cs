@@ -30,14 +30,6 @@ namespace WebSocketForm
             InitializeComponent();
 
             OnlineUserList.Items.Clear();
-            OnlineUserList.Items.Add(new { });
-            OnlineUserList.Items.Add(new { });
-            OnlineUserList.Items.Add(new { });
-
-            for (int i = 0; i < 10; i++)
-            {
-                Button_Click(addOne, null);
-            }
         }
 
         private void Window_Drag(object sender, MouseButtonEventArgs e)
@@ -105,34 +97,24 @@ namespace WebSocketForm
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Thread.Sleep(10);
+            OnlineUserList.Items.Clear();
+
             var rd = new Random();
-            var lif = new List<IconFont>();
-            foreach (var _if in Enum.GetValues(typeof(IconFont)))
-            {
-                if (rd.Next(100) % 2 == 0) lif.Add((IconFont)_if);
-            }
-            OnlineUserList.Items.Add(new OnlineUser()
-            {
-                IsTop = rd.Next(100) % 2 == 0 ? true : false,
-                Title = $"测试用户{OnlineUserList.Items.Count + 1}",
-                LastTime = new DateTime(1, 1, 1, rd.Next(23), rd.Next(59), 0),
-                LastSay = $"测试消息来自于 192.168.4.{OnlineUserList.Items.Count + 1}",
-                Status = lif
-            });
+
         }
 
-        private void GetListBoxSelected(object sender, RoutedEventArgs e)
+        private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var olUser = (OnlineUser)OnlineUserList.SelectedItem;
-                MessageBox.Show(olUser.Title);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
+            OnlineUserList.Items.Clear();
+
+            var rd = new Random();
+
+
+        }
+
+        private void Button3_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

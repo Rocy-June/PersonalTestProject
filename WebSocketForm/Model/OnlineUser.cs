@@ -8,6 +8,12 @@ namespace WebSocketForm.Model
 {
     class OnlineUser
     {
+        public OnlineUser()
+        {
+            LastTime = new DateTime();
+            Status = new List<IconFont>();
+        }
+
         public bool IsTop { get; set; }
         public string IsTopVisibilityStr { get { return IsTop ? "Visible" : "Hidden"; } }
         public string Title { get; set; }

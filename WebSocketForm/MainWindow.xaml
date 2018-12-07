@@ -442,8 +442,9 @@
                     </Border>
                     <Border Style="{StaticResource ChatBox}">
                         <Grid>
-                            <Button Name="addOne" Content="添加一行" HorizontalAlignment="Left" Margin="211,170,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-                            <Button Content="获取选择" HorizontalAlignment="Left" Margin="211,216,0,0" VerticalAlignment="Top" Width="75" Click="GetListBoxSelected"/>
+                            <Button Content="读取在线" HorizontalAlignment="Left" Margin="211,170,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
+                            <Button Content="读取在线(异步)" HorizontalAlignment="Left" Margin="211,194,0,0" VerticalAlignment="Top" Width="100" Click="Button2_Click"/>
+                            <Button Content="清空列表" HorizontalAlignment="Left" Margin="211,218,0,0" VerticalAlignment="Top" Width="100" Click="Button3_Click"/>
                         </Grid>
                     </Border>
                 </Grid>
