@@ -64,6 +64,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enum\PostActionType.cs" />
+    <Compile Include="Function\ExtendFunctions.cs" />
+    <Compile Include="Function\LocalServer.cs" />
+    <Compile Include="Function\Tool.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -71,11 +75,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Client.cs" />
-    <Compile Include="Model\Function.cs" />
-    <Compile Include="Model\IconFont.cs" />
+    <Compile Include="Function\SocketTool.cs" />
+    <Compile Include="Enum\IconFont.cs" />
     <Compile Include="Model\IConnection.cs" />
+    <Compile Include="Model\NickName.cs" />
     <Compile Include="Model\OnlineUser.cs" />
+    <Compile Include="Model\PostInfo.cs" />
     <Compile Include="Model\Server.cs" />
+    <Compile Include="Model\Setting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +16,8 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WebSocketForm.Enum;
+using WebSocketForm.Function;
 using WebSocketForm.Model;
 
 namespace WebSocketForm
@@ -23,13 +27,42 @@ namespace WebSocketForm
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private List<OnlineUser> olusers = new List<OnlineUser>();
 
         public MainWindow()
         {
             InitializeComponent();
 
+            LocalServer.LoginRequestReceived += LocalServer_LoginRequestReceived;
+            LocalServer.OpenLocalServer();
+
+            new Thread(() =>
+            {
+                SocketTool.OnlineBroadcasting();
+            })
+            { IsBackground = true }.Start();
+
             OnlineUserList.Items.Clear();
+        }
+
+        #region 服务器事件
+        private void LocalServer_LoginRequestReceived(PostInfo<object> data, IPAddress ip)
+        {
+            Setting.AddMessageMenu(new MessageListModel()
+            {
+                IP = ip,
+                IsTop = false,
+                LastSay = "我上线了",
+                LastTime = new DateTime(),
+                Status = new List<IconFont>(),
+                Title = "测试"
+            });
+            OnlineUserList.DataContext = Setting.GetMessageList();
+        }
+        #endregion
+
+        private void RequestReceived(PostInfo<object> data, IPEndPoint ip)
+        {
+            MessageBox.Show(ip.ToString());
         }
 
         private void Window_Drag(object sender, MouseButtonEventArgs e)
@@ -58,9 +91,17 @@ namespace WebSocketForm
             }
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            new Thread(() =>
+            {
+                SocketTool.OfflineBroadcasting();
+            }).Start();
+        }
+
         private void ExitApplication(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            Close();
         }
 
         private void MenuButton_Enter(object sender, MouseEventArgs e)
@@ -99,22 +140,25 @@ namespace WebSocketForm
         {
             OnlineUserList.Items.Clear();
 
-            var rd = new Random();
-
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            OnlineUserList.Items.Clear();
+            var tcpClient = new TcpClient();
+            //var ipep = new IPEndPoint(IPAddress.Broadcast, SocketTool.port);
 
-            var rd = new Random();
+            var postData = new PostInfo<object>()
+            {
+                Action = PostActionType.login
+            };
+            var bytesData = postData.ToBytes();
 
-
+            tcpClient.ConnectAsync(IPAddress.Broadcast, SocketTool.port);
         }
 
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
-
+            SocketTool.OnlineBroadcasting();
         }
     }
 }

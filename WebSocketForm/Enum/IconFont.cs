@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSocketForm.Model
+namespace WebSocketForm.Enum
 {
-    class IconFontChar
+    public class IconFontChar
     {
         public static char Get(IconFont _if)
         {
@@ -18,7 +18,7 @@ namespace WebSocketForm.Model
         }
     }
 
-    enum IconFont
+    public enum IconFont
     {
         favor_fill,
         round_close_fill,

@@ -4,6 +4,7 @@
         Title="WebSocket通讯器" ResizeMode="CanResize"
         Width="920" Height="800"
         MinWidth="700" MinHeight="600"
+        Closing="Window_Closing"
         Style="{StaticResource WindowStyle}">
     <Window.Resources>
         <Storyboard x:Key="ControlBoxBlueBackGround">
@@ -442,9 +443,9 @@
                     </Border>
                     <Border Style="{StaticResource ChatBox}">
                         <Grid>
-                            <Button Content="读取在线" HorizontalAlignment="Left" Margin="211,170,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
-                            <Button Content="读取在线(异步)" HorizontalAlignment="Left" Margin="211,194,0,0" VerticalAlignment="Top" Width="100" Click="Button2_Click"/>
-                            <Button Content="清空列表" HorizontalAlignment="Left" Margin="211,218,0,0" VerticalAlignment="Top" Width="100" Click="Button3_Click"/>
+                            <Button Content="BTN1" HorizontalAlignment="Left" Margin="211,170,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
+                            <Button Content="BTN2" HorizontalAlignment="Left" Margin="211,194,0,0" VerticalAlignment="Top" Width="100" Click="Button2_Click"/>
+                            <Button Content="BTN3" HorizontalAlignment="Left" Margin="211,218,0,0" VerticalAlignment="Top" Width="100" Click="Button3_Click"/>
                         </Grid>
                     </Border>
                 </Grid>
