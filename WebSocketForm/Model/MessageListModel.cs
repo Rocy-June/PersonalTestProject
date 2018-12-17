@@ -46,8 +46,10 @@ namespace WebSocketForm.Model
                         title = IP.ToString();
                     }
                 }
-                title = _Title;
-
+                else
+                {
+                    title = _Title;
+                }
                 return title;
             }
 

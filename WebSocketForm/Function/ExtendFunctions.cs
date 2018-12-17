@@ -30,6 +30,27 @@ namespace WebSocketForm.Function
         }
 
         /// <summary>
+        /// 将变量转换为int64
+        /// </summary>
+        /// <param name="obj">任意变量</param>
+        /// <returns>值</returns>
+        public static long Long(this object obj)
+        {
+            try { return Convert.ToInt64(obj); }
+            catch { return 0; }
+        }
+        /// <summary>
+        /// 将变量转换为int64, 但无法转换会返回null
+        /// </summary>
+        /// <param name="obj">任意变量</param>
+        /// <returns>值</returns>
+        public static long? ToLongWidthNull(this object obj)
+        {
+            try { return Convert.ToInt64(obj); }
+            catch { return null; }
+        }
+
+        /// <summary>
         /// 将变量转换为double
         /// </summary>
         /// <param name="obj">任意变量</param>

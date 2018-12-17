@@ -27,12 +27,16 @@ namespace WebSocketForm
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static Thread currentThread;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            LocalServer.LoginRequestReceived += LocalServer_LoginRequestReceived;
+            currentThread = Thread.CurrentThread;
+
+            LocalServer.LoginReceived += LocalServer_LoginReceived;
+            LocalServer.LogoutReceived += LocalServer_LogoutReceived;
             LocalServer.OpenLocalServer();
 
             new Thread(() =>
@@ -42,29 +46,31 @@ namespace WebSocketForm
             { IsBackground = true }.Start();
 
             OnlineUserList.Items.Clear();
+            OnlineUserList.ItemsSource = Setting.GetMessageList();
         }
 
         #region 服务器事件
-        private void LocalServer_LoginRequestReceived(PostInfo<object> data, IPAddress ip)
+        private void LocalServer_LoginReceived(PostInfo<object> data, IPAddress ip)
         {
             Setting.AddMessageMenu(new MessageListModel()
             {
                 IP = ip,
                 IsTop = false,
                 LastSay = "我上线了",
-                LastTime = new DateTime(),
+                LastTime = DateTime.Now,
                 Status = new List<IconFont>(),
                 Title = "测试"
             });
-            OnlineUserList.DataContext = Setting.GetMessageList();
+            OnlineUserList.Items.Refresh();
+        }
+
+        private void LocalServer_LogoutReceived(PostInfo<object> data, IPAddress ip)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
-        private void RequestReceived(PostInfo<object> data, IPEndPoint ip)
-        {
-            MessageBox.Show(ip.ToString());
-        }
-
+        #region 窗体基础事件
         private void Window_Drag(object sender, MouseButtonEventArgs e)
         {
             FrameworkElement c = (FrameworkElement)sender;
@@ -135,6 +141,7 @@ namespace WebSocketForm
                 storyBord.Begin();
             }
         }
+        #endregion
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -144,16 +151,21 @@ namespace WebSocketForm
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
-            var tcpClient = new TcpClient();
-            //var ipep = new IPEndPoint(IPAddress.Broadcast, SocketTool.port);
+            Random rd = new Random();
 
-            var postData = new PostInfo<object>()
+            var ip = "192.168.4." + rd.Next(255);
+
+            Setting.AddMessageMenu(new MessageListModel()
             {
-                Action = PostActionType.login
-            };
-            var bytesData = postData.ToBytes();
+                IP = IPAddress.Parse(ip),
+                IsTop = false,
+                LastSay = ip + " 我上线了",
+                LastTime = DateTime.Now,
+                Status = new List<IconFont>(),
+                Title = "测试"
+            });
 
-            tcpClient.ConnectAsync(IPAddress.Broadcast, SocketTool.port);
+            OnlineUserList.Items.Refresh();
         }
 
         private void Button3_Click(object sender, RoutedEventArgs e)

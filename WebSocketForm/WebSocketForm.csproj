@@ -79,7 +79,7 @@
     <Compile Include="Enum\IconFont.cs" />
     <Compile Include="Model\IConnection.cs" />
     <Compile Include="Model\NickName.cs" />
-    <Compile Include="Model\OnlineUser.cs" />
+    <Compile Include="Model\MessageListModel.cs" />
     <Compile Include="Model\PostInfo.cs" />
     <Compile Include="Model\Server.cs" />
     <Compile Include="Model\Setting.cs" />

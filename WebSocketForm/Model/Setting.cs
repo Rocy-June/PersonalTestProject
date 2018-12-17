@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WebSocketForm.Function;
 
 namespace WebSocketForm.Model
 {
@@ -30,9 +31,20 @@ namespace WebSocketForm.Model
         {
             for (var i = 0; i < messageList.Count; i++)
             {
-                if (messageList[i].IP == value.IP)
+                if (messageList[i].IP.Equals(value.IP))
                 {
-                    messageList[i] = value;
+                    foreach (var prop in value.GetType().GetProperties())
+                    {
+                        var type = prop.PropertyType.Name;
+                        var data = prop.GetValue(value);
+                        if (type == "string")
+                        {
+                            if (!string.IsNullOrWhiteSpace((string)data))
+                            {
+                                prop.SetValue(messageList[i], data);
+                            }
+                        }
+                    }
                     return true;
                 }
             }
