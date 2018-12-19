@@ -61,6 +61,8 @@ namespace WebSocketForm
                 Status = new List<IconFont>(),
                 Title = "测试"
             });
+
+            OnlineUserList.ItemsSource = Setting.GetMessageList();
             OnlineUserList.Items.Refresh();
         }
 
@@ -145,8 +147,8 @@ namespace WebSocketForm
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            OnlineUserList.Items.Clear();
-
+            Setting.SettingSave();
+            Setting.SettingLoad();
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
@@ -158,13 +160,14 @@ namespace WebSocketForm
             Setting.AddMessageMenu(new MessageListModel()
             {
                 IP = IPAddress.Parse(ip),
-                IsTop = false,
+                IsTop = rd.Next(100) % 2 == 0 ? true : false,
                 LastSay = ip + " 我上线了",
                 LastTime = DateTime.Now,
                 Status = new List<IconFont>(),
                 Title = "测试"
             });
 
+            OnlineUserList.ItemsSource = Setting.GetMessageList();
             OnlineUserList.Items.Refresh();
         }
 

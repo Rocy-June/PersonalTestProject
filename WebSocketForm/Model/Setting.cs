@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -11,16 +12,93 @@ namespace WebSocketForm.Model
 {
     public class Setting
     {
+        #region InfoSave
+
+        private static readonly byte[] spliter = new byte[] { 0x00, 0x33, 0x00 };
+
+        public static Exception SettingSave()
+        {
+            try
+            {
+                using (var fs = new FileStream("\\MessageList.dat", FileMode.Truncate, FileAccess.Write))
+                {
+                    var messageList_data = GetMessageList();
+
+                    for (var i = 0; i < messageList_data.Count; i++)
+                    {
+                        var bytesData = messageList_data[i].ToBytes();
+                        fs.Write(bytesData, 0, bytesData.Length);
+
+                        if (i != messageList_data.Count - 1)
+                        {
+                            fs.Write(spliter, 0, spliter.Length);
+                        }
+                    }
+
+                    fs.Flush();
+                }
+
+                using (var fs = new FileStream("\\NickNameList.dat", FileMode.Truncate, FileAccess.Write))
+                {
+                    var nickname_data = GetNickNames();
+
+                    for (var i = 0; i < nickname_data.Count; i++)
+                    {
+                        var bytesData = nickname_data[i].ToBytes();
+                        fs.Write(bytesData, 0, bytesData.Length);
+
+                        if (i != nickname_data.Count - 1)
+                        {
+                            fs.Write(spliter, 0, spliter.Length);
+                        }
+                    }
+
+                    fs.Flush();
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+            return null;
+        }
+
+        public static Exception SettingLoad()
+        {
+            try
+            {
+                var messageListData = new List<MessageListModel>();
+                byte[] messageListBytesData = null;
+                using (var fs = new FileStream("\\MessageList.dat", FileMode.Open, FileAccess.Read))
+                {
+                    messageListBytesData = new byte[fs.Length];
+                    fs.Read(messageListBytesData, 0, fs.Length.ToIntWidthEx());
+                }
+
+                var thisDataStartIndex = 0;
+                for (int i = 0; i < messageListBytesData.Length; i++)
+                {
+
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+
+            return null;
+        }
+
+        #endregion
 
         #region MessageList
         /// <summary>
         /// 获取菜单设定列表
         /// </summary>
         /// <returns></returns>
-        public static List<MessageListModel> GetMessageList()
-        {
-            return messageList;
-        }
+        public static List<MessageListModel> GetMessageList() => messageList.OrderByDescending(e => e.IsTop).ThenByDescending(e => e.LastTime).ToList();
 
         /// <summary>
         /// 新增一条菜单设定
@@ -35,11 +113,10 @@ namespace WebSocketForm.Model
                 {
                     foreach (var prop in value.GetType().GetProperties())
                     {
-                        var type = prop.PropertyType.Name;
-                        var data = prop.GetValue(value);
-                        if (type == "string")
+                        if (prop.CanWrite)
                         {
-                            if (!string.IsNullOrWhiteSpace((string)data))
+                            var data = prop.GetValue(value);
+                            if (data != null)
                             {
                                 prop.SetValue(messageList[i], data);
                             }
@@ -60,10 +137,7 @@ namespace WebSocketForm.Model
         /// 获取昵称设定列表
         /// </summary>
         /// <returns></returns>
-        public static List<NickName> GetNickNames()
-        {
-            return nickNames;
-        }
+        public static List<NickName> GetNickNames() => nickNames;
 
         /// <summary>
         /// 新增一条昵称设定
@@ -74,9 +148,19 @@ namespace WebSocketForm.Model
         {
             for (var i = 0; i < nickNames.Count; i++)
             {
-                if (nickNames[i].IP == value.IP)
+                if (nickNames[i].IP.Equals(value.IP))
                 {
-                    nickNames[i].Name = value.Name;
+                    foreach (var prop in value.GetType().GetProperties())
+                    {
+                        if (prop.CanWrite)
+                        {
+                            var data = prop.GetValue(value);
+                            if (data != null)
+                            {
+                                prop.SetValue(nickNames[i], data);
+                            }
+                        }
+                    }
                     return true;
                 }
             }

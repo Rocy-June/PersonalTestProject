@@ -21,11 +21,11 @@ namespace WebSocketForm.Model
         /// <summary>
         /// 是否置顶
         /// </summary>
-        public bool IsTop { get; set; }
+        public bool? IsTop { get; set; }
         /// <summary>
         /// 返回IsTop的可见属性字符串
         /// </summary>
-        public string IsTopVisibilityStr { get { return IsTop ? "Visible" : "Hidden"; } }
+        public string IsTopVisibilityStr => IsTop == true ? "Visible" : "Hidden";
         /// <summary>
         /// 标题
         /// </summary>
