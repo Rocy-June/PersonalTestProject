@@ -76,10 +76,21 @@ namespace WebSocketForm.Model
                 }
 
                 var thisDataStartIndex = 0;
-                for (int i = 0; i < messageListBytesData.Length; i++)
+                for (int i = 0; i < messageListBytesData.Length - 2; i++)
                 {
-
+                    if (messageListBytesData[i] == 0x00 && messageListBytesData[i] == 0x33 && messageListBytesData[i] == 0x00)
+                    {
+                        var entityBytes = new byte[i - thisDataStartIndex];
+                        Array.Copy(messageListBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
+                        var savedEntity = entityBytes.ToObject<MessageListModel>();
+                        messageListData.Add(savedEntity);
+                    }
                 }
+                //var entityBytes = new byte[messageListBytesData.Length - thisDataStartIndex];
+                //Array.Copy(messageListBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
+                //var savedEntity = entityBytes.ToObject<MessageListModel>();
+                //messageListData.Add(savedEntity);
+
 
 
             }
