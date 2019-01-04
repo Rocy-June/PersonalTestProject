@@ -8,6 +8,7 @@ using WebSocketForm.Enum;
 
 namespace WebSocketForm.Model
 {
+    [Serializable]
     public class MessageListModel
     {
         public MessageListModel()

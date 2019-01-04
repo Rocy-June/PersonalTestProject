@@ -9,10 +9,10 @@ using WebSocketForm.Enum;
 namespace WebSocketForm.Model
 {
     [Serializable]
-    public class PostInfo<T> where T : new()
+    public class PostInfo
     {
         public PostActionType Action { get; set; }
         public IPAddress IP { get; set; }
-        public T Data { get; set; }
+        public object Data { get; set; }
     }
 }

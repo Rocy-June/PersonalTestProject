@@ -45,7 +45,7 @@ namespace WebSocketForm.Function
             var udpClient = new UdpClient();
             var ipep = new IPEndPoint(IPAddress.Broadcast, port);
 
-            var postData = new PostInfo<object>()
+            var postData = new PostInfo()
             {
                 Action = PostActionType.login
             };
@@ -62,7 +62,7 @@ namespace WebSocketForm.Function
             var udpClient = new UdpClient();
             var ipep = new IPEndPoint(IPAddress.Broadcast, port);
 
-            var postData = new PostInfo<object>()
+            var postData = new PostInfo()
             {
                 Action = PostActionType.logout
             };

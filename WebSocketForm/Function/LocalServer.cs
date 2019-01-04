@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using WebSocketForm.Enum;
 using WebSocketForm.Model;
+using WebSocketForm.View;
 
 namespace WebSocketForm.Function
 {
@@ -20,14 +21,14 @@ namespace WebSocketForm.Function
 
         public delegate void RequestReceivedHandler<T>(T data, IPAddress ip);
 
-        private static readonly List<RequestReceivedHandler<PostInfo<object>>> UnknownReceivedList = new List<RequestReceivedHandler<PostInfo<object>>>();
-        private static readonly List<RequestReceivedHandler<PostInfo<object>>> LoginReceivedList = new List<RequestReceivedHandler<PostInfo<object>>>();
-        private static readonly List<RequestReceivedHandler<PostInfo<object>>> LogoutReceivedList = new List<RequestReceivedHandler<PostInfo<object>>>();
-        private static readonly List<RequestReceivedHandler<PostInfo<object>>> StillOnlineReceivedList = new List<RequestReceivedHandler<PostInfo<object>>>();
-        private static readonly List<RequestReceivedHandler<PostInfo<object>>> MessageSendReceivedList = new List<RequestReceivedHandler<PostInfo<object>>>();
-        private static readonly List<RequestReceivedHandler<PostInfo<object>>> FileSendReceivedList = new List<RequestReceivedHandler<PostInfo<object>>>();
+        private static readonly List<RequestReceivedHandler<PostInfo>> UnknownReceivedList = new List<RequestReceivedHandler<PostInfo>>();
+        private static readonly List<RequestReceivedHandler<PostInfo>> LoginReceivedList = new List<RequestReceivedHandler<PostInfo>>();
+        private static readonly List<RequestReceivedHandler<PostInfo>> LogoutReceivedList = new List<RequestReceivedHandler<PostInfo>>();
+        private static readonly List<RequestReceivedHandler<PostInfo>> StillOnlineReceivedList = new List<RequestReceivedHandler<PostInfo>>();
+        private static readonly List<RequestReceivedHandler<PostInfo>> MessageSendReceivedList = new List<RequestReceivedHandler<PostInfo>>();
+        private static readonly List<RequestReceivedHandler<PostInfo>> FileSendReceivedList = new List<RequestReceivedHandler<PostInfo>>();
 
-        public static event RequestReceivedHandler<PostInfo<object>> UnknownReceived
+        public static event RequestReceivedHandler<PostInfo> UnknownReceived
         {
             add
             {
@@ -44,7 +45,7 @@ namespace WebSocketForm.Function
                 }
             }
         }
-        public static event RequestReceivedHandler<PostInfo<object>> LoginReceived
+        public static event RequestReceivedHandler<PostInfo> LoginReceived
         {
             add
             {
@@ -61,7 +62,7 @@ namespace WebSocketForm.Function
                 }
             }
         }
-        public static event RequestReceivedHandler<PostInfo<object>> LogoutReceived
+        public static event RequestReceivedHandler<PostInfo> LogoutReceived
         {
             add
             {
@@ -78,7 +79,7 @@ namespace WebSocketForm.Function
                 }
             }
         }
-        public static event RequestReceivedHandler<PostInfo<object>> StillOnlineReceived
+        public static event RequestReceivedHandler<PostInfo> StillOnlineReceived
         {
             add
             {
@@ -95,7 +96,7 @@ namespace WebSocketForm.Function
                 }
             }
         }
-        public static event RequestReceivedHandler<PostInfo<object>> MessageSendReceived
+        public static event RequestReceivedHandler<PostInfo> MessageSendReceived
         {
             add
             {
@@ -112,7 +113,7 @@ namespace WebSocketForm.Function
                 }
             }
         }
-        public static event RequestReceivedHandler<PostInfo<object>> FileSendReceived
+        public static event RequestReceivedHandler<PostInfo> FileSendReceived
         {
             add
             {
@@ -146,7 +147,7 @@ namespace WebSocketForm.Function
             
             while (true)
             {
-                var data = server.Receive(ref receive_ipep).ToObject<PostInfo<object>>();
+                var data = server.Receive(ref receive_ipep).ToObject<PostInfo>();
 
                 switch (data.Action)
                 {

@@ -14,13 +14,14 @@ namespace WebSocketForm.Model
     {
         #region InfoSave
 
+        public static readonly string path = AppDomain.CurrentDomain.BaseDirectory;
         private static readonly byte[] spliter = new byte[] { 0x00, 0x33, 0x00 };
 
         public static Exception SettingSave()
         {
             try
             {
-                using (var fs = new FileStream("\\MessageList.dat", FileMode.Truncate, FileAccess.Write))
+                using (var fs = new FileStream(path + "MessageList.dat", FileMode.Create, FileAccess.Write))
                 {
                     var messageList_data = GetMessageList();
 
@@ -38,7 +39,7 @@ namespace WebSocketForm.Model
                     fs.Flush();
                 }
 
-                using (var fs = new FileStream("\\NickNameList.dat", FileMode.Truncate, FileAccess.Write))
+                using (var fs = new FileStream(path + "NickNameList.dat", FileMode.Create, FileAccess.Write))
                 {
                     var nickname_data = GetNickNames();
 
@@ -67,31 +68,57 @@ namespace WebSocketForm.Model
         {
             try
             {
-                var messageListData = new List<MessageListModel>();
                 byte[] messageListBytesData = null;
-                using (var fs = new FileStream("\\MessageList.dat", FileMode.Open, FileAccess.Read))
+                using (var fs = new FileStream(path + "MessageList.dat", FileMode.OpenOrCreate, FileAccess.Read))
                 {
                     messageListBytesData = new byte[fs.Length];
                     fs.Read(messageListBytesData, 0, fs.Length.ToIntWidthEx());
                 }
-
-                var thisDataStartIndex = 0;
-                for (int i = 0; i < messageListBytesData.Length - 2; i++)
+                if (messageListBytesData.Length > 0)
                 {
-                    if (messageListBytesData[i] == 0x00 && messageListBytesData[i] == 0x33 && messageListBytesData[i] == 0x00)
+                    var thisDataStartIndex = 0;
+                    for (int i = 0; i < messageListBytesData.Length - 2; i++)
                     {
-                        var entityBytes = new byte[i - thisDataStartIndex];
-                        Array.Copy(messageListBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
-                        var savedEntity = entityBytes.ToObject<MessageListModel>();
-                        messageListData.Add(savedEntity);
+                        if (messageListBytesData[i] == 0x00 && messageListBytesData[i + 1] == 0x33 && messageListBytesData[i + 2] == 0x00)
+                        {
+                            var entityBytes = new byte[i - thisDataStartIndex];
+                            Array.Copy(messageListBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
+                            var savedEntity = entityBytes.ToObject<MessageListModel>();
+                            messageList.Add(savedEntity);
+                        }
                     }
+                    var lastEntityBytes = new byte[messageListBytesData.Length - thisDataStartIndex];
+                    Array.Copy(messageListBytesData, thisDataStartIndex, lastEntityBytes, 0, lastEntityBytes.Length);
+                    var lastSavedEntity = lastEntityBytes.ToObject<MessageListModel>();
+                    AddMessageMenu(lastSavedEntity);
                 }
-                //var entityBytes = new byte[messageListBytesData.Length - thisDataStartIndex];
-                //Array.Copy(messageListBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
-                //var savedEntity = entityBytes.ToObject<MessageListModel>();
-                //messageListData.Add(savedEntity);
 
 
+
+                byte[] nickNameListBytesData = null;
+                using (var fs = new FileStream(path + "NickNameList.dat", FileMode.OpenOrCreate, FileAccess.Read))
+                {
+                    nickNameListBytesData = new byte[fs.Length];
+                    fs.Read(nickNameListBytesData, 0, fs.Length.ToIntWidthEx());
+                }
+                if (nickNameListBytesData.Length > 0)
+                {
+                    var thisDataStartIndex = 0;
+                    for (int i = 0; i < nickNameListBytesData.Length - 2; i++)
+                    {
+                        if (nickNameListBytesData[i] == 0x00 && nickNameListBytesData[i + 1] == 0x33 && nickNameListBytesData[i + 2] == 0x00)
+                        {
+                            var entityBytes = new byte[i - thisDataStartIndex];
+                            Array.Copy(nickNameListBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
+                            var savedEntity = entityBytes.ToObject<NickName>();
+                            nickNames.Add(savedEntity);
+                        }
+                    }
+                    var lastEntityBytes = new byte[nickNameListBytesData.Length - thisDataStartIndex];
+                    Array.Copy(nickNameListBytesData, thisDataStartIndex, lastEntityBytes, 0, lastEntityBytes.Length);
+                    var lastSavedEntity = lastEntityBytes.ToObject<NickName>();
+                    AddNickName(lastSavedEntity);
+                }
 
             }
             catch (Exception ex)

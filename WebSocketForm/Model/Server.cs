@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using WebSocketForm.Model.Interface;
 using static System.Console;
 
 namespace WebSocketForm.Model

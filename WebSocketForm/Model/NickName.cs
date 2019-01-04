@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebSocketForm.Model
 {
+    [Serializable]
     public class NickName
     {
         public IPAddress IP { get; set; }

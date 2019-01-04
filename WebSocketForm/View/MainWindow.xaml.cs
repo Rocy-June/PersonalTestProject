@@ -20,7 +20,7 @@ using WebSocketForm.Enum;
 using WebSocketForm.Function;
 using WebSocketForm.Model;
 
-namespace WebSocketForm
+namespace WebSocketForm.View
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -32,6 +32,12 @@ namespace WebSocketForm
         public MainWindow()
         {
             InitializeComponent();
+
+            var settingLoadException = Setting.SettingLoad();
+            if (settingLoadException != null)
+            {
+                MessageBox.Show("读取设定时出现错误:\r\n" + settingLoadException.Message);
+            }
 
             currentThread = Thread.CurrentThread;
 
@@ -50,7 +56,7 @@ namespace WebSocketForm
         }
 
         #region 服务器事件
-        private void LocalServer_LoginReceived(PostInfo<object> data, IPAddress ip)
+        private void LocalServer_LoginReceived(PostInfo data, IPAddress ip)
         {
             Setting.AddMessageMenu(new MessageListModel()
             {
@@ -66,9 +72,20 @@ namespace WebSocketForm
             OnlineUserList.Items.Refresh();
         }
 
-        private void LocalServer_LogoutReceived(PostInfo<object> data, IPAddress ip)
+        private void LocalServer_LogoutReceived(PostInfo data, IPAddress ip)
         {
-            throw new NotImplementedException();
+            Setting.AddMessageMenu(new MessageListModel()
+            {
+                IP = ip,
+                IsTop = false,
+                LastSay = "我下线了",
+                LastTime = DateTime.Now,
+                Status = new List<IconFont>(),
+                Title = "测试"
+            });
+
+            OnlineUserList.ItemsSource = Setting.GetMessageList();
+            OnlineUserList.Items.Refresh();
         }
         #endregion
 
@@ -147,8 +164,23 @@ namespace WebSocketForm
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Setting.SettingSave();
-            Setting.SettingLoad();
+            var sT = DateTime.Now;
+
+            var s_ex = Setting.SettingSave();
+            if (s_ex != null)
+            {
+                MessageBox.Show(s_ex.Message);
+            }
+
+            var l_ex = Setting.SettingLoad();
+            if (l_ex != null)
+            {
+                MessageBox.Show(l_ex.Message);
+            }
+
+            var eT = DateTime.Now;
+
+            MessageBox.Show((eT - sT).TotalMilliseconds.ToString());
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
