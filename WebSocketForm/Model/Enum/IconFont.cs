@@ -14,13 +14,16 @@ namespace WebSocketForm.Enum
             {
                 { IconFont.favor_fill, '' },
                 { IconFont.round_close_fill, '' },
+                { IconFont.clock_fill, '' },
             }[_if];
         }
     }
 
     public enum IconFont
     {
+        unknow = 0,
         favor_fill,
         round_close_fill,
+        clock_fill
     }
 }

@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,24 +65,26 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Function\ServerEvent.cs" />
+    <Compile Include="Model\Chat.cs" />
+    <Compile Include="Model\Enum\ChatType.cs" />
+    <Compile Include="Model\Enum\OnlineStatus.cs" />
     <Compile Include="Model\Enum\PostActionType.cs" />
     <Compile Include="Function\ExtendFunctions.cs" />
     <Compile Include="Function\LocalServer.cs" />
     <Compile Include="Function\Tool.cs" />
+    <Compile Include="Model\GroupChat.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Client.cs" />
     <Compile Include="Function\SocketTool.cs" />
     <Compile Include="Model\Enum\IconFont.cs" />
-    <Compile Include="Model\Interface\IConnection.cs" />
-    <Compile Include="Model\NickName.cs" />
-    <Compile Include="Model\MessageListModel.cs" />
+    <Compile Include="Model\Menu.cs" />
     <Compile Include="Model\PostInfo.cs" />
-    <Compile Include="Model\Server.cs" />
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using WebSocketForm.Enum;
 using WebSocketForm.Model;
 
@@ -52,6 +53,27 @@ namespace WebSocketForm.Function
             var bytesData = postData.ToBytes();
 
             udpClient.SendAsync(bytesData, bytesData.Length, ipep);
+        }
+
+        /// <summary>
+        /// 持续在线广播
+        /// </summary>
+        public static void StillOnlineBroadcasting()
+        {
+            var udpClient = new UdpClient();
+            var ipep = new IPEndPoint(IPAddress.Broadcast, port);
+
+            var postData = new PostInfo()
+            {
+                Action = PostActionType.stillOnline
+            };
+            var bytesData = postData.ToBytes();
+
+            while (true)
+            {
+                Thread.Sleep(30000);
+                udpClient.SendAsync(bytesData, bytesData.Length, ipep);
+            }
         }
 
         /// <summary>

@@ -33,40 +33,36 @@ namespace WebSocketForm.View
         {
             InitializeComponent();
 
+            //记录线程
+            currentThread = Thread.CurrentThread;
+
+            //读取设定
             var settingLoadException = Setting.SettingLoad();
             if (settingLoadException != null)
             {
                 MessageBox.Show("读取设定时出现错误:\r\n" + settingLoadException.Message);
             }
 
-            currentThread = Thread.CurrentThread;
+            //重载控件
+            OnlineUserList.ItemsSource = Setting.GetMessageList();
 
+            //绑定服务器事件
             LocalServer.LoginReceived += LocalServer_LoginReceived;
             LocalServer.LogoutReceived += LocalServer_LogoutReceived;
             LocalServer.OpenLocalServer();
 
-            new Thread(() =>
-            {
-                SocketTool.OnlineBroadcasting();
-            })
-            { IsBackground = true }.Start();
-
-            OnlineUserList.Items.Clear();
-            OnlineUserList.ItemsSource = Setting.GetMessageList();
+            //上线广播
+            new Thread(SocketTool.OnlineBroadcasting) { IsBackground = true }.Start();
+            //持续在线广播线程
+            new Thread(SocketTool.StillOnlineBroadcasting) { IsBackground = true }.Start();
+            //刷新在线状态线程
+            new Thread(Setting.UserStatusRefresh) { IsBackground = true }.Start();
         }
 
         #region 服务器事件
         private void LocalServer_LoginReceived(PostInfo data, IPAddress ip)
         {
-            Setting.AddMessageMenu(new MessageListModel()
-            {
-                IP = ip,
-                IsTop = false,
-                LastSay = "我上线了",
-                LastTime = DateTime.Now,
-                Status = new List<IconFont>(),
-                Title = "测试"
-            });
+            ServerEvent.LocalServer_LoginReceived(data, ip);
 
             OnlineUserList.ItemsSource = Setting.GetMessageList();
             OnlineUserList.Items.Refresh();
@@ -74,15 +70,7 @@ namespace WebSocketForm.View
 
         private void LocalServer_LogoutReceived(PostInfo data, IPAddress ip)
         {
-            Setting.AddMessageMenu(new MessageListModel()
-            {
-                IP = ip,
-                IsTop = false,
-                LastSay = "我下线了",
-                LastTime = DateTime.Now,
-                Status = new List<IconFont>(),
-                Title = "测试"
-            });
+            ServerEvent.LocalServer_LogoutReceived(data, ip);
 
             OnlineUserList.ItemsSource = Setting.GetMessageList();
             OnlineUserList.Items.Refresh();
@@ -189,7 +177,7 @@ namespace WebSocketForm.View
 
             var ip = "192.168.4." + rd.Next(255);
 
-            Setting.AddMessageMenu(new MessageListModel()
+            Setting.AddMessageMenu(new Model.IMenu()
             {
                 IP = IPAddress.Parse(ip),
                 IsTop = rd.Next(100) % 2 == 0 ? true : false,
@@ -206,6 +194,9 @@ namespace WebSocketForm.View
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
             SocketTool.OnlineBroadcasting();
+
+            GroupChat gc = new GroupChat();
+            
         }
     }
 }

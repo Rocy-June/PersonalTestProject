@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WebSocketForm.Function;
+using WebSocketForm.Model.Enum;
 
 namespace WebSocketForm.Model
 {
@@ -21,34 +22,16 @@ namespace WebSocketForm.Model
         {
             try
             {
-                using (var fs = new FileStream(path + "MessageList.dat", FileMode.Create, FileAccess.Write))
+                using (var fs = new FileStream(path + "data\\Menu.dat", FileMode.Create, FileAccess.Write))
                 {
-                    var messageList_data = GetMessageList();
+                    var menu_data = GetMessageList();
 
-                    for (var i = 0; i < messageList_data.Count; i++)
+                    for (var i = 0; i < menu_data.Count; i++)
                     {
-                        var bytesData = messageList_data[i].ToBytes();
+                        var bytesData = menu_data[i].ToBytes();
                         fs.Write(bytesData, 0, bytesData.Length);
 
-                        if (i != messageList_data.Count - 1)
-                        {
-                            fs.Write(spliter, 0, spliter.Length);
-                        }
-                    }
-
-                    fs.Flush();
-                }
-
-                using (var fs = new FileStream(path + "NickNameList.dat", FileMode.Create, FileAccess.Write))
-                {
-                    var nickname_data = GetNickNames();
-
-                    for (var i = 0; i < nickname_data.Count; i++)
-                    {
-                        var bytesData = nickname_data[i].ToBytes();
-                        fs.Write(bytesData, 0, bytesData.Length);
-
-                        if (i != nickname_data.Count - 1)
+                        if (i != menu_data.Count - 1)
                         {
                             fs.Write(spliter, 0, spliter.Length);
                         }
@@ -68,58 +51,30 @@ namespace WebSocketForm.Model
         {
             try
             {
-                byte[] messageListBytesData = null;
-                using (var fs = new FileStream(path + "MessageList.dat", FileMode.OpenOrCreate, FileAccess.Read))
+                byte[] menuBytesData = null;
+                using (var fs = new FileStream(path + "data\\Menu.dat", FileMode.OpenOrCreate, FileAccess.Read))
                 {
-                    messageListBytesData = new byte[fs.Length];
-                    fs.Read(messageListBytesData, 0, fs.Length.ToIntWidthEx());
+                    menuBytesData = new byte[fs.Length];
+                    fs.Read(menuBytesData, 0, fs.Length.ToIntWidthEx());
                 }
-                if (messageListBytesData.Length > 0)
+                if (menuBytesData.Length > 0)
                 {
                     var thisDataStartIndex = 0;
-                    for (int i = 0; i < messageListBytesData.Length - 2; i++)
+                    for (int i = 0; i < menuBytesData.Length - 2; i++)
                     {
-                        if (messageListBytesData[i] == 0x00 && messageListBytesData[i + 1] == 0x33 && messageListBytesData[i + 2] == 0x00)
+                        if (menuBytesData[i + 1] == 0x33 && menuBytesData[i] == 0x00 && menuBytesData[i + 2] == 0x00)
                         {
                             var entityBytes = new byte[i - thisDataStartIndex];
-                            Array.Copy(messageListBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
-                            var savedEntity = entityBytes.ToObject<MessageListModel>();
+                            Array.Copy(menuBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
+                            var savedEntity = entityBytes.ToObject<IMenu>();
                             messageList.Add(savedEntity);
                         }
                     }
-                    var lastEntityBytes = new byte[messageListBytesData.Length - thisDataStartIndex];
-                    Array.Copy(messageListBytesData, thisDataStartIndex, lastEntityBytes, 0, lastEntityBytes.Length);
-                    var lastSavedEntity = lastEntityBytes.ToObject<MessageListModel>();
+                    var lastEntityBytes = new byte[menuBytesData.Length - thisDataStartIndex];
+                    Array.Copy(menuBytesData, thisDataStartIndex, lastEntityBytes, 0, lastEntityBytes.Length);
+                    var lastSavedEntity = lastEntityBytes.ToObject<IMenu>();
                     AddMessageMenu(lastSavedEntity);
                 }
-
-
-
-                byte[] nickNameListBytesData = null;
-                using (var fs = new FileStream(path + "NickNameList.dat", FileMode.OpenOrCreate, FileAccess.Read))
-                {
-                    nickNameListBytesData = new byte[fs.Length];
-                    fs.Read(nickNameListBytesData, 0, fs.Length.ToIntWidthEx());
-                }
-                if (nickNameListBytesData.Length > 0)
-                {
-                    var thisDataStartIndex = 0;
-                    for (int i = 0; i < nickNameListBytesData.Length - 2; i++)
-                    {
-                        if (nickNameListBytesData[i] == 0x00 && nickNameListBytesData[i + 1] == 0x33 && nickNameListBytesData[i + 2] == 0x00)
-                        {
-                            var entityBytes = new byte[i - thisDataStartIndex];
-                            Array.Copy(nickNameListBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
-                            var savedEntity = entityBytes.ToObject<NickName>();
-                            nickNames.Add(savedEntity);
-                        }
-                    }
-                    var lastEntityBytes = new byte[nickNameListBytesData.Length - thisDataStartIndex];
-                    Array.Copy(nickNameListBytesData, thisDataStartIndex, lastEntityBytes, 0, lastEntityBytes.Length);
-                    var lastSavedEntity = lastEntityBytes.ToObject<NickName>();
-                    AddNickName(lastSavedEntity);
-                }
-
             }
             catch (Exception ex)
             {
@@ -136,14 +91,14 @@ namespace WebSocketForm.Model
         /// 获取菜单设定列表
         /// </summary>
         /// <returns></returns>
-        public static List<MessageListModel> GetMessageList() => messageList.OrderByDescending(e => e.IsTop).ThenByDescending(e => e.LastTime).ToList();
+        public static List<IMenu> GetMessageList() => messageList.OrderByDescending(e => e.IsTop).ThenByDescending(e => e.LastTime).ToList();
 
         /// <summary>
         /// 新增一条菜单设定
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool AddMessageMenu(MessageListModel value)
+        public static bool AddMessageMenu(IMenu value)
         {
             for (var i = 0; i < messageList.Count; i++)
             {
@@ -167,26 +122,22 @@ namespace WebSocketForm.Model
             return false;
         }
 
-        private static readonly List<MessageListModel> messageList = new List<MessageListModel>();
+        private static readonly List<Menu> messageList = new List<Menu>();
         #endregion
 
-        #region NickName
-        /// <summary>
-        /// 获取昵称设定列表
-        /// </summary>
-        /// <returns></returns>
-        public static List<NickName> GetNickNames() => nickNames;
+        #region User
+        public static List<User> GetUserList() => userList.OrderByDescending(e => e.LastRespondTime).ToList();
 
         /// <summary>
-        /// 新增一条昵称设定
+        /// 新增一条用户设定
         /// </summary>
-        /// <param name="value">昵称实体</param>
-        /// <returns>该IP是否曾设定过昵称</returns>
-        public static bool AddNickName(NickName value)
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool AddUser(User value)
         {
-            for (var i = 0; i < nickNames.Count; i++)
+            for (var i = 0; i < userList.Count; i++)
             {
-                if (nickNames[i].IP.Equals(value.IP))
+                if (userList[i].IP.Equals(value.IP))
                 {
                     foreach (var prop in value.GetType().GetProperties())
                     {
@@ -195,36 +146,39 @@ namespace WebSocketForm.Model
                             var data = prop.GetValue(value);
                             if (data != null)
                             {
-                                prop.SetValue(nickNames[i], data);
+                                prop.SetValue(userList[i], data);
                             }
                         }
                     }
                     return true;
                 }
             }
-            nickNames.Add(value);
+            userList.Add(value);
             return false;
         }
 
-        /// <summary>
-        /// 删除对应IP的昵称
-        /// </summary>
-        /// <param name="ip">IP地址</param>
-        /// <returns>是否找到并删除成功</returns>
-        public static bool RemoveNickName(IPAddress ip)
+        private static readonly List<User> userList = new List<User>();
+        #endregion
+
+        #region UserStatusRefresh
+
+        public static void UserStatusRefresh()
         {
-            for (var i = 0; i < nickNames.Count; i++)
+            while (true)
             {
-                if (nickNames[i].IP == ip)
+                Thread.Sleep(60000);
+                var now = DateTime.Now;
+                var timeOut = new TimeSpan(90000);
+                for (int i = 0; i < userList.Count; i++)
                 {
-                    nickNames.RemoveAt(i);
-                    return true;
+                    if (now - userList[i].LastRespondTime > timeOut)
+                    {
+                        userList[i].OnlineStatus = OnlineStatus.Offline;
+                    }
                 }
             }
-            return false;
         }
 
-        private static readonly List<NickName> nickNames = new List<NickName>();
         #endregion
 
     }
