@@ -10,6 +10,7 @@ using WebSocketForm.Model.Enum;
 
 namespace WebSocketForm.Model
 {
+    [Serializable]
     public class User : Menu
     {
         public IPAddress IP { get; set; }
@@ -22,6 +23,12 @@ namespace WebSocketForm.Model
 
         public DateTime LastRespondTime { get; set; }
 
+        public override string LastSay => Setting.GetLastChat(IP)?.Message ?? "";
+
+        public override DateTime LastChatTime => Setting.GetLastChat(IP)?.SendTime ?? new DateTime(0);
+
+        public override string LastTimeStr => LastChatTime.ToString("MM-DD HH:mm");
+
         public char GetStatusIconFont()
         {
             return IconFontChar.Get(
@@ -29,7 +36,7 @@ namespace WebSocketForm.Model
                     { OnlineStatus.Unknow, IconFont.unknow },
                     { OnlineStatus.Offline, IconFont.unknow },
                     { OnlineStatus.Online, IconFont.unknow },
-                    { OnlineStatus.Hiding, IconFont.unknow },
+                    //{ OnlineStatus.Hiding, IconFont.unknow },
                     { OnlineStatus.Leaving, IconFont.clock_fill },
                     { OnlineStatus.Busy, IconFont.clock_fill },
                 }[OnlineStatus]

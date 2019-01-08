@@ -21,5 +21,7 @@ namespace WebSocketForm.Model
         public string Message { get; set; }
 
         public DateTime SendTime { get; set; }
+
+        public ChatStatus ChatStatus { get; set; }
     }
 }

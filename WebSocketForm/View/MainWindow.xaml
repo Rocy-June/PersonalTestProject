@@ -26,16 +26,6 @@
             <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#fff" Duration="0:0:.1"/>
         </Storyboard>
 
-        <Style x:Key="MainOuter" TargetType="Border">
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="CornerRadius" Value="5"/>
-            <Setter Property="Background" Value="#fff"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity=".5"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <Style x:Key="LeftMenu" TargetType="Border">
             <Setter Property="Width" Value="65"/>
             <Setter Property="CornerRadius" Value="5,0,0,5"/>

@@ -57,6 +57,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\UserSetting.xaml.cs">
+      <DependentUpon>UserSetting.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,6 +70,7 @@
     </Compile>
     <Compile Include="Function\ServerEvent.cs" />
     <Compile Include="Model\Chat.cs" />
+    <Compile Include="Model\Enum\ChatStatus.cs" />
     <Compile Include="Model\Enum\ChatType.cs" />
     <Compile Include="Model\Enum\OnlineStatus.cs" />
     <Compile Include="Model\Enum\PostActionType.cs" />
@@ -79,6 +83,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\UserSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Function\SocketTool.cs" />

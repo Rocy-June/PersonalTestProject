@@ -43,8 +43,11 @@ namespace WebSocketForm.View
                 MessageBox.Show("读取设定时出现错误:\r\n" + settingLoadException.Message);
             }
 
+            //清空测试用列表项目
+            OnlineUserList.Items.Clear();
+
             //重载控件
-            OnlineUserList.ItemsSource = Setting.GetMessageList();
+            OnlineUserList.ItemsSource = Setting.GetMenuList();
 
             //绑定服务器事件
             LocalServer.LoginReceived += LocalServer_LoginReceived;
@@ -64,7 +67,7 @@ namespace WebSocketForm.View
         {
             ServerEvent.LocalServer_LoginReceived(data, ip);
 
-            OnlineUserList.ItemsSource = Setting.GetMessageList();
+            OnlineUserList.ItemsSource = Setting.GetMenuList();
             OnlineUserList.Items.Refresh();
         }
 
@@ -72,7 +75,7 @@ namespace WebSocketForm.View
         {
             ServerEvent.LocalServer_LogoutReceived(data, ip);
 
-            OnlineUserList.ItemsSource = Setting.GetMessageList();
+            OnlineUserList.ItemsSource = Setting.GetMenuList();
             OnlineUserList.Items.Refresh();
         }
         #endregion
@@ -177,17 +180,14 @@ namespace WebSocketForm.View
 
             var ip = "192.168.4." + rd.Next(255);
 
-            Setting.AddMessageMenu(new Model.IMenu()
+            Setting.AddUser(new User()
             {
                 IP = IPAddress.Parse(ip),
                 IsTop = rd.Next(100) % 2 == 0 ? true : false,
-                LastSay = ip + " 我上线了",
-                LastTime = DateTime.Now,
-                Status = new List<IconFont>(),
                 Title = "测试"
             });
 
-            OnlineUserList.ItemsSource = Setting.GetMessageList();
+            OnlineUserList.ItemsSource = Setting.GetMenuList();
             OnlineUserList.Items.Refresh();
         }
 
@@ -196,7 +196,7 @@ namespace WebSocketForm.View
             SocketTool.OnlineBroadcasting();
 
             GroupChat gc = new GroupChat();
-            
+
         }
     }
 }

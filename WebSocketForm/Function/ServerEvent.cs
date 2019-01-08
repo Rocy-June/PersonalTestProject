@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebSocketForm.Enum;
 using WebSocketForm.Model;
+using WebSocketForm.Model.Enum;
 
 namespace WebSocketForm.Function
 {
@@ -15,33 +16,14 @@ namespace WebSocketForm.Function
         {
             var userData = (User)data.Data;
 
-            Setting.AddMessageMenu(new IMenu()
-            {
-                IP = ip,
-                LastSay = "我上线了",
-                LastTime = DateTime.Now,
-                Status = new List<IconFont>(),
-                Title = "测试"
-            });
-
-
+            Setting.AddUser(userData);
         }
 
         public static void LocalServer_LogoutReceived(PostInfo data, IPAddress ip)
         {
             var userData = (User)data.Data;
 
-            Setting.AddMessageMenu(new IMenu()
-            {
-                IP = ip,
-                IsTop = false,
-                LastSay = "我下线了",
-                LastTime = DateTime.Now,
-                Status = new List<IconFont>(),
-                Title = "测试"
-            });
-
-
+            Setting.AddUser(userData);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace WebSocketForm.Model.Enum
         Unknow = -1,
         Offline = 0,
         Online = 1,
-        Hiding = 5,
+        //Hiding = 5,   //局域网你隐个P身
         Leaving = 10,
         Busy = 20
     }

@@ -13,31 +13,42 @@ namespace WebSocketForm.Model
 {
     public class Setting
     {
+        #region Setting
+
+        public static User Config = new User();
+
+        #endregion
+
         #region InfoSave
 
         public static readonly string path = AppDomain.CurrentDomain.BaseDirectory;
-        private static readonly byte[] spliter = new byte[] { 0x00, 0x33, 0x00 };
 
         public static Exception SettingSave()
         {
             try
             {
-                using (var fs = new FileStream(path + "data\\Menu.dat", FileMode.Create, FileAccess.Write))
+                using (var fs = new FileStream(path + "setting\\setting.dat", FileMode.Create, FileAccess.Write))
                 {
-                    var menu_data = GetMessageList();
+                    var bytesData = Config.ToBytes();
+                    fs.Write(bytesData, 0, bytesData.Length);
+                }
 
-                    for (var i = 0; i < menu_data.Count; i++)
+                using (var fs = new FileStream(path + "data\\user.dat", FileMode.Create, FileAccess.Write))
+                {
+                    for (var i = 0; i < userList.Count; i++)
                     {
-                        var bytesData = menu_data[i].ToBytes();
+                        var bytesData = userList[i].ToBytes();
                         fs.Write(bytesData, 0, bytesData.Length);
-
-                        if (i != menu_data.Count - 1)
-                        {
-                            fs.Write(spliter, 0, spliter.Length);
-                        }
                     }
+                }
 
-                    fs.Flush();
+                using (var fs = new FileStream(path + "data\\group.dat", FileMode.Create, FileAccess.Write))
+                {
+                    for (var i = 0; i < groupList.Count; i++)
+                    {
+                        var bytesData = groupList[i].ToBytes();
+                        fs.Write(bytesData, 0, bytesData.Length);
+                    }
                 }
             }
             catch (Exception ex)
@@ -51,29 +62,63 @@ namespace WebSocketForm.Model
         {
             try
             {
-                byte[] menuBytesData = null;
-                using (var fs = new FileStream(path + "data\\Menu.dat", FileMode.OpenOrCreate, FileAccess.Read))
+                byte[] configBytesData = null;
+                using (var fs = new FileStream(path + "setting\\setting.dat", FileMode.OpenOrCreate, FileAccess.Read))
                 {
-                    menuBytesData = new byte[fs.Length];
-                    fs.Read(menuBytesData, 0, fs.Length.ToIntWidthEx());
+                    configBytesData = new byte[fs.Length];
+                    fs.Read(configBytesData, 0, fs.Length.ToIntWidthEx());
                 }
-                if (menuBytesData.Length > 0)
+                if (configBytesData.Length > 0)
                 {
-                    var thisDataStartIndex = 0;
-                    for (int i = 0; i < menuBytesData.Length - 2; i++)
+                    Config = configBytesData.ToObject<User>();
+                }
+                else
+                {
+
+                }
+
+                byte[] userBytesData = null;
+                using (var fs = new FileStream(path + "data\\user.dat", FileMode.OpenOrCreate, FileAccess.Read))
+                {
+                    userBytesData = new byte[fs.Length];
+                    fs.Read(userBytesData, 0, fs.Length.ToIntWidthEx());
+                }
+                if (userBytesData.Length > 0)
+                {
+                    var entitySize = new User().ToBytes().Length;
+                    if (userBytesData.Length % entitySize != 0)
                     {
-                        if (menuBytesData[i + 1] == 0x33 && menuBytesData[i] == 0x00 && menuBytesData[i + 2] == 0x00)
-                        {
-                            var entityBytes = new byte[i - thisDataStartIndex];
-                            Array.Copy(menuBytesData, thisDataStartIndex, entityBytes, 0, entityBytes.Length);
-                            var savedEntity = entityBytes.ToObject<IMenu>();
-                            messageList.Add(savedEntity);
-                        }
+                        return new FileFormatException("版本更新致保存文件格式不正确。");
                     }
-                    var lastEntityBytes = new byte[menuBytesData.Length - thisDataStartIndex];
-                    Array.Copy(menuBytesData, thisDataStartIndex, lastEntityBytes, 0, lastEntityBytes.Length);
-                    var lastSavedEntity = lastEntityBytes.ToObject<IMenu>();
-                    AddMessageMenu(lastSavedEntity);
+                    var entityCount = userBytesData.Length / entitySize;
+                    for (var i = 0; i < entityCount; i++)
+                    {
+                        var entityBytes = new byte[entitySize];
+                        Array.Copy(userBytesData, 0, entityBytes, i * entitySize, entitySize);
+                        AddUser(entityBytes.ToObject<User>());
+                    }
+                }
+
+                byte[] groupBytesData = null;
+                using (var fs = new FileStream(path + "data\\group.dat", FileMode.OpenOrCreate, FileAccess.Read))
+                {
+                    groupBytesData = new byte[fs.Length];
+                    fs.Read(groupBytesData, 0, fs.Length.ToIntWidthEx());
+                }
+                if (groupBytesData.Length > 0)
+                {
+                    var entitySize = new GroupChat().ToBytes().Length;
+                    if (groupBytesData.Length % entitySize != 0)
+                    {
+                        return new FileFormatException("版本更新致保存文件格式不正确。");
+                    }
+                    var entityCount = groupBytesData.Length / entitySize;
+                    for (var i = 0; i < entityCount; i++)
+                    {
+                        var entityBytes = new byte[entitySize];
+                        Array.Copy(groupBytesData, 0, entityBytes, i * entitySize, entitySize);
+                        AddGroupChat(entityBytes.ToObject<GroupChat>());
+                    }
                 }
             }
             catch (Exception ex)
@@ -86,47 +131,20 @@ namespace WebSocketForm.Model
 
         #endregion
 
-        #region MessageList
-        /// <summary>
-        /// 获取菜单设定列表
-        /// </summary>
-        /// <returns></returns>
-        public static List<IMenu> GetMessageList() => messageList.OrderByDescending(e => e.IsTop).ThenByDescending(e => e.LastTime).ToList();
+        #region MenuList
 
-        /// <summary>
-        /// 新增一条菜单设定
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static bool AddMessageMenu(IMenu value)
+        public static List<Menu> GetMenuList()
         {
-            for (var i = 0; i < messageList.Count; i++)
-            {
-                if (messageList[i].IP.Equals(value.IP))
-                {
-                    foreach (var prop in value.GetType().GetProperties())
-                    {
-                        if (prop.CanWrite)
-                        {
-                            var data = prop.GetValue(value);
-                            if (data != null)
-                            {
-                                prop.SetValue(messageList[i], data);
-                            }
-                        }
-                    }
-                    return true;
-                }
-            }
-            messageList.Add(value);
-            return false;
-        }
+            var menuList = new List<Menu>();
+            menuList.AddRange(userList);
+            menuList.AddRange(groupList);
 
-        private static readonly List<Menu> messageList = new List<Menu>();
+            return menuList.OrderByDescending(e => e.LastChatTime).ToList();
+        }
         #endregion
 
         #region User
-        public static List<User> GetUserList() => userList.OrderByDescending(e => e.LastRespondTime).ToList();
+        public static List<User> GetUserList() => userList.OrderByDescending(e => e.LastChatTime).ToList();
 
         /// <summary>
         /// 新增一条用户设定
@@ -135,9 +153,10 @@ namespace WebSocketForm.Model
         /// <returns></returns>
         public static bool AddUser(User value)
         {
+            if (value == null) throw new ArgumentNullException();
             for (var i = 0; i < userList.Count; i++)
             {
-                if (userList[i].IP.Equals(value.IP))
+                if (userList[i].IP.ToString() == value.IP.ToString())
                 {
                     foreach (var prop in value.GetType().GetProperties())
                     {
@@ -158,6 +177,71 @@ namespace WebSocketForm.Model
         }
 
         private static readonly List<User> userList = new List<User>();
+        #endregion
+
+        #region GroupChat
+        public static List<GroupChat> GetGroupChat() => groupList.OrderByDescending(e => e.LastChatTime).ToList();
+
+        public static bool AddGroupChat(GroupChat value)
+        {
+            if (value == null) throw new ArgumentNullException();
+            for (var i = 0; i < groupList.Count; i++)
+            {
+                if (groupList[i].ID.Ticks == value.ID.Ticks)
+                {
+                    foreach (var prop in value.GetType().GetProperties())
+                    {
+                        if (prop.CanWrite)
+                        {
+                            var data = prop.GetValue(value);
+                            if (data != null)
+                            {
+                                prop.SetValue(groupList[i], data);
+                            }
+                        }
+                    }
+                    return true;
+                }
+            }
+            groupList.Add(value);
+            return false;
+        }
+
+        private static readonly List<GroupChat> groupList = new List<GroupChat>();
+        #endregion
+
+        #region ChatList
+        public static List<Chat> GetChatList(IPAddress id)
+        {
+            return chatList.FindAll(e => e.ToUserChatID.ToString() == id.ToString());
+        }
+        public static List<Chat> GetChatList(DateTime id)
+        {
+            return chatList.FindAll(e => e.ToGroupChatID.Ticks == id.Ticks);
+        }
+
+        public static Chat GetLastChat(IPAddress id)
+        {
+            return chatList.FindLast(e => e.ToUserChatID.ToString() == id.ToString());
+        }
+
+        public static Chat GetLastChat(DateTime id)
+        {
+            return chatList.FindLast(e => e.ToGroupChatID.Ticks == id.Ticks);
+        }
+
+        public static void EditChatStatus(int index, ChatStatus value)
+        {
+            chatList[index].ChatStatus = value;
+        }
+
+        public static int AddChat(Chat value)
+        {
+            chatList.Add(value);
+            return chatList.Count - 1;
+        }
+
+        private static readonly List<Chat> chatList = new List<Chat>();
         #endregion
 
         #region UserStatusRefresh
