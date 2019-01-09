@@ -9,6 +9,7 @@ using WebSocketForm.Enum;
 
 namespace WebSocketForm.Model
 {
+    [Serializable]
     public abstract class Menu
     {
         /// <summary>

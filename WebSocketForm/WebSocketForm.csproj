@@ -76,7 +76,6 @@
     <Compile Include="Model\Enum\PostActionType.cs" />
     <Compile Include="Function\ExtendFunctions.cs" />
     <Compile Include="Function\LocalServer.cs" />
-    <Compile Include="Function\Tool.cs" />
     <Compile Include="Model\GroupChat.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="View\MainWindow.xaml.cs">

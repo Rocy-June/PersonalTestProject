@@ -23,5 +23,10 @@ namespace WebSocketForm.View
         {
             InitializeComponent();
         }
+
+        private void SelectHeadImage(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("1");
+        }
     }
 }

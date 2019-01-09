@@ -11,14 +11,6 @@
             <ColorAnimation Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" To="#ff3e82f7" Duration="0:0:.05"/>
             <ColorAnimation Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)" To="#fff" Duration="0:0:.05"/>
         </Storyboard>
-        <Storyboard x:Key="ControlBoxRedBackGround">
-            <ColorAnimation Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" To="#ff00" Duration="0:0:.05"/>
-            <ColorAnimation Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)" To="#fff" Duration="0:0:.05"/>
-        </Storyboard>
-        <Storyboard x:Key="ControlBoxReturn">
-            <ColorAnimation Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" To="#003e82f7" Duration="0:0:.05"/>
-            <ColorAnimation Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)" To="#000" Duration="0:0:.05"/>
-        </Storyboard>
         <Storyboard x:Key="SearchBox_MouseEnter">
             <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#f5f5f5" Duration="0:0:.1"/>
         </Storyboard>
@@ -187,44 +179,6 @@
                 <EventTrigger RoutedEvent="MouseEnter">
                     <EventTrigger.Actions>
                         <BeginStoryboard Storyboard="{StaticResource ControlBoxBlueBackGround}" />
-                    </EventTrigger.Actions>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="MouseLeave">
-                    <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource ControlBoxReturn}" />
-                    </EventTrigger.Actions>
-                </EventTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="ControlBoxButtonExit" TargetType="Button">
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="#000"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
-                            <ContentPresenter  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                               Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
-                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <EventTrigger RoutedEvent="MouseEnter">
-                    <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource ControlBoxRedBackGround}" />
                     </EventTrigger.Actions>
                 </EventTrigger>
                 <EventTrigger RoutedEvent="MouseLeave">
@@ -406,7 +360,7 @@
                 <Grid>
                     <Button Style="{StaticResource ControlBoxButton}" Margin="0,0,90,0" Click="HideApplication" Content=""/>
                     <Button Style="{StaticResource ControlBoxButton}" Margin="0,0,50,0" Click="FullSizeOrMinApplication" Content=""/>
-                    <Button Style="{StaticResource ControlBoxButtonExit}" Margin="0,0,10,0" Click="ExitApplication" Content=""/>
+                    <Button Style="{StaticResource CloseFormButton}" Click="ExitApplication" Content=""/>
                 </Grid>
             </Border>
             <Border Style="{StaticResource MainFunctionBox}">

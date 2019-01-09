@@ -195,7 +195,8 @@ namespace WebSocketForm.View
         {
             SocketTool.OnlineBroadcasting();
 
-            GroupChat gc = new GroupChat();
+            Application.Current.Run();
+            Application.Current.Shutdown();
 
         }
     }

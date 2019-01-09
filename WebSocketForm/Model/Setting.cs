@@ -6,8 +6,10 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using WebSocketForm.Function;
 using WebSocketForm.Model.Enum;
+using WebSocketForm.View;
 
 namespace WebSocketForm.Model
 {
@@ -63,6 +65,7 @@ namespace WebSocketForm.Model
             try
             {
                 byte[] configBytesData = null;
+                var userEntitySize = new User().ToBytes().Length;
                 using (var fs = new FileStream(path + "setting\\setting.dat", FileMode.OpenOrCreate, FileAccess.Read))
                 {
                     configBytesData = new byte[fs.Length];
@@ -70,11 +73,16 @@ namespace WebSocketForm.Model
                 }
                 if (configBytesData.Length > 0)
                 {
+                    if (configBytesData.Length % userEntitySize != 0)
+                    {
+                        return new FileFormatException("版本更新致保存文件格式不正确。");
+                    }
                     Config = configBytesData.ToObject<User>();
                 }
                 else
                 {
-
+                    Application.Current.Run();
+                    Application.Current.Shutdown();
                 }
 
                 byte[] userBytesData = null;
@@ -85,16 +93,15 @@ namespace WebSocketForm.Model
                 }
                 if (userBytesData.Length > 0)
                 {
-                    var entitySize = new User().ToBytes().Length;
-                    if (userBytesData.Length % entitySize != 0)
+                    if (userBytesData.Length % userEntitySize != 0)
                     {
                         return new FileFormatException("版本更新致保存文件格式不正确。");
                     }
-                    var entityCount = userBytesData.Length / entitySize;
+                    var entityCount = userBytesData.Length / userEntitySize;
                     for (var i = 0; i < entityCount; i++)
                     {
-                        var entityBytes = new byte[entitySize];
-                        Array.Copy(userBytesData, 0, entityBytes, i * entitySize, entitySize);
+                        var entityBytes = new byte[userEntitySize];
+                        Array.Copy(userBytesData, 0, entityBytes, i * userEntitySize, userEntitySize);
                         AddUser(entityBytes.ToObject<User>());
                     }
                 }

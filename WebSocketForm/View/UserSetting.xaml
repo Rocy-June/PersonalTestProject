@@ -4,9 +4,75 @@
         Title="UserSetting"
         Height="600" Width="380"
         Style="{StaticResource WindowStyle}">
+    <Window.Resources>
+        <Storyboard x:Key="HeadImageMouseEnterHighLight">
+            <DoubleAnimation Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.Opacity)" To=".5" Duration="0:0:.2"/>
+        </Storyboard>
+        <Storyboard x:Key="HeadImageMouseLeaveResume">
+            <DoubleAnimation Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.Opacity)" To="0" Duration="0:0:.2"/>
+        </Storyboard>
+
+        <Style x:Key="TitleBar" TargetType="Border">
+            <Setter Property="CornerRadius" Value="5,5,0,0"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Background" Value="#eee"/>
+        </Style>
+        <Style x:Key="Title" TargetType="Label">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="15,0,0,0"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style x:Key="SettingArea" TargetType="Border">
+            <Setter Property="CornerRadius" Value="0,0,5,5"/>
+            <Setter Property="Margin" Value="0,50,0,0"/>
+        </Style>
+        <Style x:Key="HeadImage" TargetType="Border">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource HeadImageMouseEnterHighLight}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource HeadImageMouseLeaveResume}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+            <Setter Property="CornerRadius" Value="99"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="130"/>
+            <Setter Property="Height" Value="130"/>
+            <Setter Property="Margin" Value="0,25,0,0"/>
+            <Setter Property="Background" Value="#fff"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="BorderBrush" Value="#eee"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0"/>
+                </Setter.Value>
+            </Setter>
+            <EventSetter Event="MouseLeftButtonUp" Handler="SelectHeadImage"/>
+        </Style>
+    </Window.Resources>
+
     <Border Style="{StaticResource MainOuter}">
         <Grid>
-
+            <Border Style="{StaticResource TitleBar}">
+                <Grid>
+                    <Label Style="{StaticResource Title}">个人信息设置</Label>
+                    <Button Style="{StaticResource CloseFormButton}" Content=""/>
+                </Grid>
+            </Border>
+            <Border Style="{StaticResource SettingArea}">
+                <Grid>
+                    <Border Style="{StaticResource HeadImage}"></Border>
+                </Grid>
+            </Border>
         </Grid>
     </Border>
 </Window>
