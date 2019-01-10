@@ -8,16 +8,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using WebSocketForm.Function;
+using WebSocketForm.Model;
 using WebSocketForm.Model.Enum;
 using WebSocketForm.View;
 
-namespace WebSocketForm.Model
+namespace WebSocketForm
 {
     public class Setting
     {
         #region Setting
 
-        public static User Config = new User();
+        public static User Config = null;
 
         #endregion
 

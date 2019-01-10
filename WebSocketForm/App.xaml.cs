@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace WebSocketForm
 {
@@ -13,5 +14,13 @@ namespace WebSocketForm
     /// </summary>
     public partial class App : Application
     {
+        private void FormCloseButtonClick(object sender, RoutedEventArgs e)
+        {
+            var obj = (Button)sender;
+
+            var window = Window.GetWindow(obj);
+
+            window.Close();
+        }
     }
 }

@@ -35,6 +35,19 @@
             <ColorAnimation Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)" To="#0000" Duration="0:0:.05"/>
         </Storyboard>
         <Style x:Key="CloseFormButton" TargetType="Button">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource ControlBoxRedBackGround}" />
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource ControlBoxReturn}" />
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+            
             <Setter Property="Width" Value="30"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -48,6 +61,7 @@
             <Setter Property="Foreground" Value="#000"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="Content" Value=""/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -60,18 +74,8 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <EventTrigger RoutedEvent="MouseEnter">
-                    <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource ControlBoxRedBackGround}" />
-                    </EventTrigger.Actions>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="MouseLeave">
-                    <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource ControlBoxReturn}" />
-                    </EventTrigger.Actions>
-                </EventTrigger>
-            </Style.Triggers>
+            
+            <EventSetter Event="Click" Handler="FormCloseButtonClick"/>
         </Style>
 
         

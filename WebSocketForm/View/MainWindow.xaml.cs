@@ -115,11 +115,6 @@ namespace WebSocketForm.View
             }).Start();
         }
 
-        private void ExitApplication(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
         private void MenuButton_Enter(object sender, MouseEventArgs e)
         {
             var label = (Label)sender;

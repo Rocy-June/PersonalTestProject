@@ -7,6 +7,7 @@
         Closing="Window_Closing"
         Style="{StaticResource WindowStyle}">
     <Window.Resources>
+
         <Storyboard x:Key="ControlBoxBlueBackGround">
             <ColorAnimation Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" To="#ff3e82f7" Duration="0:0:.05"/>
             <ColorAnimation Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)" To="#fff" Duration="0:0:.05"/>
@@ -360,7 +361,7 @@
                 <Grid>
                     <Button Style="{StaticResource ControlBoxButton}" Margin="0,0,90,0" Click="HideApplication" Content=""/>
                     <Button Style="{StaticResource ControlBoxButton}" Margin="0,0,50,0" Click="FullSizeOrMinApplication" Content=""/>
-                    <Button Style="{StaticResource CloseFormButton}" Click="ExitApplication" Content=""/>
+                    <Button Style="{StaticResource CloseFormButton}" />
                 </Grid>
             </Border>
             <Border Style="{StaticResource MainFunctionBox}">

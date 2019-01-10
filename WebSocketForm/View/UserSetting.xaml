@@ -2,13 +2,13 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="UserSetting"
-        Height="600" Width="380"
+        Height="500" Width="380"
         Style="{StaticResource WindowStyle}">
     <Window.Resources>
-        <Storyboard x:Key="HeadImageMouseEnterHighLight">
+        <Storyboard x:Key="MouseEnterHighLight">
             <DoubleAnimation Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.Opacity)" To=".5" Duration="0:0:.2"/>
         </Storyboard>
-        <Storyboard x:Key="HeadImageMouseLeaveResume">
+        <Storyboard x:Key="MouseLeaveResume">
             <DoubleAnimation Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.Opacity)" To="0" Duration="0:0:.2"/>
         </Storyboard>
 
@@ -28,16 +28,16 @@
             <Setter Property="CornerRadius" Value="0,0,5,5"/>
             <Setter Property="Margin" Value="0,50,0,0"/>
         </Style>
-        <Style x:Key="HeadImage" TargetType="Border">
+        <Style x:Key="UserHeadImage" TargetType="Border">
             <Style.Triggers>
                 <EventTrigger RoutedEvent="MouseEnter">
                     <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource HeadImageMouseEnterHighLight}"/>
+                        <BeginStoryboard Storyboard="{StaticResource MouseEnterHighLight}"/>
                     </EventTrigger.Actions>
                 </EventTrigger>
                 <EventTrigger RoutedEvent="MouseLeave">
                     <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource HeadImageMouseLeaveResume}"/>
+                        <BeginStoryboard Storyboard="{StaticResource MouseLeaveResume}"/>
                     </EventTrigger.Actions>
                 </EventTrigger>
             </Style.Triggers>
@@ -46,7 +46,7 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="Width" Value="130"/>
             <Setter Property="Height" Value="130"/>
-            <Setter Property="Margin" Value="0,25,0,0"/>
+            <Setter Property="Margin" Value="0,50,0,0"/>
             <Setter Property="Background" Value="#fff"/>
             <Setter Property="BorderThickness" Value="3"/>
             <Setter Property="BorderBrush" Value="#eee"/>
@@ -58,6 +58,85 @@
             </Setter>
             <EventSetter Event="MouseLeftButtonUp" Handler="SelectHeadImage"/>
         </Style>
+        <Style x:Key="UserNameBorder" TargetType="Border">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource MouseEnterHighLight}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="GotFocus">
+                    <BeginStoryboard Storyboard="{StaticResource MouseEnterHighLight}"/>
+                </EventTrigger>
+            </Style.Triggers>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="0,230,0,0"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Background" Value="#f3f3f3"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0"/>
+                </Setter.Value>
+            </Setter>
+
+            <EventSetter Event="MouseLeave" Handler="UserNameBorderMouseLeave"/>
+        </Style>
+        <Style x:Key="UserName" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="MaxLength" Value="15"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="SaveButtonBorder" TargetType="Border">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource MouseEnterHighLight}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource MouseLeaveResume}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="0,330,0,0"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Background" Value="#10be83"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SaveButton" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#fff"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                            <ContentPresenter  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                               Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
+                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <EventSetter Event="Click" Handler="SaveUserInfoClick"/>
+        </Style>
     </Window.Resources>
 
     <Border Style="{StaticResource MainOuter}">
@@ -65,12 +144,18 @@
             <Border Style="{StaticResource TitleBar}">
                 <Grid>
                     <Label Style="{StaticResource Title}">个人信息设置</Label>
-                    <Button Style="{StaticResource CloseFormButton}" Content=""/>
+                    <Button x:Name="CloseFormButton" Style="{StaticResource CloseFormButton}"/>
                 </Grid>
             </Border>
             <Border Style="{StaticResource SettingArea}">
                 <Grid>
-                    <Border Style="{StaticResource HeadImage}"></Border>
+                    <Border x:Name="UserHeadImage" Style="{StaticResource UserHeadImage}"/>
+                    <Border x:Name="UserNameBorder" Style="{StaticResource UserNameBorder}">
+                        <TextBox x:Name="UserName" Style="{StaticResource UserName}" >TestName</TextBox>
+                    </Border>
+                    <Border Style="{StaticResource SaveButtonBorder}">
+                        <Button Style="{StaticResource SaveButton}" Content="保存"/>
+                    </Border>
                 </Grid>
             </Border>
         </Grid>

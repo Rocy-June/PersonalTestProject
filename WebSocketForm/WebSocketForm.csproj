@@ -92,7 +92,7 @@
     <Compile Include="Model\Enum\IconFont.cs" />
     <Compile Include="Model\Menu.cs" />
     <Compile Include="Model\PostInfo.cs" />
-    <Compile Include="Model\Setting.cs" />
+    <Compile Include="Setting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
