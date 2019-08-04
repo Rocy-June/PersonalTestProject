@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebSocketForm.Model.Enum
 {
-    public enum ChatStatus
+    public enum MessageStatus
     {
         Sending = 0,
         Success = 200,

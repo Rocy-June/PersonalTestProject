@@ -35,15 +35,15 @@ namespace wfTest
         [DllImport("user32.dll")]
         static extern void mouse_event(int flags, int dX, int dY, int buttons, int extraInfo);
 
-        const int MOUSEEVENTF_MOVE = 0x1;
-        const int MOUSEEVENTF_LEFTDOWN = 0x2;//  
-        const int MOUSEEVENTF_LEFTUP = 0x4;
-        const int MOUSEEVENTF_RIGHTDOWN = 0x8;
-        const int MOUSEEVENTF_RIGHTUP = 0x10;
-        const int MOUSEEVENTF_MIDDLEDOWN = 0x20;
-        const int MOUSEEVENTF_MIDDLEUP = 0x40;
-        const int MOUSEEVENTF_WHEEL = 0x800;
-        const int MOUSEEVENTF_ABSOLUTE = 0x8000;
+        const int MOUSEEVENTF_MOVE = 0x1;           //0000 0000 0000 0001
+        const int MOUSEEVENTF_LEFTDOWN = 0x2;       //0000 0000 0000 0010
+        const int MOUSEEVENTF_LEFTUP = 0x4;         //0000 0000 0000 0100
+        const int MOUSEEVENTF_RIGHTDOWN = 0x8;      //0000 0000 0000 1000
+        const int MOUSEEVENTF_RIGHTUP = 0x10;       //0000 0000 0001 0000
+        const int MOUSEEVENTF_MIDDLEDOWN = 0x20;    //0000 0000 0010 0000
+        const int MOUSEEVENTF_MIDDLEUP = 0x40;      //0000 0000 0100 0000
+        const int MOUSEEVENTF_WHEEL = 0x800;        //0000 1000 0000 0000
+        const int MOUSEEVENTF_ABSOLUTE = 0x8000;    //1000 0000 0000 0000
 
         Size sR = Screen.PrimaryScreen.Bounds.Size;
 

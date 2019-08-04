@@ -68,6 +68,9 @@
                 <EventTrigger RoutedEvent="GotFocus">
                     <BeginStoryboard Storyboard="{StaticResource MouseEnterHighLight}"/>
                 </EventTrigger>
+                <EventTrigger RoutedEvent="LostFocus">
+                    <BeginStoryboard Storyboard="{StaticResource MouseLeaveResume}"/>
+                </EventTrigger>
             </Style.Triggers>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>

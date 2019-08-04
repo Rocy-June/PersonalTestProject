@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -38,7 +39,11 @@ namespace WebSocketForm.View
 
         private void SelectHeadImage(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("1");
+            var selectedHeadImage = new OpenFileDialog()
+            {
+                Filter = "所有图片|*.bmp;*.jpeg;*.jpg;*.png|Windows位图(*.bmp)|*.bmp|JPEG格式(*.jpg)|*.jpg;*.jpeg|便携式网络图形(*.png)|*.png|",
+                RestoreDirectory = false
+            };
         }
 
         private void UserNameBorderMouseLeave(object sender, MouseEventArgs e)

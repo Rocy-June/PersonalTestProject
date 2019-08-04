@@ -10,18 +10,45 @@ namespace WebSocketForm.Model
 {
     public class Chat
     {
-        public IPAddress SenderID { get; set; }
 
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public Guid ID { get; set; }
+
+        /// <summary>
+        /// 发送者IP
+        /// </summary>
+        public IPAddress SenderIP { get; set; }
+
+        /// <summary>
+        /// 消息类型
+        /// </summary>
         public ChatType ChatType { get; set; }
 
-        public IPAddress ToUserChatID { get; set; }
+        /// <summary>
+        /// 接收者IP
+        /// </summary>
+        public IPAddress ReceiverIP { get; set; }
 
+        /// <summary>
+        /// 发送到的群组ID
+        /// </summary>
         public DateTime ToGroupChatID { get; set; }
 
+        /// <summary>
+        /// 消息信息
+        /// </summary>
         public string Message { get; set; }
 
+        /// <summary>
+        /// 发送时间
+        /// </summary>
         public DateTime SendTime { get; set; }
 
-        public ChatStatus ChatStatus { get; set; }
+        /// <summary>
+        /// 消息状态
+        /// </summary>
+        public MessageStatus MessageStatus { get; set; }
     }
 }

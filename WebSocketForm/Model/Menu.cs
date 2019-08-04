@@ -47,7 +47,7 @@ namespace WebSocketForm.Model
         /// <returns>如果当前状态不存在并添加成功则返回True; 否则返回False</returns>
         public bool AddStatusIcon(IconFont value)
         {
-            for (var i = 0; i < Status.Count; i++)
+            for (var i = 0; i < Status.Count; ++i)
             {
                 if (Status[i] == value)
                 {
