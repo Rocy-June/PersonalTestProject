@@ -94,7 +94,17 @@ namespace WebSocketForm
             {
                 byte[] configBytesData = null;
                 var userEntitySize = new User().ToBytes().Length;
-                using (var fs = new FileStream(PATH + "setting\\setting.dat", FileMode.OpenOrCreate, FileAccess.Read))
+
+                FileStream fs = null;
+                if (!File.Exists(PATH + "setting\\setting.dat"))
+                {
+                    if (!Directory.Exists(PATH + "setting\\"))
+                    {
+                        Directory.CreateDirectory(PATH + "setting\\");
+                    }
+                    fs = File.Create(PATH + "setting\\setting.dat");
+                }
+                using (fs = fs == null ? new FileStream(PATH + "setting\\setting.dat", FileMode.OpenOrCreate, FileAccess.Read) : fs)
                 {
                     configBytesData = new byte[fs.Length];
                     fs.Read(configBytesData, 0, fs.Length.ToIntWidthEx());
@@ -114,7 +124,11 @@ namespace WebSocketForm
                 }
 
                 byte[] userBytesData = null;
-                using (var fs = new FileStream(PATH + "data\\user.dat", FileMode.OpenOrCreate, FileAccess.Read))
+                if (!File.Exists(PATH + "setting\\user.dat"))
+                {
+                    fs = File.Create(PATH + "setting\\user.dat");
+                }
+                using (fs = new FileStream(PATH + "data\\user.dat", FileMode.OpenOrCreate, FileAccess.Read))
                 {
                     userBytesData = new byte[fs.Length];
                     fs.Read(userBytesData, 0, fs.Length.ToIntWidthEx());
@@ -135,7 +149,11 @@ namespace WebSocketForm
                 }
 
                 byte[] groupBytesData = null;
-                using (var fs = new FileStream(PATH + "data\\group.dat", FileMode.OpenOrCreate, FileAccess.Read))
+                if (!File.Exists(PATH + "setting\\group.dat"))
+                {
+                    fs = File.Create(PATH + "setting\\group.dat");
+                }
+                using (fs = new FileStream(PATH + "data\\group.dat", FileMode.OpenOrCreate, FileAccess.Read))
                 {
                     groupBytesData = new byte[fs.Length];
                     fs.Read(groupBytesData, 0, fs.Length.ToIntWidthEx());
@@ -350,7 +368,7 @@ namespace WebSocketForm
         public static Exception ModelToFile()
         {
 
-            
+
 
             return null;
 
