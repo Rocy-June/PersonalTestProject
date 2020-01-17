@@ -75,7 +75,7 @@
             this.label_PlzWait.Name = "label_PlzWait";
             this.label_PlzWait.Size = new System.Drawing.Size(41, 12);
             this.label_PlzWait.TabIndex = 2;
-            this.label_PlzWait.Text = "请稍后";
+            this.label_PlzWait.Text = "请稍候";
             this.label_PlzWait.Visible = false;
             // 
             // panel_info
@@ -190,6 +190,7 @@
             this.Name = "MainForm";
             this.Text = "局域网测试";
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.panel_info.ResumeLayout(false);
             this.panel_info.PerformLayout();
             this.menuStrip.ResumeLayout(false);

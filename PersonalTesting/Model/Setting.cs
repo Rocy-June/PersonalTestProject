@@ -10,12 +10,12 @@ namespace PortPinger.Model
         /// <summary>
         /// 用户数据
         /// </summary>
-        public static NetworkStatus[] networkInfo = new NetworkStatus[PART_COUNT];
+        public static NetworkStatus[] NetworkInfo = new NetworkStatus[PART_COUNT];
 
         /// <summary>
         /// 机器对应昵称数据
         /// </summary>
-        private static List<DeviceNickName> deviceNamesInfo = new List<DeviceNickName>();
+        private static List<DeviceNickName> DeviceNamesInfo = new List<DeviceNickName>();
 
         public static string THIS_COMPUTER_IP;
 
@@ -88,7 +88,7 @@ namespace PortPinger.Model
         {
             get
             {
-                var onlineCount = networkInfo.Count(e => e.Visible && !e.UserHidden);
+                var onlineCount = NetworkInfo.Count(e => e.Visible && !e.UserHidden);
                 return DetectDelay_Min + (onlineCount > SlowDownMaxPersonCount ? onlineCount : 0) * SlowDownDelayPerPerson;
             }
         }
@@ -198,10 +198,10 @@ namespace PortPinger.Model
 
             #region NetworkStatus
 
-            for (int i = 0; i < networkInfo.Length; ++i)
+            for (int i = 0; i < NetworkInfo.Length; ++i)
             {
-                networkInfo[i] = new NetworkStatus(i);
-                networkInfo[i].LoadFromSaveFile();
+                NetworkInfo[i] = new NetworkStatus(i);
+                NetworkInfo[i].LoadFromSaveFile();
             }
 
             #endregion
@@ -219,7 +219,7 @@ namespace PortPinger.Model
                 }
                 if (Regex.IsMatch(deviceName, "^([0-9A-F]{2}-){5}[0-9A-F]{2}$"))
                 {
-                    deviceNamesInfo.Add(new DeviceNickName(deviceName, name));
+                    DeviceNamesInfo.Add(new DeviceNickName(deviceName, name));
                 }
 
                 ++lines;
@@ -243,21 +243,21 @@ namespace PortPinger.Model
         /// <returns>昵称</returns>
         public static DeviceNickName GetDeviceNickName(string deviceName)
         {
-            return deviceNamesInfo.Find(e => e.DeviceName == deviceName);
+            return DeviceNamesInfo.Find(e => e.DeviceName == deviceName);
         }
 
         public static void SetDeviceNickName(string deviceName, string nickName)
         {
-            var index = deviceNamesInfo.FindIndex(e => e.DeviceName == deviceName);
+            var index = DeviceNamesInfo.FindIndex(e => e.DeviceName == deviceName);
             if (index >= 0)
             {
-                deviceNamesInfo[index].NickName = nickName;
+                DeviceNamesInfo[index].NickName = nickName;
                 INI_Handler.Write("DeviceName", "n_" + index, nickName, INI_File.SaveFile);
             }
             else
             {
-                deviceNamesInfo.Add(new DeviceNickName(deviceName, nickName));
-                var newIndex = deviceNamesInfo.Count - 1;
+                DeviceNamesInfo.Add(new DeviceNickName(deviceName, nickName));
+                var newIndex = DeviceNamesInfo.Count - 1;
                 INI_Handler.Write("DeviceName", "m_" + newIndex, deviceName, INI_File.SaveFile);
                 INI_Handler.Write("DeviceName", "n_" + newIndex, nickName, INI_File.SaveFile);
             }

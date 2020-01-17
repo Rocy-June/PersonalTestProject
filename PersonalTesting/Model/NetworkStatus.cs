@@ -84,6 +84,17 @@ namespace PortPinger.Model
         /// </summary>
         private List<long> DelayLog { get; set; }
 
+        public string DelayLogString
+        {
+            get
+            {
+                lock (DelayLog)
+                {
+                    return string.Join("ms\r\n\r\n", DelayLog) + "ms";
+                }
+            }
+        }
+
         /// <summary>
         /// 是否掉线或不在线
         /// </summary>

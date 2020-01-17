@@ -104,6 +104,8 @@ namespace PortPinger
         /// </summary>
         private Control.ControlCollection panelControls;
 
+        bool controlsInited = false;
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -161,7 +163,7 @@ namespace PortPinger
                      var part = arg1.ToInt();
                      var delay = KnockDoor(part);
 
-                     var name = Setting.networkInfo[part].GetDeviceName();
+                     var name = Setting.NetworkInfo[part].GetDeviceName();
 
                      if (delay == 0)
                      {
@@ -220,10 +222,14 @@ namespace PortPinger
                             knockDoorPart = i;
                             Invoke(new Action(() =>
                             {
-                                ((ProgressBar)panelControls.Find("ProgressBar_KnockDoor", false)[0]).Value = knockDoorPart;
+                                try
+                                {
+                                    ((ProgressBar)panelControls.Find("ProgressBar_KnockDoor", false)[0]).Value = knockDoorPart;
+                                }
+                                catch { }
                             }));
 
-                            if (!Setting.networkInfo[i].IsDisconnect)
+                            if (!Setting.NetworkInfo[i].IsDisconnect)
                             {
                                 continue;
                             }
@@ -265,18 +271,18 @@ namespace PortPinger
             if (result >= 0 && result <= Ping_Handler.TIMEOUT)
             {
                 //初始化网段状态
-                Setting.networkInfo[part].Delay = result;
-                Setting.networkInfo[part].Visible = true;
+                Setting.NetworkInfo[part].Delay = result;
+                Setting.NetworkInfo[part].Visible = true;
 
                 //启用归属当前网段的实时检测线程
-                Setting.networkInfo[part].DetectingThread = new Thread(() =>
+                Setting.NetworkInfo[part].DetectingThread = new Thread(() =>
                 {
                     Detecting(part);
                 })
                 {
                     IsBackground = true
                 };
-                Setting.networkInfo[part].DetectingThread.Start();
+                Setting.NetworkInfo[part].DetectingThread.Start();
             }
             return result;
         }
@@ -293,7 +299,7 @@ namespace PortPinger
                 var delay = Ping_Handler.PingIP(Setting.NetworkSegment + part);
 
                 //超出记录总量删除多余部分并记录
-                Setting.networkInfo[part].Delay = delay;
+                Setting.NetworkInfo[part].Delay = delay;
 
                 //计算下一次间隔延时
                 var sleepTime = Setting.DetectDelay - delay.ToInt();
@@ -312,17 +318,23 @@ namespace PortPinger
         private void UpdateForm()
         {
             //统计曾经总在线人数
-            var nowOnlineCount = Setting.networkInfo.Count(e => e.Visible);
-
-            //在线人数发生变化则重置显示界面并更新
-            if (nowOnlineCount != onlineCount)
-            {
-                ResetInformation();
-            }
-            UpdateInformation();
-
+            var nowOnlineCount = Setting.NetworkInfo.Count(e => e.Visible);
+            //上次人数
+            var lastCount = onlineCount;
             //记录历史在线人数
             onlineCount = nowOnlineCount;
+
+            //在线人数发生变化则重置显示界面并更新
+            if (nowOnlineCount != lastCount || !controlsInited)
+            {
+                ResetInformation();
+
+                controlsInited = true;
+            }
+            if (nowOnlineCount != 0)
+            {
+                UpdateInformation();
+            }
         }
 
         /// <summary>
@@ -358,7 +370,7 @@ namespace PortPinger
 
             for (int i = 0; i < Setting.PART_COUNT; ++i)
             {
-                var info = Setting.networkInfo[i];
+                var info = Setting.NetworkInfo[i];
                 //用户曾在线则创建网段信息控件
                 if (info.Visible && !info.UserHidden)
                 {
@@ -394,6 +406,8 @@ namespace PortPinger
                         Name = "la_" + i
                     };
 
+                    l_ip.MouseDoubleClick += L_ip_MouseDoubleClick;
+
                     panelControls.Add(p_now);
                     panelControls.Add(p_avg);
                     panelControls.Add(l_ip);
@@ -428,6 +442,64 @@ namespace PortPinger
 
         }
 
+        Form l_ip_form = null;
+        Thread control_log_thread = null;
+        private void L_ip_MouseDoubleClick(object sender, EventArgs e)
+        {
+            var obj = (Label)sender;
+            var ip = obj.Text;
+            var index = obj.Name.Replace("lip_", "").ToInt();
+
+            if (l_ip_form == null)
+            {
+                l_ip_form = new Form()
+                {
+                    Size = new Size(300, 360)
+                };
+
+                l_ip_form.Controls.Add(new Label()
+                {
+                    Location = new Point(10, 10),
+                    Size = new Size(280, 340),
+                    Name = "log",
+                    Text = Setting.NetworkInfo[index].DelayLogString
+                });
+            }
+
+            if (control_log_thread != null && control_log_thread.IsAlive)
+            {
+                control_log_thread.Abort();
+            }
+
+            control_log_thread = new Thread(() =>
+            {
+                while (true)
+                {
+                    var l_log = (Label)l_ip_form.Controls.Find("log", false)[0];
+
+                    Invoke(new Action(() =>
+                    {
+                        l_log.Text = ip + ":\r\n" + Setting.NetworkInfo[index].DelayLogString;
+                    }));
+
+                    Thread.Sleep(20);
+                }
+            })
+            {
+                IsBackground = true
+            };
+            control_log_thread.Start();
+
+            l_ip_form.FormClosing += L_ip_form_FormClosing;
+
+            l_ip_form.Show();
+        }
+
+        private void L_ip_form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            control_log_thread.Abort();
+        }
+
         /// <summary>
         /// 更新用户界面信息
         /// </summary>
@@ -435,7 +507,7 @@ namespace PortPinger
         {
             for (int i = 0; i < Setting.PART_COUNT; ++i)
             {
-                var info = Setting.networkInfo[i];
+                var info = Setting.NetworkInfo[i];
                 //用户曾在线则更新用户信息
                 if (info.Visible && !info.UserHidden)
                 {
@@ -449,7 +521,7 @@ namespace PortPinger
                     //信息更新
                     panel_Now.BackColor = info.DelayColor;
                     panel_Avg.BackColor = info.DelayColor_Avg;
-                    label_IP.Text = Setting.networkInfo[i].HostNickName;
+                    label_IP.Text = Setting.NetworkInfo[i].HostNickName;
                     label_Now.Text = info.DelayText;
                     label_Now.ForeColor = info.DelayTextColor;
                     label_Avg.Text = info.DelayText_Avg;
@@ -463,7 +535,7 @@ namespace PortPinger
             //消息控件消息更新
             label_Log.Text =
                 "共" + onlineCount +
-                "人(在线: " + Setting.networkInfo.Count(e => !e.IsDisconnect) +
+                "人(在线: " + Setting.NetworkInfo.Count(e => !e.IsDisconnect) +
                 "人) " +
                 "离线敲门: " + knockDoorPart;
 
@@ -514,6 +586,27 @@ namespace PortPinger
         }
 
         #endregion
+
+        /// <summary>
+        /// 窗体关闭前事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (initThread.IsAlive)
+            {
+                initThread.Abort();
+            }
+            if (controlThread.IsAlive)
+            {
+                controlThread.Abort();
+            }
+            if (offlineDetectThread.IsAlive)
+            {
+                offlineDetectThread.Abort();
+            }
+        }
     }
 
 }
