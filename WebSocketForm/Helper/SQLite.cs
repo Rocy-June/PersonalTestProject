@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSocketForm.Function
+namespace WebSocketForm.Helper
 {
     class SQLite<T> where T : new()
     {

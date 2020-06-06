@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using WebSocketForm.Function;
+using WebSocketForm.Helper;
 using WebSocketForm.Model;
 using WebSocketForm.Model.Enum;
 using WebSocketForm.View;
@@ -51,8 +51,6 @@ namespace WebSocketForm
         {
             try
             {
-
-
                 using (var fs = new FileStream(PATH + "setting\\setting.dat", FileMode.Create, FileAccess.Write))
                 {
                     var bytesData = Config.ToBytes();
@@ -88,14 +86,15 @@ namespace WebSocketForm
         /// 读取设定
         /// </summary>
         /// <returns>读取错误信息</returns>
-        public static Exception SettingLoad()
+        public static void SettingLoad()
         {
             try
             {
-                byte[] configBytesData = null;
-                var userEntitySize = new User().ToBytes().Length;
-
                 FileStream fs = null;
+                var userEntitySize = new User().ToBytes().Length;
+                var groupEneitySize = new GroupChat().ToBytes().Length;
+
+                byte[] configBytesData = null;
                 if (!File.Exists(PATH + "setting\\setting.dat"))
                 {
                     if (!Directory.Exists(PATH + "setting\\"))
@@ -104,41 +103,29 @@ namespace WebSocketForm
                     }
                     fs = File.Create(PATH + "setting\\setting.dat");
                 }
-                using (fs = fs == null ? new FileStream(PATH + "setting\\setting.dat", FileMode.OpenOrCreate, FileAccess.Read) : fs)
+                using (fs = fs ?? new FileStream(PATH + "setting\\setting.dat", FileMode.OpenOrCreate, FileAccess.Read))
                 {
                     configBytesData = new byte[fs.Length];
-                    fs.Read(configBytesData, 0, fs.Length.ToIntWidthEx());
+                    fs.Read(configBytesData, 0, fs.Length.ToIntWithEx());
                 }
-                if (configBytesData.Length > 0)
+                if (configBytesData.Length > 0 && configBytesData.Length % userEntitySize == 0)
                 {
-                    if (configBytesData.Length % userEntitySize != 0)
-                    {
-                        return new FileFormatException("版本更新致保存文件格式不正确。");
-                    }
                     Config = configBytesData.ToObject<User>();
                 }
-                else
-                {
-                    Application.Current.Run();
-                    Application.Current.Shutdown();
-                }
+                fs = null;
 
                 byte[] userBytesData = null;
                 if (!File.Exists(PATH + "setting\\user.dat"))
                 {
                     fs = File.Create(PATH + "setting\\user.dat");
                 }
-                using (fs = new FileStream(PATH + "data\\user.dat", FileMode.OpenOrCreate, FileAccess.Read))
+                using (fs = fs ?? new FileStream(PATH + "setting\\user.dat", FileMode.OpenOrCreate, FileAccess.Read))
                 {
                     userBytesData = new byte[fs.Length];
-                    fs.Read(userBytesData, 0, fs.Length.ToIntWidthEx());
+                    fs.Read(userBytesData, 0, fs.Length.ToIntWithEx());
                 }
-                if (userBytesData.Length > 0)
+                if (userBytesData.Length > 0 && userBytesData.Length % userEntitySize == 0)
                 {
-                    if (userBytesData.Length % userEntitySize != 0)
-                    {
-                        return new FileFormatException("版本更新致保存文件格式不正确。");
-                    }
                     var entityCount = userBytesData.Length / userEntitySize;
                     for (var i = 0; i < entityCount; ++i)
                     {
@@ -147,39 +134,36 @@ namespace WebSocketForm
                         AddUser(entityBytes.ToObject<User>());
                     }
                 }
+                fs = null;
 
                 byte[] groupBytesData = null;
                 if (!File.Exists(PATH + "setting\\group.dat"))
                 {
                     fs = File.Create(PATH + "setting\\group.dat");
                 }
-                using (fs = new FileStream(PATH + "data\\group.dat", FileMode.OpenOrCreate, FileAccess.Read))
+                using (fs = fs ?? new FileStream(PATH + "setting\\group.dat", FileMode.OpenOrCreate, FileAccess.Read))
                 {
                     groupBytesData = new byte[fs.Length];
-                    fs.Read(groupBytesData, 0, fs.Length.ToIntWidthEx());
+                    fs.Read(groupBytesData, 0, fs.Length.ToIntWithEx());
                 }
-                if (groupBytesData.Length > 0)
+                if (groupBytesData.Length > 0 && groupBytesData.Length % groupEneitySize == 0)
                 {
-                    var entitySize = new GroupChat().ToBytes().Length;
-                    if (groupBytesData.Length % entitySize != 0)
-                    {
-                        return new FileFormatException("版本更新致保存文件格式不正确。");
-                    }
-                    var entityCount = groupBytesData.Length / entitySize;
+                    var entityCount = groupBytesData.Length / groupEneitySize;
                     for (var i = 0; i < entityCount; ++i)
                     {
-                        var entityBytes = new byte[entitySize];
-                        Array.Copy(groupBytesData, 0, entityBytes, i * entitySize, entitySize);
+                        var entityBytes = new byte[groupEneitySize];
+                        Array.Copy(groupBytesData, 0, entityBytes, i * groupEneitySize, groupEneitySize);
                         AddGroupChat(entityBytes.ToObject<GroupChat>());
                     }
+
                 }
             }
             catch (Exception ex)
             {
-                return ex;
+                MessageBox.Show($@"{ex.Message}
+{ex.StackTrace}", "警告", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
-
-            return null;
         }
 
         #endregion

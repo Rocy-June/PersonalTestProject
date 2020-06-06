@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using WebSocketForm.Enum;
+using WebSocketForm.Helper;
 using WebSocketForm.Model;
 
 namespace WebSocketForm.Function

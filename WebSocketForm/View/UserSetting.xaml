@@ -154,7 +154,7 @@
                 <Grid>
                     <Border x:Name="UserHeadImage" Style="{StaticResource UserHeadImage}"/>
                     <Border x:Name="UserNameBorder" Style="{StaticResource UserNameBorder}">
-                        <TextBox x:Name="UserName" Style="{StaticResource UserName}" >TestName</TextBox>
+                        <TextBox x:Name="UserName" Style="{StaticResource UserName}"></TextBox>
                     </Border>
                     <Border Style="{StaticResource SaveButtonBorder}">
                         <Button Style="{StaticResource SaveButton}" Content="保存"/>

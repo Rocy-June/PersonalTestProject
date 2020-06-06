@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WebSocketForm.Enum;
 using WebSocketForm.Function;
+using WebSocketForm.Helper;
 using WebSocketForm.Model;
 
 namespace WebSocketForm.View
@@ -27,21 +28,21 @@ namespace WebSocketForm.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static Thread currentThread;
+        /// <summary>
+        /// 持续在线广播线程
+        /// </summary>
+        public static Thread StillOnlineBroadcastingThread;
+        /// <summary>
+        /// 刷新在线状态线程
+        /// </summary>
+        public static Thread UserStatusRefreshThread;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            //记录线程
-            currentThread = Thread.CurrentThread;
-
             //读取设定
-            var settingLoadException = Setting.SettingLoad();
-            if (settingLoadException != null)
-            {
-                MessageBox.Show("读取设定时出现错误:\r\n" + settingLoadException.Message);
-            }
+            Setting.SettingLoad();
 
             //清空测试用列表项目
             OnlineUserList.Items.Clear();
@@ -54,6 +55,19 @@ namespace WebSocketForm.View
             LocalServer.LogoutReceived += LocalServer_LogoutReceived;
             LocalServer.OpenLocalServer();
 
+            if (Setting.Config == null)
+            {
+                var us = new UserSetting();
+                us.ShowDialog();
+            }
+
+            StartOnlineThreads();
+        }
+
+        #region 过程方法
+
+        private void StartOnlineThreads()
+        {
             //上线广播
             new Thread(SocketTool.OnlineBroadcasting) { IsBackground = true }.Start();
             //持续在线广播线程
@@ -62,7 +76,10 @@ namespace WebSocketForm.View
             new Thread(Setting.UserStatusRefresh) { IsBackground = true }.Start();
         }
 
+        #endregion
+
         #region 服务器事件
+
         private void LocalServer_LoginReceived(PostInfo data, IPAddress ip)
         {
             ServerEvent.LocalServer_LoginReceived(data, ip);
@@ -78,6 +95,7 @@ namespace WebSocketForm.View
             OnlineUserList.ItemsSource = Setting.GetMenuList();
             OnlineUserList.Items.Refresh();
         }
+
         #endregion
 
         #region 窗体基础事件
@@ -158,11 +176,7 @@ namespace WebSocketForm.View
                 MessageBox.Show(s_ex.Message);
             }
 
-            var l_ex = Setting.SettingLoad();
-            if (l_ex != null)
-            {
-                MessageBox.Show(l_ex.Message);
-            }
+            Setting.SettingLoad();
 
             var eT = DateTime.Now;
 

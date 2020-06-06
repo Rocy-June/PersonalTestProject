@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSocketForm.Function
+namespace WebSocketForm.Helper
 {
     static class ExtendFunctions
     {
@@ -19,27 +19,25 @@ namespace WebSocketForm.Function
         /// <returns>值</returns>
         public static int Int(this object obj)
         {
-            try { return Convert.ToInt32(obj); }
-            catch { return 0; }
+            return (int)obj.Double();
         }
         /// <summary>
         /// 将变量转换为int32, 但无法转换会报错
         /// </summary>
         /// <param name="obj">任意变量</param>
         /// <returns>值</returns>
-        public static int ToIntWidthEx(this object obj)
+        public static int ToIntWithEx(this object obj)
         {
-            return Convert.ToInt32(obj);
+            return (int)obj.ToDoubleWithEx();
         }
         /// <summary>
         /// 将变量转换为int32, 但无法转换会返回null
         /// </summary>
         /// <param name="obj">任意变量</param>
         /// <returns>值</returns>
-        public static int? ToIntWidthNull(this object obj)
+        public static int? ToIntWithNull(this object obj)
         {
-            try { return Convert.ToInt32(obj); }
-            catch { return null; }
+            return (int?)obj.ToDoubleWithNull();
         }
 
         /// <summary>
@@ -49,27 +47,25 @@ namespace WebSocketForm.Function
         /// <returns>值</returns>
         public static long Long(this object obj)
         {
-            try { return Convert.ToInt64(obj); }
-            catch { return 0; }
+            return (long)obj.Double();
         }
         /// <summary>
         /// 将变量转换为int64, 但无法转换会报错
         /// </summary>
         /// <param name="obj">任意变量</param>
         /// <returns>值</returns>
-        public static long ToLongWidthEx(this object obj)
+        public static long ToLongWithEx(this object obj)
         {
-            return Convert.ToInt64(obj);
+            return (long)obj.ToDoubleWithEx();
         }
         /// <summary>
         /// 将变量转换为int64, 但无法转换会返回null
         /// </summary>
         /// <param name="obj">任意变量</param>
         /// <returns>值</returns>
-        public static long? ToLongWidthNull(this object obj)
+        public static long? ToLongWithNull(this object obj)
         {
-            try { return Convert.ToInt64(obj); }
-            catch { return null; }
+            return (long?)obj.ToDoubleWithNull();
         }
 
         /// <summary>
@@ -82,21 +78,23 @@ namespace WebSocketForm.Function
             try { return Convert.ToDouble(obj); }
             catch { return 0; }
         }
+
         /// <summary>
         /// 将变量转换为double, 但无法转换会报错
         /// </summary>
         /// <param name="obj">任意变量</param>
         /// <returns>值</returns>
-        public static double ToDoubleWidthEx(this object obj)
+        public static double ToDoubleWithEx(this object obj)
         {
             return Convert.ToDouble(obj);
         }
+
         /// <summary>
         /// 将变量转换为double, 但无法转换会返回null
         /// </summary>
         /// <param name="obj">任意变量</param>
         /// <returns>值</returns>
-        public static double? ToDoubleWidthNull(this object obj)
+        public static double? ToDoubleWithNull(this object obj)
         {
             try { return Convert.ToDouble(obj); }
             catch { return null; }
@@ -135,7 +133,7 @@ namespace WebSocketForm.Function
                 obj = (T)iFormatter.Deserialize(ms);
             }
             return obj;
-        } 
+        }
         #endregion
     }
 }

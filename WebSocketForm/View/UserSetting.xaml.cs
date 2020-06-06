@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -16,6 +18,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WebSocketForm.Function;
+using WebSocketForm.Helper;
 using WebSocketForm.Model;
 
 namespace WebSocketForm.View
@@ -25,7 +28,7 @@ namespace WebSocketForm.View
     /// </summary>
     public partial class UserSetting : Window
     {
-        Bitmap userHeadImage = null;
+        BitmapImage userHeadImage = null;
 
         public UserSetting()
         {
@@ -39,11 +42,29 @@ namespace WebSocketForm.View
 
         private void SelectHeadImage(object sender, MouseButtonEventArgs e)
         {
-            var selectedHeadImage = new OpenFileDialog()
+            var ofd = new OpenFileDialog()
             {
-                Filter = "所有图片|*.bmp;*.jpeg;*.jpg;*.png|Windows位图(*.bmp)|*.bmp|JPEG格式(*.jpg)|*.jpg;*.jpeg|便携式网络图形(*.png)|*.png|",
+                Filter = "所有图片|*.bmp;*.jpeg;*.jpg;*.png|Windows位图(*.bmp)|*.bmp|JPEG格式(*.jpg)|*.jpg;*.jpeg|便携式网络图形(*.png)|*.png",
                 RestoreDirectory = false
             };
+            ofd.ShowDialog();
+            if (string.IsNullOrWhiteSpace(ofd.FileName))
+            {
+                return;
+            }
+
+            var headImagePath = $@"{Setting.PATH}setting\\headImage.png";
+            using (var image = new Bitmap(ofd.FileName))
+            {
+                image.Save(headImagePath, ImageFormat.Png);
+
+                using (var headImage = new Bitmap(headImagePath))
+                {
+                    userHeadImage = ImageHelper.BitmapToBitmapImage(headImage);
+                }
+            }
+
+            RefreshHeadImage();
         }
 
         private void UserNameBorderMouseLeave(object sender, MouseEventArgs e)
@@ -64,8 +85,13 @@ namespace WebSocketForm.View
             }
 
             Setting.Config.IP = IPAddress.Parse(SocketTool.GetLocalIp());
-            Setting.Config.HeadImage = userHeadImage;
+            Setting.Config.HeadImage = ImageHelper.BitmapImageToBytes(userHeadImage);
             Setting.Config.Name = UserName.Text;
+        }
+
+        private void RefreshHeadImage()
+        {
+            UserHeadImage.Background = new ImageBrush(userHeadImage);
         }
     }
 }

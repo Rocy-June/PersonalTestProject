@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using WebSocketForm.Enum;
 
 namespace WebSocketForm.Model
@@ -15,7 +16,7 @@ namespace WebSocketForm.Model
         /// <summary>
         /// 头像
         /// </summary>
-        public Bitmap HeadImage { get; set; }
+        public byte[] HeadImage { get; set; }
         /// <summary>
         /// 标题
         /// </summary>
