@@ -28,15 +28,25 @@ namespace WebSocketForm.View
     /// </summary>
     public partial class UserSetting : Window
     {
-        BitmapImage userHeadImage = null;
+        Bitmap userHeadImage = null;
 
         public UserSetting()
         {
             InitializeComponent();
 
-            if (Setting.Config == null)
+            if (Setting.UserConfig == null)
             {
                 CloseFormButton.Visibility = Visibility.Collapsed;
+            }
+
+            if (Setting.UserConfig?.HeadImage != null)
+            {
+                userHeadImage = ImageHelper.BytesToBitmap(Setting.UserConfig.HeadImage);
+            }
+
+            if (userHeadImage != null)
+            {
+                RefreshHeadImage();
             }
         }
 
@@ -53,15 +63,13 @@ namespace WebSocketForm.View
                 return;
             }
 
-            var headImagePath = $@"{Setting.PATH}setting\\headImage.png";
+            var headImagePath = $@"{Setting.PATH}setting\\HeadImage.png";
             using (var image = new Bitmap(ofd.FileName))
             {
+                userHeadImage?.Dispose();
                 image.Save(headImagePath, ImageFormat.Png);
+                userHeadImage = new Bitmap(headImagePath);
 
-                using (var headImage = new Bitmap(headImagePath))
-                {
-                    userHeadImage = ImageHelper.BitmapToBitmapImage(headImage);
-                }
             }
 
             RefreshHeadImage();
@@ -79,19 +87,31 @@ namespace WebSocketForm.View
 
         private void SaveUserInfoClick(object sender, RoutedEventArgs e)
         {
-            if (Setting.Config == null)
+            if (Setting.UserConfig == null)
             {
-                Setting.Config = new User();
+                Setting.UserConfig = new User();
             }
 
-            Setting.Config.IP = IPAddress.Parse(SocketTool.GetLocalIp());
-            Setting.Config.HeadImage = ImageHelper.BitmapImageToBytes(userHeadImage);
-            Setting.Config.Name = UserName.Text;
+            Setting.UserConfig.IP = IPAddress.Parse(SocketTool.GetLocalIp());
+            Setting.UserConfig.HeadImage = ImageHelper.BitmapToBytes(userHeadImage);
+            Setting.UserConfig.Name = UserName.Text;
+
+            var ex = Setting.Save();
+
+            if (ex != null)
+            {
+                MessageBox.Show($@"{ex.Message}
+{ex.StackTrace}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                Close();
+            }
         }
 
         private void RefreshHeadImage()
         {
-            UserHeadImage.Background = new ImageBrush(userHeadImage);
+            UserHeadImage.Background = new ImageBrush(ImageHelper.BitmapToBitmapImage(userHeadImage));
         }
     }
 }

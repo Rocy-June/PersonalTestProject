@@ -135,27 +135,34 @@ namespace WebSocketForm.Function
 
             while (true)
             {
+                var d = server.Receive(ref receive_ipep);
+                MainWindow.CurrentWindow.Dispatcher.Invoke(() =>
+                {
+                    MainWindow.CurrentWindow.test.Text = d.Length.ToString();
+                });
+                continue;
+
                 var data = server.Receive(ref receive_ipep).ToObject<PostInfo>();
 
                 switch (data.Action)
                 {
                     case PostActionType.unknown:
-                        _UnknownReceived(data, receive_ipep.Address);
+                        _UnknownReceived?.Invoke(data, receive_ipep.Address);
                         break;
                     case PostActionType.login:
-                        _LoginReceived(data, receive_ipep.Address);
+                        _LoginReceived?.Invoke(data, receive_ipep.Address);
                         break;
                     case PostActionType.logout:
-                        _LogoutReceived(data, receive_ipep.Address);
+                        _LogoutReceived?.Invoke(data, receive_ipep.Address);
                         break;
                     case PostActionType.stillOnline:
-                        _StillOnlineReceived(data, receive_ipep.Address);
+                        _StillOnlineReceived?.Invoke(data, receive_ipep.Address);
                         break;
                     case PostActionType.messageSend:
-                        _MessageSendReceived(data, receive_ipep.Address);
+                        _MessageSendReceived?.Invoke(data, receive_ipep.Address);
                         break;
                     case PostActionType.fileSend:
-                        _FileSendReceived(data, receive_ipep.Address);
+                        _FileSendReceived?.Invoke(data, receive_ipep.Address);
                         break;
                     default:
                         break;

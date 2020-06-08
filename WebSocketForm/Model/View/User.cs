@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 using WebSocketForm.Enum;
 using WebSocketForm.Model.Enum;
 
-namespace WebSocketForm.Model
+namespace WebSocketForm.Model.View
 {
-    [Serializable]
     public class User : Menu
     {
         public IPAddress IP { get; set; }
@@ -42,16 +41,5 @@ namespace WebSocketForm.Model
                 }[OnlineStatus]
             );
         }
-    }
-
-    public class User_Post
-    {
-        public IPAddress IP { get; set; }
-
-        public Bitmap HeadImage { get; set; }
-
-        public string Name { get; set; }
-
-        public OnlineStatus Status { get; set; }
     }
 }

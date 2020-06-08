@@ -40,6 +40,39 @@ namespace WebSocketForm.Helper
             }
         }
 
+        public static BitmapImage BitmapToBitmapImage(Bitmap bm)
+        {
+            var bmi = new BitmapImage();
+            using (var ms = new MemoryStream())
+            {
+                bm.Save(ms, ImageFormat.Png);
+                bmi.BeginInit();
+                bmi.StreamSource = ms;
+                bmi.CacheOption = BitmapCacheOption.OnLoad;
+                bmi.EndInit();
+                bmi.Freeze();
+
+                return bmi;
+            }
+        }
+
+        public static byte[] BitmapToBytes(Bitmap bm)
+        {
+            using (var ms = new MemoryStream())
+            {
+                bm.Save(ms, ImageFormat.Png);
+                return ms.GetBuffer();
+            }
+        }
+
+        public static Bitmap BytesToBitmap(byte[] bytes)
+        {
+            using (var ms = new MemoryStream(bytes))
+            {
+                return (Bitmap)Image.FromStream(ms);
+            }
+        }
+
         public static BitmapImage BytesToBitmapImage(byte[] bytes)
         {
             try
@@ -54,22 +87,6 @@ namespace WebSocketForm.Helper
             catch
             {
                 return null;
-            }
-        }
-
-        public static BitmapImage BitmapToBitmapImage(Bitmap bm)
-        {
-            var bmi = new BitmapImage();
-            using (var ms = new MemoryStream())
-            {
-                bm.Save(ms, ImageFormat.Png);
-                bmi.BeginInit();
-                bmi.StreamSource = ms;
-                bmi.CacheOption = BitmapCacheOption.OnLoad;
-                bmi.EndInit();
-                bmi.Freeze();
-
-                return bmi;
             }
         }
     }

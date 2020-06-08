@@ -44,16 +44,14 @@ namespace WebSocketForm.Function
         /// </summary>
         public static void OnlineBroadcasting()
         {
-            var udpClient = new UdpClient();
-            var ipep = new IPEndPoint(IPAddress.Broadcast, port);
-
             var postData = new PostInfo()
             {
-                Action = PostActionType.login
+                Action = PostActionType.login,
+                Data = Setting.UserConfig,
+                IP = 
             };
-            var bytesData = postData.ToBytes();
 
-            udpClient.SendAsync(bytesData, bytesData.Length, ipep);
+            CommunicationHelper.UDP_Send(IPAddress.Broadcast, postData);
         }
 
         /// <summary>

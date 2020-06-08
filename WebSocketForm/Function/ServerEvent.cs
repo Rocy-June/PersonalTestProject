@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using WebSocketForm.Enum;
 using WebSocketForm.Model;
+using WebSocketForm.Model.Data;
 using WebSocketForm.Model.Enum;
+using WebSocketForm.View;
 
 namespace WebSocketForm.Function
 {
@@ -14,16 +16,18 @@ namespace WebSocketForm.Function
     {
         public static void LocalServer_LoginReceived(PostInfo data, IPAddress ip)
         {
-            var userData = (User)data.Data;
+            var userData = (Data_User)data.Data;
 
             Setting.AddUser(userData);
+            MainWindow.CurrentWindow.RefreshMenu();
         }
 
         public static void LocalServer_LogoutReceived(PostInfo data, IPAddress ip)
         {
-            var userData = (User)data.Data;
+            var userData = (Data_User)data.Data;
 
             Setting.AddUser(userData);
+            MainWindow.CurrentWindow.RefreshMenu();
         }
     }
 }

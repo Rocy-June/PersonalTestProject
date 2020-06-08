@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using WebSocketForm.Enum;
 
-namespace WebSocketForm.Model
+namespace WebSocketForm.Model.View
 {
     [Serializable]
     public abstract class Menu

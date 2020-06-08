@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebSocketForm.Model.Enum;
 
-namespace WebSocketForm.Model
+namespace WebSocketForm.Model.View
 {
     public class Chat
     {

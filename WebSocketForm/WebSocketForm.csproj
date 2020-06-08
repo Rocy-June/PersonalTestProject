@@ -62,8 +62,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppData.cs" />
+    <Compile Include="Helper\CommunicationHelper.cs" />
     <Compile Include="Helper\ImageHelper.cs" />
+    <Compile Include="Helper\IoHelper.cs" />
     <Compile Include="Helper\SQLite.cs" />
+    <Compile Include="Model\Data\Data_Package.cs" />
+    <Compile Include="Model\Data\Data_GroupChat.cs" />
+    <Compile Include="Model\Data\Data_User.cs" />
     <Compile Include="Model\SQLiteModel\FilterCommand.cs" />
     <Compile Include="View\UserSetting.xaml.cs">
       <DependentUpon>UserSetting.xaml</DependentUpon>
@@ -77,7 +83,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Function\ServerEvent.cs" />
-    <Compile Include="Model\Chat.cs" />
+    <Compile Include="Model\View\Chat.cs" />
     <Compile Include="Model\Enum\MessageStatus.cs" />
     <Compile Include="Model\Enum\ChatType.cs" />
     <Compile Include="Model\Enum\OnlineStatus.cs" />
@@ -85,7 +91,7 @@
     <Compile Include="Helper\ExtendFunctions.cs" />
     <Compile Include="Function\LocalServer.cs" />
     <Compile Include="Model\GroupChat.cs" />
-    <Compile Include="Model\User.cs" />
+    <Compile Include="Model\View\User.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -98,7 +104,7 @@
   <ItemGroup>
     <Compile Include="Function\SocketTool.cs" />
     <Compile Include="Model\Enum\IconFont.cs" />
-    <Compile Include="Model\Menu.cs" />
+    <Compile Include="Model\View\Menu.cs" />
     <Compile Include="Model\PostInfo.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

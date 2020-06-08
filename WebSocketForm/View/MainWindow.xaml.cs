@@ -20,6 +20,7 @@ using WebSocketForm.Enum;
 using WebSocketForm.Function;
 using WebSocketForm.Helper;
 using WebSocketForm.Model;
+using WebSocketForm.Model.View;
 
 namespace WebSocketForm.View
 {
@@ -28,6 +29,8 @@ namespace WebSocketForm.View
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow CurrentWindow;
+
         /// <summary>
         /// 持续在线广播线程
         /// </summary>
@@ -39,10 +42,27 @@ namespace WebSocketForm.View
 
         public MainWindow()
         {
-            InitializeComponent();
+            CurrentWindow = this;
 
+            InitializeComponent();
+            Init();
+
+            if (Setting.UserConfig == null)
+            {
+                var us = new UserSetting();
+                us.ShowDialog();
+            }
+
+            StartOnlineThreads();
+            LoadedInit();
+        }
+
+        #region 过程方法
+
+        private void Init()
+        {
             //读取设定
-            Setting.SettingLoad();
+            Setting.Load();
 
             //清空测试用列表项目
             OnlineUserList.Items.Clear();
@@ -54,17 +74,12 @@ namespace WebSocketForm.View
             LocalServer.LoginReceived += LocalServer_LoginReceived;
             LocalServer.LogoutReceived += LocalServer_LogoutReceived;
             LocalServer.OpenLocalServer();
-
-            if (Setting.Config == null)
-            {
-                var us = new UserSetting();
-                us.ShowDialog();
-            }
-
-            StartOnlineThreads();
         }
 
-        #region 过程方法
+        private void LoadedInit()
+        {
+            UserHeadImage.Background = new ImageBrush(ImageHelper.BytesToBitmapImage(Setting.UserConfig.HeadImage));
+        }
 
         private void StartOnlineThreads()
         {
@@ -74,6 +89,16 @@ namespace WebSocketForm.View
             new Thread(SocketTool.StillOnlineBroadcasting) { IsBackground = true }.Start();
             //刷新在线状态线程
             new Thread(Setting.UserStatusRefresh) { IsBackground = true }.Start();
+        }
+
+        #endregion
+
+        #region 接口
+
+        public void RefreshMenu()
+        {
+            OnlineUserList.ItemsSource = Setting.GetMenuList();
+            OnlineUserList.Items.Refresh();
         }
 
         #endregion
@@ -168,19 +193,21 @@ namespace WebSocketForm.View
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var sT = DateTime.Now;
-
-            var s_ex = Setting.SettingSave();
-            if (s_ex != null)
+            new Thread(() =>
             {
-                MessageBox.Show(s_ex.Message);
-            }
+                var uc = new UdpClient();
+                var ipep = new IPEndPoint(IPAddress.Broadcast, 8009);
 
-            Setting.SettingLoad();
-
-            var eT = DateTime.Now;
-
-            MessageBox.Show((eT - sT).TotalMilliseconds.ToString());
+                while(true)
+                {
+                    uc.SendAsync(new byte[264130], 264130, ipep);
+                    Thread.Sleep(10);
+                    
+                }
+            })
+            {
+                IsBackground = true
+            }.Start();
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
@@ -196,17 +223,12 @@ namespace WebSocketForm.View
                 Title = "测试"
             });
 
-            OnlineUserList.ItemsSource = Setting.GetMenuList();
-            OnlineUserList.Items.Refresh();
+            RefreshMenu();
         }
 
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
-            SocketTool.OnlineBroadcasting();
-
-            Application.Current.Run();
-            Application.Current.Shutdown();
-
+            
         }
     }
 }

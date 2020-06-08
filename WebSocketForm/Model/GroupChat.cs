@@ -5,10 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using WebSocketForm.Model.View;
 
 namespace WebSocketForm.Model
 {
-    [Serializable]
     public class GroupChat : Menu
     {
         public IPAddress OwnerID { get; set; }

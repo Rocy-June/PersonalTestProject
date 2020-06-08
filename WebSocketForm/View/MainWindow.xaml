@@ -340,16 +340,14 @@
                         <Border Style="{StaticResource SearchBoxOuter}">
                             <Grid>
                                 <Label Style="{StaticResource SearchIcon}"></Label>
-                                <TextBox Style="{StaticResource SearchInput}"/>
+                                <TextBox Name="test" Style="{StaticResource SearchInput}"/>
                             </Grid>
                         </Border>
                     </Border>
                     <Border Style="{StaticResource FunctionBox}">
                         <Grid>
-                            <Border Style="{StaticResource HeadIcon}">
-                            </Border>
-                            <Border Style="{StaticResource LoginStatusIcon}">
-                            </Border>
+                            <Border Name="UserHeadImage" Style="{StaticResource HeadIcon}"/>
+                            <Border Style="{StaticResource LoginStatusIcon}"/>
                             <Border Style="{StaticResource HeadTriangle}">
                                 <Polygon Stroke="#888" Fill="#888" StrokeThickness="1" Points="0,4 8,4 4,8"/>
                             </Border>
