@@ -20,13 +20,29 @@ namespace WebSocketForm.Model.View
 
         public OnlineStatus OnlineStatus { get; set; }
 
-        public DateTime LastRespondTime { get; set; }
+        public DateTime LastResponsedTime { get; set; }
 
-        public override string LastSay => Setting.GetLastChat(IP)?.Message ?? "";
+        public override string LastSay => AppData.GetLastChat(IP)?.Message ?? "";
 
-        public override DateTime LastChatTime => Setting.GetLastChat(IP)?.SendTime ?? new DateTime(0);
+        public override DateTime LastChatTime => AppData.GetLastChat(IP)?.SendTime ?? new DateTime(0);
 
         public override string LastTimeStr => LastChatTime.ToString("MM-DD HH:mm");
+
+        public override string Title
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(NickName))
+                {
+                    return NickName;
+                }
+                if (!string.IsNullOrWhiteSpace(Name))
+                {
+                    return Name;
+                }
+                return IP.ToString();
+            }
+        }
 
         public char GetStatusIconFont()
         {

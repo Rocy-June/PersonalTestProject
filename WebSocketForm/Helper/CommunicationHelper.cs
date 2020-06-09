@@ -30,7 +30,7 @@ namespace WebSocketForm.Helper
                 {
                     for (var j = 0; j < dataPackes.Length; ++j)
                     {
-                        var packageBytes = dataPackes.ToBytes();
+                        var packageBytes = dataPackes[i].ToBytes();
                         udp.Send(packageBytes, packageBytes.Length, ipep);
                     }
                 }
@@ -44,18 +44,34 @@ namespace WebSocketForm.Helper
         private static Data_Package[] SplitData(byte[] data, int packageSize)
         {
             var id = DateTime.Now.Ticks;
-            var splitPackagesCount = data.Length / packageSize + (data.Length % packageSize != 0 ? 1 : 0);
-            var result = new Data_Package[splitPackagesCount];
+            var splitPackagesFullCount = data.Length / packageSize;
+            var needSmallPackage = data.Length % packageSize != 0;
 
-            for (int i = 0; i < splitPackagesCount; i++)
+            var result = new Data_Package[splitPackagesFullCount + (needSmallPackage ? 1 : 0)];
+
+            for (int i = 0; i < splitPackagesFullCount; i++)
             {
-                result[0] = new Data_Package()
+                result[i] = new Data_Package()
                 {
                     ID = id,
                     Index = i,
-                    DataLength = data.Length
+                    DataLength = data.Length,
+                    Data = new byte[packageSize]
                 };
-                Buffer.BlockCopy(data, packageSize * i, result[0].Data, 0, packageSize);
+                Array.Copy(data, packageSize * i, result[i].Data, 0, packageSize);
+            }
+
+            if (needSmallPackage)
+            {
+                var index = result.Length - 1;
+                result[index] = new Data_Package()
+                {
+                    ID = id,
+                    Index = index,
+                    DataLength = data.Length,
+                    Data = new byte[data.Length % packageSize]
+                };
+                Array.Copy(data, packageSize * index, result[index].Data, 0, data.Length % packageSize);
             }
 
             return result;

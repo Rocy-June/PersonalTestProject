@@ -10,21 +10,28 @@ using WebSocketForm.Enum;
 
 namespace WebSocketForm.Model.View
 {
-    [Serializable]
     public abstract class Menu
     {
         /// <summary>
         /// 头像
         /// </summary>
-        public byte[] HeadImage { get; set; }
-        /// <summary>
-        /// 标题
-        /// </summary>
-        public string Title { get; set; }
+        public BitmapImage HeadImage { get; set; }
         /// <summary>
         /// 是否置顶
         /// </summary>
         public bool IsTop { get; set; }
+        /// <summary>
+        /// 是否静音
+        /// </summary>
+        public bool IsMuted { get; set; }
+        /// <summary>
+        /// 状态图标列表
+        /// </summary>
+        private List<IconFont> Status { get; }
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public abstract string Title { get; }
         /// <summary>
         /// 最后一条消息
         /// </summary>
@@ -37,10 +44,6 @@ namespace WebSocketForm.Model.View
         /// 最后一条消息的时间字符串(HH:mm)
         /// </summary>
         public abstract string LastTimeStr { get; }
-        /// <summary>
-        /// 状态图标列表
-        /// </summary>
-        private List<IconFont> Status { get; }
         /// <summary>
         /// 添加一个图标状态
         /// </summary>

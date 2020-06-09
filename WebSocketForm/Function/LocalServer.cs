@@ -135,13 +135,6 @@ namespace WebSocketForm.Function
 
             while (true)
             {
-                var d = server.Receive(ref receive_ipep);
-                MainWindow.CurrentWindow.Dispatcher.Invoke(() =>
-                {
-                    MainWindow.CurrentWindow.test.Text = d.Length.ToString();
-                });
-                continue;
-
                 var data = server.Receive(ref receive_ipep).ToObject<PostInfo>();
 
                 switch (data.Action)

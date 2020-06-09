@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebSocketForm.Model.View;
 
-namespace WebSocketForm.Model
+namespace WebSocketForm.Model.View
 {
     public class GroupChat : Menu
     {
@@ -19,10 +19,22 @@ namespace WebSocketForm.Model
 
         public string Name { get; set; }
 
-        public override string LastSay => Setting.GetLastChat(ID).Message;
+        public override string LastSay => AppData.GetLastChat(ID).Message;
 
-        public override DateTime LastChatTime => Setting.GetLastChat(ID).SendTime;
+        public override DateTime LastChatTime => AppData.GetLastChat(ID).SendTime;
 
         public override string LastTimeStr => LastChatTime.ToString("MM-DD HH:mm");
+
+        public override string Title
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(Name))
+                {
+                    return Name;
+                }
+                return OwnerID.ToString();
+            }
+        }
     }
 }

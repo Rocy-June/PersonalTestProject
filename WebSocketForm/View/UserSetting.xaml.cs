@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using WebSocketForm.Function;
 using WebSocketForm.Helper;
 using WebSocketForm.Model;
+using WebSocketForm.Model.File;
 
 namespace WebSocketForm.View
 {
@@ -63,7 +64,7 @@ namespace WebSocketForm.View
                 return;
             }
 
-            var headImagePath = $@"{Setting.PATH}setting\\HeadImage.png";
+            var headImagePath = $@"{AppData.PATH}setting\\HeadImage.png";
             using (var image = new Bitmap(ofd.FileName))
             {
                 userHeadImage?.Dispose();
@@ -89,14 +90,14 @@ namespace WebSocketForm.View
         {
             if (Setting.UserConfig == null)
             {
-                Setting.UserConfig = new User();
+                Setting.UserConfig = new File_User();
             }
 
-            Setting.UserConfig.IP = IPAddress.Parse(SocketTool.GetLocalIp());
+            Setting.UserConfig.IP = SocketTool.GetLocalIp().GetAddressBytes();
             Setting.UserConfig.HeadImage = ImageHelper.BitmapToBytes(userHeadImage);
             Setting.UserConfig.Name = UserName.Text;
 
-            var ex = Setting.Save();
+            var ex = AppData.Save();
 
             if (ex != null)
             {

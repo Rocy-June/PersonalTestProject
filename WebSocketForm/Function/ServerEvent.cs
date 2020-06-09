@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using WebSocketForm.Enum;
+using WebSocketForm.Helper;
 using WebSocketForm.Model;
 using WebSocketForm.Model.Data;
 using WebSocketForm.Model.Enum;
@@ -18,7 +19,7 @@ namespace WebSocketForm.Function
         {
             var userData = (Data_User)data.Data;
 
-            Setting.AddUser(userData);
+            AppData.AddUser(ModelHelper.DataUserToViewUser(userData));
             MainWindow.CurrentWindow.RefreshMenu();
         }
 
@@ -26,7 +27,7 @@ namespace WebSocketForm.Function
         {
             var userData = (Data_User)data.Data;
 
-            Setting.AddUser(userData);
+            AppData.AddUser(ModelHelper.DataUserToViewUser(userData));
             MainWindow.CurrentWindow.RefreshMenu();
         }
     }

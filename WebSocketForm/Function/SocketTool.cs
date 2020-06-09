@@ -6,6 +6,7 @@ using System.Threading;
 using WebSocketForm.Enum;
 using WebSocketForm.Helper;
 using WebSocketForm.Model;
+using WebSocketForm.Model.Enum;
 
 namespace WebSocketForm.Function
 {
@@ -17,26 +18,25 @@ namespace WebSocketForm.Function
         /// 获取本地ip地址,优先取内网ip
         /// </summary>
         /// <returns>本地IP字符串</returns>
-        public static string GetLocalIp()
+        public static IPAddress GetLocalIp(bool getIpv6 = false)
         {
-            var ips = GetLocalIpAddress();
+            var ips = GetLocalIpAddreses();
 
-            foreach (string ip in ips) if (ip.StartsWith("10.80.")) return ip;
-            foreach (string ip in ips) if (ip.Contains(".")) return ip;
+            foreach (var ip in ips) if (ip.IsIPv6LinkLocal == getIpv6) return ip;
 
-            return "127.0.0.1";
+            return null;
         }
 
         /// <summary>
         /// 获取本地ip地址。多个ip
         /// </summary>
         /// <returns>本地IP字符串列表</returns>
-        public static string[] GetLocalIpAddress()
+        public static IPAddress[] GetLocalIpAddreses()
         {
             var hostName = Dns.GetHostName();                   //获取主机名称  
             var addresses = Dns.GetHostAddresses(hostName);     //解析主机IP地址  
 
-            return addresses.Select(e => e.ToString()).ToArray();
+            return Dns.GetHostAddresses(hostName);
         }
 
         /// <summary>
@@ -47,8 +47,8 @@ namespace WebSocketForm.Function
             var postData = new PostInfo()
             {
                 Action = PostActionType.login,
-                Data = Setting.UserConfig,
-                IP = 
+                Data = ModelHelper.FileUserToDataUser(Setting.UserConfig),
+                IP = new IPAddress(Setting.UserConfig.IP)
             };
 
             CommunicationHelper.UDP_Send(IPAddress.Broadcast, postData);

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebSocketForm.Model.Data
 {
+    [Serializable]
     class Data_Package
     {
         public long ID { get; set; }

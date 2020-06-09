@@ -62,13 +62,13 @@ namespace WebSocketForm.View
         private void Init()
         {
             //读取设定
-            Setting.Load();
+            AppData.Load();
 
             //清空测试用列表项目
             OnlineUserList.Items.Clear();
 
             //重载控件
-            OnlineUserList.ItemsSource = Setting.GetMenuList();
+            OnlineUserList.ItemsSource = AppData.GetMenuList();
 
             //绑定服务器事件
             LocalServer.LoginReceived += LocalServer_LoginReceived;
@@ -88,7 +88,7 @@ namespace WebSocketForm.View
             //持续在线广播线程
             new Thread(SocketTool.StillOnlineBroadcasting) { IsBackground = true }.Start();
             //刷新在线状态线程
-            new Thread(Setting.UserStatusRefresh) { IsBackground = true }.Start();
+            new Thread(AppData.UserStatusRefresh) { IsBackground = true }.Start();
         }
 
         #endregion
@@ -97,7 +97,7 @@ namespace WebSocketForm.View
 
         public void RefreshMenu()
         {
-            OnlineUserList.ItemsSource = Setting.GetMenuList();
+            OnlineUserList.ItemsSource = AppData.GetMenuList();
             OnlineUserList.Items.Refresh();
         }
 
@@ -109,7 +109,7 @@ namespace WebSocketForm.View
         {
             ServerEvent.LocalServer_LoginReceived(data, ip);
 
-            OnlineUserList.ItemsSource = Setting.GetMenuList();
+            OnlineUserList.ItemsSource = AppData.GetMenuList();
             OnlineUserList.Items.Refresh();
         }
 
@@ -117,7 +117,7 @@ namespace WebSocketForm.View
         {
             ServerEvent.LocalServer_LogoutReceived(data, ip);
 
-            OnlineUserList.ItemsSource = Setting.GetMenuList();
+            OnlineUserList.ItemsSource = AppData.GetMenuList();
             OnlineUserList.Items.Refresh();
         }
 
@@ -202,7 +202,6 @@ namespace WebSocketForm.View
                 {
                     uc.SendAsync(new byte[264130], 264130, ipep);
                     Thread.Sleep(10);
-                    
                 }
             })
             {
@@ -216,11 +215,11 @@ namespace WebSocketForm.View
 
             var ip = "192.168.4." + rd.Next(255);
 
-            Setting.AddUser(new User()
+            AppData.AddUser(new User()
             {
                 IP = IPAddress.Parse(ip),
                 IsTop = rd.Next(100) % 2 == 0 ? true : false,
-                Title = "测试"
+                NickName = "测试"
             });
 
             RefreshMenu();

@@ -67,9 +67,13 @@
     <Compile Include="Helper\ImageHelper.cs" />
     <Compile Include="Helper\IoHelper.cs" />
     <Compile Include="Helper\SQLite.cs" />
+    <Compile Include="Helper\ModelHelper.cs" />
     <Compile Include="Model\Data\Data_Package.cs" />
     <Compile Include="Model\Data\Data_GroupChat.cs" />
     <Compile Include="Model\Data\Data_User.cs" />
+    <Compile Include="Model\File\File_GroupChat.cs" />
+    <Compile Include="Model\File\File_Menu.cs" />
+    <Compile Include="Model\File\File_User.cs" />
     <Compile Include="Model\SQLiteModel\FilterCommand.cs" />
     <Compile Include="View\UserSetting.xaml.cs">
       <DependentUpon>UserSetting.xaml</DependentUpon>
@@ -90,7 +94,7 @@
     <Compile Include="Model\Enum\PostActionType.cs" />
     <Compile Include="Helper\ExtendFunctions.cs" />
     <Compile Include="Function\LocalServer.cs" />
-    <Compile Include="Model\GroupChat.cs" />
+    <Compile Include="Model\View\GroupChat.cs" />
     <Compile Include="Model\View\User.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -136,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="db\" />
+    <Folder Include="Model\Communicate\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.111.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.111.0\build\net46\System.Data.SQLite.Core.targets')" />
