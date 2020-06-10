@@ -6,13 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using WebSocketForm.Enum;
 
-namespace WebSocketForm.Model
+namespace WebSocketForm.Model.Data
 {
     [Serializable]
     public class PostInfo
     {
         public PostActionType Action { get; set; }
-        public IPAddress IP { get; set; }
+        public byte[] IP { get; set; }
         public object Data { get; set; }
     }
 }

@@ -93,7 +93,7 @@ namespace WebSocketForm.View
                 Setting.UserConfig = new File_User();
             }
 
-            Setting.UserConfig.IP = SocketTool.GetLocalIp().GetAddressBytes();
+            Setting.UserConfig.IP = NetHelper.GetLocalIp().GetAddressBytes();
             Setting.UserConfig.HeadImage = ImageHelper.BitmapToBytes(userHeadImage);
             Setting.UserConfig.Name = UserName.Text;
 

@@ -63,14 +63,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppData.cs" />
-    <Compile Include="Helper\CommunicationHelper.cs" />
+    <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\ImageHelper.cs" />
     <Compile Include="Helper\IoHelper.cs" />
     <Compile Include="Helper\SQLite.cs" />
     <Compile Include="Helper\ModelHelper.cs" />
-    <Compile Include="Model\Data\Data_Package.cs" />
     <Compile Include="Model\Data\Data_GroupChat.cs" />
     <Compile Include="Model\Data\Data_User.cs" />
+    <Compile Include="Model\Data\BroadcastInfo.cs" />
     <Compile Include="Model\File\File_GroupChat.cs" />
     <Compile Include="Model\File\File_Menu.cs" />
     <Compile Include="Model\File\File_User.cs" />
@@ -86,12 +86,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Function\ServerEvent.cs" />
     <Compile Include="Model\View\Chat.cs" />
     <Compile Include="Model\Enum\MessageStatus.cs" />
     <Compile Include="Model\Enum\ChatType.cs" />
     <Compile Include="Model\Enum\OnlineStatus.cs" />
-    <Compile Include="Model\Enum\PostActionType.cs" />
+    <Compile Include="Model\Enum\BroadcastActionType.cs" />
     <Compile Include="Helper\ExtendFunctions.cs" />
     <Compile Include="Function\LocalServer.cs" />
     <Compile Include="Model\View\GroupChat.cs" />
@@ -106,10 +105,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Function\SocketTool.cs" />
+    <Compile Include="Function\BroadcastFunction.cs" />
     <Compile Include="Model\Enum\IconFont.cs" />
     <Compile Include="Model\View\Menu.cs" />
-    <Compile Include="Model\PostInfo.cs" />
+    <Compile Include="Model\Data\PostInfo.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -140,7 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="db\" />
-    <Folder Include="Model\Communicate\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.111.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.111.0\build\net46\System.Data.SQLite.Core.targets')" />

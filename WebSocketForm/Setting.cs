@@ -23,6 +23,11 @@ namespace WebSocketForm
         #region Setting
 
         /// <summary>
+        /// 通讯端口
+        /// </summary>
+        public const int PORT = 8009;
+
+        /// <summary>
         /// 用户设定
         /// </summary>
         public static File_User UserConfig;

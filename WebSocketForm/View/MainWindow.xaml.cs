@@ -20,6 +20,7 @@ using WebSocketForm.Enum;
 using WebSocketForm.Function;
 using WebSocketForm.Helper;
 using WebSocketForm.Model;
+using WebSocketForm.Model.Data;
 using WebSocketForm.Model.View;
 
 namespace WebSocketForm.View
@@ -29,8 +30,6 @@ namespace WebSocketForm.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static MainWindow CurrentWindow;
-
         /// <summary>
         /// 持续在线广播线程
         /// </summary>
@@ -42,8 +41,6 @@ namespace WebSocketForm.View
 
         public MainWindow()
         {
-            CurrentWindow = this;
-
             InitializeComponent();
             Init();
 
@@ -71,8 +68,11 @@ namespace WebSocketForm.View
             OnlineUserList.ItemsSource = AppData.GetMenuList();
 
             //绑定服务器事件
-            LocalServer.LoginReceived += LocalServer_LoginReceived;
-            LocalServer.LogoutReceived += LocalServer_LogoutReceived;
+            LocalServer.GetLoginDataReceived += LocalServer_GetLoginData;
+
+            LocalServer.LoginReceived += Other_LoginReceived;
+            LocalServer.LogoutReceived += Other_LogoutReceived;
+
             LocalServer.OpenLocalServer();
         }
 
@@ -84,9 +84,9 @@ namespace WebSocketForm.View
         private void StartOnlineThreads()
         {
             //上线广播
-            new Thread(SocketTool.OnlineBroadcasting) { IsBackground = true }.Start();
+            new Thread(BroadcastFunction.OnlineBroadcasting) { IsBackground = true }.Start();
             //持续在线广播线程
-            new Thread(SocketTool.StillOnlineBroadcasting) { IsBackground = true }.Start();
+            new Thread(BroadcastFunction.StillOnlineBroadcasting) { IsBackground = true }.Start();
             //刷新在线状态线程
             new Thread(AppData.UserStatusRefresh) { IsBackground = true }.Start();
         }
@@ -105,17 +105,31 @@ namespace WebSocketForm.View
 
         #region 服务器事件
 
-        private void LocalServer_LoginReceived(PostInfo data, IPAddress ip)
+        private static void LocalServer_GetLoginData(BroadcastInfo data, IPAddress ip)
         {
-            ServerEvent.LocalServer_LoginReceived(data, ip);
+            NetHelper.TCP_Send(ip, new PostInfo()
+            {
+                Action = PostActionType.login,
+                Data = ModelHelper.FileUserToDataUser(Setting.UserConfig),
+                IP = Setting.UserConfig.IP
+            });
+        }
+
+        private void Other_LoginReceived(PostInfo data, IPAddress ip)
+        {
+            var userData = (Data_User)data.Data;
+
+            AppData.AddUser(ModelHelper.DataUserToViewUser(userData));
 
             OnlineUserList.ItemsSource = AppData.GetMenuList();
             OnlineUserList.Items.Refresh();
         }
 
-        private void LocalServer_LogoutReceived(PostInfo data, IPAddress ip)
+        private void Other_LogoutReceived(PostInfo data, IPAddress ip)
         {
-            ServerEvent.LocalServer_LogoutReceived(data, ip);
+            var userData = (Data_User)data.Data;
+
+            AppData.AddUser(ModelHelper.DataUserToViewUser(userData));
 
             OnlineUserList.ItemsSource = AppData.GetMenuList();
             OnlineUserList.Items.Refresh();
@@ -154,7 +168,7 @@ namespace WebSocketForm.View
         {
             new Thread(() =>
             {
-                SocketTool.OfflineBroadcasting();
+                BroadcastFunction.OfflineBroadcasting();
             }).Start();
         }
 
@@ -198,7 +212,7 @@ namespace WebSocketForm.View
                 var uc = new UdpClient();
                 var ipep = new IPEndPoint(IPAddress.Broadcast, 8009);
 
-                while(true)
+                while (true)
                 {
                     uc.SendAsync(new byte[264130], 264130, ipep);
                     Thread.Sleep(10);
@@ -225,9 +239,34 @@ namespace WebSocketForm.View
             RefreshMenu();
         }
 
+        Thread t;
+
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
-            
+            //if (t == null)
+            //{
+            //    t = new Thread(() =>
+            //    {
+            //        var i = 1;
+            //        while (true)
+            //        {
+            //            var data = new byte[i++];
+            //            NetHelper.UDP_Send(IPAddress.Broadcast, data);
+            //            Thread.Sleep(10);
+            //        }
+            //    })
+            //    {
+            //        IsBackground = true
+            //    };
+
+            //    t.Start();
+            //}
+            NetHelper.TCP_Send(new IPAddress(Setting.UserConfig.IP), new PostInfo()
+            {
+                Action = PostActionType.stillOnline,
+                Data = new byte[999999999],
+                IP = Setting.UserConfig.IP
+            });
         }
     }
 }

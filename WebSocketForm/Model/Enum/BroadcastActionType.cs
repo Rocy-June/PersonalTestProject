@@ -23,14 +23,6 @@ namespace WebSocketForm.Enum
         /// <summary>
         /// 持续登陆状态
         /// </summary>
-        stillOnline = 5,
-        /// <summary>
-        /// 发送文字消息
-        /// </summary>
-        messageSend = 100,
-        /// <summary>
-        /// 发送文件消息
-        /// </summary>
-        fileSend = 120
+        stillOnline = 3,
     }
 }

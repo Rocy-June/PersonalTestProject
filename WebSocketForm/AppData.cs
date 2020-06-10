@@ -123,7 +123,7 @@ namespace WebSocketForm
                     }
                 }
 
-                Setting.UserConfig.IP = SocketTool.GetLocalIp()?.GetAddressBytes();
+                Setting.UserConfig.IP = NetHelper.GetLocalIp()?.GetAddressBytes();
             }
             
             try
