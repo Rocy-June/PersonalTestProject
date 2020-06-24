@@ -71,6 +71,7 @@
     <Compile Include="Model\Data\Data_GroupChat.cs" />
     <Compile Include="Model\Data\Data_User.cs" />
     <Compile Include="Model\Data\BroadcastInfo.cs" />
+    <Compile Include="Model\Data\NetPackage.cs" />
     <Compile Include="Model\File\File_GroupChat.cs" />
     <Compile Include="Model\File\File_Menu.cs" />
     <Compile Include="Model\File\File_User.cs" />

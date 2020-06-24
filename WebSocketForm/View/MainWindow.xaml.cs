@@ -107,7 +107,7 @@ namespace WebSocketForm.View
 
         private static void LocalServer_GetLoginData(BroadcastInfo data, IPAddress ip)
         {
-            NetHelper.TCP_Send(ip, new PostInfo()
+            NetHelper.Send_TCP(ip, new PostInfo()
             {
                 Action = PostActionType.login,
                 Data = ModelHelper.FileUserToDataUser(Setting.UserConfig),
@@ -261,7 +261,7 @@ namespace WebSocketForm.View
 
             //    t.Start();
             //}
-            NetHelper.TCP_Send(new IPAddress(Setting.UserConfig.IP), new PostInfo()
+            NetHelper.Send_TCP(new IPAddress(Setting.UserConfig.IP), new PostInfo()
             {
                 Action = PostActionType.stillOnline,
                 Data = new byte[999999999],

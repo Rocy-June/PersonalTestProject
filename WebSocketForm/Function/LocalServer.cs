@@ -151,7 +151,7 @@ namespace WebSocketForm.Function
                     {
                         data.NeedHandShake = false;
                         data.IsRequest = false;
-                        NetHelper.UDP_Send(receive_ipep.Address, data);
+                        NetHelper.Send_UDP(receive_ipep.Address, data);
                     }
                 }
                 else

@@ -16,6 +16,10 @@ namespace WebSocketForm.Helper
 
         private const int UDP_REPEAT_COUNT = 2;
 
+        private static readonly Dictionary<Guid, List<NetPackage>> SendingPackageBuffer = new Dictionary<Guid, List<NetPackage>>();
+
+        private static readonly Dictionary<Guid, List<NetPackage>> ReceivedPackageBuffer = new Dictionary<Guid, List<NetPackage>>();
+
         /// <summary>
         /// 获取本地ip地址,优先取内网ip
         /// </summary>
@@ -41,8 +45,18 @@ namespace WebSocketForm.Helper
             return Dns.GetHostAddresses(hostName);
         }
 
-        public static void UDP_Send(IPAddress ip, BroadcastInfo data)
+        public static void Resend(IPAddress ip, Guid id, int packageID)
         {
+            using (var udp = new UdpClient(new IPEndPoint(IPAddress.Any, 0)))
+            {
+                UniversalSend_UDP(udp, ip, SendingPackageBuffer[id][packageID]);
+            }
+        }
+
+        public static void Send_UDP(IPAddress ip, BroadcastInfo data)
+        {
+
+
             new Thread(() =>
             {
                 using (var udp = new UdpClient(new IPEndPoint(IPAddress.Any, 0)))
@@ -58,7 +72,7 @@ namespace WebSocketForm.Helper
             .Start();
         }
 
-        public static void TCP_Send(IPAddress ip, PostInfo data)
+        public static void Send_TCP(IPAddress ip, PostInfo data)
         {
             new Thread(() =>
             {
@@ -77,5 +91,13 @@ namespace WebSocketForm.Helper
             }
             .Start();
         }
+
+        private static void UniversalSend_UDP(UdpClient udp, IPAddress ip, NetPackage package)
+        {
+            var ipep = new IPEndPoint(ip, Setting.PORT);
+            var bytes = package.ToBytes();
+            udp.Send(bytes, bytes.Length, ipep);
+        }
+
     }
 }

@@ -26,7 +26,7 @@ namespace WebSocketForm.Function
                 IsRequest = true
             };
 
-            NetHelper.UDP_Send(IPAddress.Broadcast, postData);
+            NetHelper.Send_UDP(IPAddress.Broadcast, postData);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace WebSocketForm.Function
                     IsRequest = true
                 };
 
-                NetHelper.UDP_Send(IPAddress.Broadcast, postData);
+                NetHelper.Send_UDP(IPAddress.Broadcast, postData);
             }
         }
 
@@ -63,7 +63,7 @@ namespace WebSocketForm.Function
                 IsRequest = true
             };
 
-            NetHelper.UDP_Send(IPAddress.Broadcast, postData);
+            NetHelper.Send_UDP(IPAddress.Broadcast, postData);
         }
     }
 }
