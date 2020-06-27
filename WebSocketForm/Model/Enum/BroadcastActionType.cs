@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace WebSocketForm.Enum
 {
-    public enum PostActionType
+    public enum BroadcastActionType
     {
         /// <summary>
         /// 未知传送信息
         /// </summary>
-        unknown = 0,
+        Unknown = 0,
         /// <summary>
         /// 首次登陆消息
         /// </summary>
-        login = 1,
+        Login = 1,
         /// <summary>
         /// 下线消息
         /// </summary>
-        logout = 2,
+        Logout = 2,
         /// <summary>
         /// 持续登陆状态
         /// </summary>
-        stillOnline = 3,
+        StillOnline = 3,
     }
 }

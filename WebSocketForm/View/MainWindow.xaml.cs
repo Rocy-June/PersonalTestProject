@@ -105,17 +105,17 @@ namespace WebSocketForm.View
 
         #region 服务器事件
 
-        private static void LocalServer_GetLoginData(BroadcastInfo data, IPAddress ip)
+        private static void LocalServer_GetLoginData(BroadcastMessage data, IPAddress ip)
         {
-            NetHelper.Send_TCP(ip, new PostInfo()
+            NetHelper.Send_TCP(ip, new UdpPackage()
             {
-                Action = PostActionType.login,
+                Action = BroadcastActionType.Login,
                 Data = ModelHelper.FileUserToDataUser(Setting.UserConfig),
                 IP = Setting.UserConfig.IP
             });
         }
 
-        private void Other_LoginReceived(PostInfo data, IPAddress ip)
+        private void Other_LoginReceived(UdpPackage data, IPAddress ip)
         {
             var userData = (Data_User)data.Data;
 
@@ -125,7 +125,7 @@ namespace WebSocketForm.View
             OnlineUserList.Items.Refresh();
         }
 
-        private void Other_LogoutReceived(PostInfo data, IPAddress ip)
+        private void Other_LogoutReceived(UdpPackage data, IPAddress ip)
         {
             var userData = (Data_User)data.Data;
 
@@ -261,9 +261,9 @@ namespace WebSocketForm.View
 
             //    t.Start();
             //}
-            NetHelper.Send_TCP(new IPAddress(Setting.UserConfig.IP), new PostInfo()
+            NetHelper.Send_TCP(new IPAddress(Setting.UserConfig.IP), new UdpPackage()
             {
-                Action = PostActionType.stillOnline,
+                Action = BroadcastActionType.StillOnline,
                 Data = new byte[999999999],
                 IP = Setting.UserConfig.IP
             });

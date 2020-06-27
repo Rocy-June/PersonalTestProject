@@ -33,34 +33,34 @@ namespace WebSocketForm.Function
         public delegate void GetDataRequestReceivedHandler<T>(T data, IPAddress ip);
 
 
-        private static event GetDataRequestReceivedHandler<BroadcastInfo> _GetUnknownDataReceived;
+        private static event GetDataRequestReceivedHandler<BroadcastMessage> _GetUnknownDataReceived;
 
-        private static event GetDataRequestReceivedHandler<BroadcastInfo> _GetLoginDataReceived;
+        private static event GetDataRequestReceivedHandler<BroadcastMessage> _GetLoginDataReceived;
 
-        private static event GetDataRequestReceivedHandler<BroadcastInfo> _GetLogoutDataReceived;
+        private static event GetDataRequestReceivedHandler<BroadcastMessage> _GetLogoutDataReceived;
 
-        private static event GetDataRequestReceivedHandler<BroadcastInfo> _GetStillOnlineDataReceived;
+        private static event GetDataRequestReceivedHandler<BroadcastMessage> _GetStillOnlineDataReceived;
 
 
-        public static event GetDataRequestReceivedHandler<BroadcastInfo> GetUnknownDataReceived
+        public static event GetDataRequestReceivedHandler<BroadcastMessage> GetUnknownDataReceived
         {
             add => _GetUnknownDataReceived += value;
             remove => _GetUnknownDataReceived -= value;
         }
 
-        public static event GetDataRequestReceivedHandler<BroadcastInfo> GetLoginDataReceived
+        public static event GetDataRequestReceivedHandler<BroadcastMessage> GetLoginDataReceived
         {
             add => _GetLoginDataReceived += value;
             remove => _GetLoginDataReceived -= value;
         }
 
-        public static event GetDataRequestReceivedHandler<BroadcastInfo> GetLogoutDataReceived
+        public static event GetDataRequestReceivedHandler<BroadcastMessage> GetLogoutDataReceived
         {
             add => _GetLogoutDataReceived += value;
             remove => _GetLogoutDataReceived -= value;
         }
 
-        public static event GetDataRequestReceivedHandler<BroadcastInfo> GetStillOnlineDataReceived
+        public static event GetDataRequestReceivedHandler<BroadcastMessage> GetStillOnlineDataReceived
         {
             add => _GetStillOnlineDataReceived += value;
             remove => _GetStillOnlineDataReceived -= value;
@@ -73,34 +73,34 @@ namespace WebSocketForm.Function
         public delegate void DataReceivedHandler<T>(T data, IPAddress ip);
 
 
-        private static event DataReceivedHandler<PostInfo> _UnknownReceived;
+        private static event DataReceivedHandler<UdpPackage> _UnknownReceived;
 
-        private static event DataReceivedHandler<PostInfo> _LoginReceived;
+        private static event DataReceivedHandler<UdpPackage> _LoginReceived;
 
-        private static event DataReceivedHandler<PostInfo> _LogoutReceived;
+        private static event DataReceivedHandler<UdpPackage> _LogoutReceived;
 
-        private static event DataReceivedHandler<PostInfo> _StillOnlineReceived;
+        private static event DataReceivedHandler<UdpPackage> _StillOnlineReceived;
 
 
-        public static event DataReceivedHandler<PostInfo> UnknownReceived
+        public static event DataReceivedHandler<UdpPackage> UnknownReceived
         {
             add => _UnknownReceived += value;
             remove => _UnknownReceived -= value;
         }
 
-        public static event DataReceivedHandler<PostInfo> LoginReceived
+        public static event DataReceivedHandler<UdpPackage> LoginReceived
         {
             add => _LoginReceived += value;
             remove => _LoginReceived -= value;
         }
 
-        public static event DataReceivedHandler<PostInfo> LogoutReceived
+        public static event DataReceivedHandler<UdpPackage> LogoutReceived
         {
             add => _LogoutReceived += value;
             remove => _LogoutReceived -= value;
         }
 
-        public static event DataReceivedHandler<PostInfo> StillOnlineReceived
+        public static event DataReceivedHandler<UdpPackage> StillOnlineReceived
         {
             add => _LogoutReceived += value;
             remove => _LogoutReceived -= value;
@@ -144,14 +144,14 @@ namespace WebSocketForm.Function
             var receive_ipep = new IPEndPoint(IPAddress.Any, 0);
             while (true)
             {
-                var data = udpServer.Receive(ref receive_ipep).ToObject<BroadcastInfo>();
+                var data = udpServer.Receive(ref receive_ipep).ToObject<BroadcastMessage>();
                 if (data.IsRequest)
                 {
                     if (data.NeedHandShake)
                     {
                         data.NeedHandShake = false;
                         data.IsRequest = false;
-                        NetHelper.Send_UDP(receive_ipep.Address, data);
+                        NetHelper.SendData_UDP(receive_ipep.Address, data);
                     }
                 }
                 else
@@ -161,20 +161,20 @@ namespace WebSocketForm.Function
             }
         }
 
-        private static void BroadcastEventDataSend(BroadcastInfo data, IPEndPoint ipep)
+        private static void BroadcastEventDataSend(BroadcastMessage data, IPEndPoint ipep)
         {
             switch (data.Action)
             {
-                case PostActionType.unknown:
+                case BroadcastActionType.Unknown:
                     _GetUnknownDataReceived?.Invoke(data, ipep.Address);
                     break;
-                case PostActionType.login:
+                case BroadcastActionType.Login:
                     _GetLoginDataReceived?.Invoke(data, ipep.Address);
                     break;
-                case PostActionType.logout:
+                case BroadcastActionType.Logout:
                     _GetLogoutDataReceived?.Invoke(data, ipep.Address);
                     break;
-                case PostActionType.stillOnline:
+                case BroadcastActionType.StillOnline:
                     _GetStillOnlineDataReceived?.Invoke(data, ipep.Address);
                     break;
                 default:
@@ -182,20 +182,20 @@ namespace WebSocketForm.Function
             }
         }
 
-        private static void BroadcastEventRecived(PostInfo data, IPEndPoint ipep)
+        private static void BroadcastEventRecived(UdpPackage data, IPEndPoint ipep)
         {
             switch (data.Action)
             {
-                case PostActionType.unknown:
+                case BroadcastActionType.Unknown:
                     _UnknownReceived?.Invoke(data, ipep.Address);
                     break;
-                case PostActionType.login:
+                case BroadcastActionType.Login:
                     _LoginReceived?.Invoke(data, ipep.Address);
                     break;
-                case PostActionType.logout:
+                case BroadcastActionType.Logout:
                     _LogoutReceived?.Invoke(data, ipep.Address);
                     break;
-                case PostActionType.stillOnline:
+                case BroadcastActionType.StillOnline:
                     _StillOnlineReceived?.Invoke(data, ipep.Address);
                     break;
                 default:

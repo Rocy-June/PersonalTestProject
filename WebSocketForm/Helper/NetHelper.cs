@@ -16,9 +16,9 @@ namespace WebSocketForm.Helper
 
         private const int UDP_REPEAT_COUNT = 2;
 
-        private static readonly Dictionary<Guid, List<NetPackage>> SendingPackageBuffer = new Dictionary<Guid, List<NetPackage>>();
+        private static readonly Dictionary<Guid, List<TcpMessage>> SendingPackageBuffer = new Dictionary<Guid, List<TcpMessage>>();
 
-        private static readonly Dictionary<Guid, List<NetPackage>> ReceivedPackageBuffer = new Dictionary<Guid, List<NetPackage>>();
+        private static readonly Dictionary<Guid, List<TcpMessage>> ReceivedPackageBuffer = new Dictionary<Guid, List<TcpMessage>>();
 
         /// <summary>
         /// 获取本地ip地址,优先取内网ip
@@ -53,12 +53,13 @@ namespace WebSocketForm.Helper
             }
         }
 
-        public static void Send_UDP(IPAddress ip, BroadcastInfo data)
+        public static void SendData_UDP(IPAddress ip, BroadcastMessage data)
         {
-
-
             new Thread(() =>
             {
+                var id = Guid.NewGuid();
+
+
                 using (var udp = new UdpClient(new IPEndPoint(IPAddress.Any, 0)))
                 {
                     var ipep = new IPEndPoint(ip, Setting.PORT);
@@ -72,7 +73,7 @@ namespace WebSocketForm.Helper
             .Start();
         }
 
-        public static void Send_TCP(IPAddress ip, PostInfo data)
+        public static void Send_TCP(IPAddress ip, UdpPackage data)
         {
             new Thread(() =>
             {
@@ -92,7 +93,7 @@ namespace WebSocketForm.Helper
             .Start();
         }
 
-        private static void UniversalSend_UDP(UdpClient udp, IPAddress ip, NetPackage package)
+        private static void UniversalSend_UDP(UdpClient udp, IPAddress ip, TcpMessage package)
         {
             var ipep = new IPEndPoint(ip, Setting.PORT);
             var bytes = package.ToBytes();

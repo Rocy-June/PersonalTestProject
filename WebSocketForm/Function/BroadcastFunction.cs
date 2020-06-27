@@ -18,15 +18,13 @@ namespace WebSocketForm.Function
         /// </summary>
         public static void OnlineBroadcasting()
         {
-            var postData = new BroadcastInfo()
+            var postData = new BroadcastMessage()
             {
-                Action = PostActionType.login,
-                IP = new IPAddress(Setting.UserConfig.IP),
-                NeedHandShake = true,
-                IsRequest = true
+                Action = BroadcastActionType.Login,
+                IP = new IPAddress(Setting.UserConfig.IP)
             };
 
-            NetHelper.Send_UDP(IPAddress.Broadcast, postData);
+            NetHelper.SendData_UDP(IPAddress.Broadcast, postData);
         }
 
         /// <summary>
@@ -38,15 +36,13 @@ namespace WebSocketForm.Function
             {
                 Thread.Sleep(30000);
 
-                var postData = new BroadcastInfo()
+                var postData = new BroadcastMessage()
                 {
-                    Action = PostActionType.stillOnline,
-                    IP = new IPAddress(Setting.UserConfig.IP),
-                    NeedHandShake = true,
-                    IsRequest = true
+                    Action = BroadcastActionType.StillOnline,
+                    IP = new IPAddress(Setting.UserConfig.IP)
                 };
 
-                NetHelper.Send_UDP(IPAddress.Broadcast, postData);
+                NetHelper.SendData_UDP(IPAddress.Broadcast, postData);
             }
         }
 
@@ -55,15 +51,13 @@ namespace WebSocketForm.Function
         /// </summary>
         public static void OfflineBroadcasting()
         {
-            var postData = new BroadcastInfo()
+            var postData = new BroadcastMessage()
             {
-                Action = PostActionType.logout,
-                IP = new IPAddress(Setting.UserConfig.IP),
-                NeedHandShake = false,
-                IsRequest = true
+                Action = BroadcastActionType.Logout,
+                IP = new IPAddress(Setting.UserConfig.IP)
             };
 
-            NetHelper.Send_UDP(IPAddress.Broadcast, postData);
+            NetHelper.SendData_UDP(IPAddress.Broadcast, postData);
         }
     }
 }

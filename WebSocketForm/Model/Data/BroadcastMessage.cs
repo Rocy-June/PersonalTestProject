@@ -9,11 +9,15 @@ using WebSocketForm.Enum;
 namespace WebSocketForm.Model.Data
 {
     [Serializable]
-    public class BroadcastInfo
+    public class BroadcastMessage
     {
-        public PostActionType Action { get; set; }
+        /// <summary>
+        /// 广播类型
+        /// </summary>
+        public BroadcastActionType Action { get; set; }
+        /// <summary>
+        /// 发送者IP
+        /// </summary>
         public IPAddress IP { get; set; }
-        public bool NeedHandShake { get; set; }
-        public bool IsRequest { get; set; }
     }
 }

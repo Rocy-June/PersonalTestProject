@@ -70,8 +70,9 @@
     <Compile Include="Helper\ModelHelper.cs" />
     <Compile Include="Model\Data\Data_GroupChat.cs" />
     <Compile Include="Model\Data\Data_User.cs" />
-    <Compile Include="Model\Data\BroadcastInfo.cs" />
-    <Compile Include="Model\Data\NetPackage.cs" />
+    <Compile Include="Model\Data\BroadcastMessage.cs" />
+    <Compile Include="Model\Data\TcpMessage.cs" />
+    <Compile Include="Model\Enum\MessageActionType.cs" />
     <Compile Include="Model\File\File_GroupChat.cs" />
     <Compile Include="Model\File\File_Menu.cs" />
     <Compile Include="Model\File\File_User.cs" />
@@ -109,7 +110,7 @@
     <Compile Include="Function\BroadcastFunction.cs" />
     <Compile Include="Model\Enum\IconFont.cs" />
     <Compile Include="Model\View\Menu.cs" />
-    <Compile Include="Model\Data\PostInfo.cs" />
+    <Compile Include="Model\Data\UdpPackage.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
