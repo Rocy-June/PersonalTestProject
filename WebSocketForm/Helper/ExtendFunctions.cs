@@ -109,30 +109,26 @@ namespace WebSocketForm.Helper
         /// <returns>转换后byte数组</returns>
         public static byte[] ToBytes(this object obj)
         {
-            byte[] buff;
-            using (MemoryStream ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
-                IFormatter iFormatter = new BinaryFormatter();
-                iFormatter.Serialize(ms, obj);
-                buff = ms.GetBuffer();
+                var bf = new BinaryFormatter();
+                bf.Serialize(ms, obj);
+                return ms.GetBuffer();
             }
-            return buff;
         }
 
         /// <summary>
         /// 将byte数组转换成对象
         /// </summary>
-        /// <param name="buff">被转换byte数组</param>
+        /// <param name="buffer">被转换byte数组</param>
         /// <returns>转换完成后的对象</returns>
-        public static T ToObject<T>(this byte[] buff) where T : new()
+        public static T ToObject<T>(this byte[] buffer) where T : new()
         {
-            T obj;
-            using (MemoryStream ms = new MemoryStream(buff))
+            using (var ms = new MemoryStream(buffer))
             {
-                IFormatter iFormatter = new BinaryFormatter();
-                obj = (T)iFormatter.Deserialize(ms);
+                var bf = new BinaryFormatter();
+                return (T)bf.Deserialize(ms);
             }
-            return obj;
         }
         #endregion
     }

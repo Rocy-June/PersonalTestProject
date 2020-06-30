@@ -24,7 +24,7 @@ namespace WebSocketForm.Function
                 IP = new IPAddress(Setting.UserConfig.IP)
             };
 
-            NetHelper.SendData_UDP(IPAddress.Broadcast, postData);
+            NetHelper.Send_UDP(IPAddress.Broadcast, postData);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace WebSocketForm.Function
                     IP = new IPAddress(Setting.UserConfig.IP)
                 };
 
-                NetHelper.SendData_UDP(IPAddress.Broadcast, postData);
+                NetHelper.Send_UDP(IPAddress.Broadcast, postData);
             }
         }
 
@@ -57,7 +57,7 @@ namespace WebSocketForm.Function
                 IP = new IPAddress(Setting.UserConfig.IP)
             };
 
-            NetHelper.SendData_UDP(IPAddress.Broadcast, postData);
+            NetHelper.Send_UDP(IPAddress.Broadcast, postData);
         }
     }
 }

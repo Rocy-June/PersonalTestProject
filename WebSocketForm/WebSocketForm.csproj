@@ -63,6 +63,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppData.cs" />
+    <Compile Include="Function\ReceiveDataConverter.cs" />
     <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\ImageHelper.cs" />
     <Compile Include="Helper\IoHelper.cs" />
@@ -110,7 +111,6 @@
     <Compile Include="Function\BroadcastFunction.cs" />
     <Compile Include="Model\Enum\IconFont.cs" />
     <Compile Include="Model\View\Menu.cs" />
-    <Compile Include="Model\Data\UdpPackage.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

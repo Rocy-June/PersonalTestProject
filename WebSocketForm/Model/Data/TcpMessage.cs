@@ -15,10 +15,12 @@ namespace WebSocketForm.Model.Data
         /// 消息类型
         /// </summary>
         public MessageActionType ActionType { get; set; }
+
         /// <summary>
         /// 发送者IP
         /// </summary>
         public IPAddress SenderIP { get; set; }
+
         /// <summary>
         /// 数据
         /// </summary>

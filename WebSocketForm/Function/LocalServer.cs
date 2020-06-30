@@ -22,9 +22,11 @@ namespace WebSocketForm.Function
     {
         #region Server
 
-        public static TcpListener tcpServer = new TcpListener(IPAddress.Any, Setting.PORT);
+        public static TcpListener tcpServer = new TcpListener(IPAddress.Any, Setting.DATA_PORT);
 
-        public static UdpClient udpServer = new UdpClient(new IPEndPoint(IPAddress.Any, Setting.PORT));
+        public static UdpClient udpBroadcastServer = new UdpClient(new IPEndPoint(IPAddress.Broadcast, Setting.BROADCAST_PORT));
+
+        public static UdpClient udpServer = new UdpClient(new IPEndPoint(IPAddress.Any, Setting.DATA_PORT));
 
         #endregion
 
@@ -120,6 +122,11 @@ namespace WebSocketForm.Function
             {
                 IsBackground = true
             }.Start();
+
+            new Thread(UDP_BroadcastServerReceive)
+            {
+                IsBackground = true
+            }.Start();
         }
 
         private static void TCP_ServerReceive()
@@ -144,14 +151,14 @@ namespace WebSocketForm.Function
             var receive_ipep = new IPEndPoint(IPAddress.Any, 0);
             while (true)
             {
-                var data = udpServer.Receive(ref receive_ipep).ToObject<BroadcastMessage>();
+                var data = udpBroadcastServer.Receive(ref receive_ipep).ToObject<BroadcastMessage>();
                 if (data.IsRequest)
                 {
                     if (data.NeedHandShake)
                     {
                         data.NeedHandShake = false;
                         data.IsRequest = false;
-                        NetHelper.SendData_UDP(receive_ipep.Address, data);
+                        NetHelper.Send_UDP(receive_ipep.Address, data);
                     }
                 }
                 else
@@ -159,6 +166,11 @@ namespace WebSocketForm.Function
                     BroadcastEventDataSend(data, receive_ipep);
                 }
             }
+        }
+
+        private static void UDP_BroadcastServerReceive()
+        {
+
         }
 
         private static void BroadcastEventDataSend(BroadcastMessage data, IPEndPoint ipep)

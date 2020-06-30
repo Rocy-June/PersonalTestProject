@@ -25,7 +25,12 @@ namespace WebSocketForm
         /// <summary>
         /// 通讯端口
         /// </summary>
-        public const int PORT = 8009;
+        public const int DATA_PORT = 8009;
+
+        /// <summary>
+        /// 广播端口
+        /// </summary>
+        public const int BROADCAST_PORT = 8010;
 
         /// <summary>
         /// 用户设定

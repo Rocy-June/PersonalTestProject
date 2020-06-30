@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PortPinger.Model
+namespace WebSocketForm.Function
 {
-    enum INI_File
+    public class ReceiveDataConverter
     {
-        SaveFile = 0b0001
+
     }
 }

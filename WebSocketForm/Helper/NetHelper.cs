@@ -12,13 +12,10 @@ namespace WebSocketForm.Helper
 {
     static class NetHelper
     {
-        private const int PACKAGE_SIZE = 1024;
-
-        private const int UDP_REPEAT_COUNT = 2;
-
-        private static readonly Dictionary<Guid, List<TcpMessage>> SendingPackageBuffer = new Dictionary<Guid, List<TcpMessage>>();
-
-        private static readonly Dictionary<Guid, List<TcpMessage>> ReceivedPackageBuffer = new Dictionary<Guid, List<TcpMessage>>();
+        /// <summary>
+        /// 单包大小
+        /// </summary>
+        private const int PACKAGE_SIZE = 4096;
 
         /// <summary>
         /// 获取本地ip地址,优先取内网ip
@@ -45,15 +42,7 @@ namespace WebSocketForm.Helper
             return Dns.GetHostAddresses(hostName);
         }
 
-        public static void Resend(IPAddress ip, Guid id, int packageID)
-        {
-            using (var udp = new UdpClient(new IPEndPoint(IPAddress.Any, 0)))
-            {
-                UniversalSend_UDP(udp, ip, SendingPackageBuffer[id][packageID]);
-            }
-        }
-
-        public static void SendData_UDP(IPAddress ip, BroadcastMessage data)
+        public static void Send_UDP(IPAddress ip, object data)
         {
             new Thread(() =>
             {
@@ -62,7 +51,7 @@ namespace WebSocketForm.Helper
 
                 using (var udp = new UdpClient(new IPEndPoint(IPAddress.Any, 0)))
                 {
-                    var ipep = new IPEndPoint(ip, Setting.PORT);
+                    var ipep = new IPEndPoint(ip, Setting.DATA_PORT);
                     var bytes = data.ToBytes();
                     udp.Send(bytes, bytes.Length, ipep);
                 }
@@ -73,19 +62,11 @@ namespace WebSocketForm.Helper
             .Start();
         }
 
-        public static void Send_TCP(IPAddress ip, UdpPackage data)
+        public static void Send_Broadcast(IPAddress ip, BroadcastMessage message)
         {
             new Thread(() =>
             {
-                using (var tcp = new TcpClient())
-                {
-                    tcp.Connect(ip, Setting.PORT);
-                    using (var ns = tcp.GetStream())
-                    {
-                        var bytes = data.ToBytes();
-                        ns.Write(bytes, 0, bytes.Length);
-                    }
-                };
+
             })
             {
                 IsBackground = true
@@ -93,11 +74,22 @@ namespace WebSocketForm.Helper
             .Start();
         }
 
-        private static void UniversalSend_UDP(UdpClient udp, IPAddress ip, TcpMessage package)
+        public static void Send_TCP(IPAddress ip, TcpMessage data)
         {
-            var ipep = new IPEndPoint(ip, Setting.PORT);
-            var bytes = package.ToBytes();
-            udp.Send(bytes, bytes.Length, ipep);
+            new Thread(() =>
+            {
+                var dataBytes = data.ToBytes();
+
+                using (var client = new TcpClient(new IPEndPoint(ip, Setting.DATA_PORT)))
+                using (var stream = client.GetStream())
+                {
+                    stream.Write(dataBytes, 0, dataBytes.Length);
+                }
+            })
+            {
+                IsBackground = true
+            }
+            .Start();
         }
 
     }
