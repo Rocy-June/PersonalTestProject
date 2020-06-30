@@ -14,7 +14,7 @@ namespace WebSocketForm.Model.Data
         /// <summary>
         /// 广播类型
         /// </summary>
-        public BroadcastActionType Action { get; set; }
+        public BroadcastType Action { get; set; }
         /// <summary>
         /// 发送者IP
         /// </summary>

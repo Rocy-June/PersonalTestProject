@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.1169
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketForm", "WebSocketForm\WebSocketForm.csproj", "{FB3AFA17-59D2-4CCC-807C-BBB22E0CD5BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetHelper", "NetHelper\NetHelper.csproj", "{EAA5A2EB-2C06-4DCC-8C99-04743362AD73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkHandler", "NetHelper\NetworkHandler.csproj", "{EAA5A2EB-2C06-4DCC-8C99-04743362AD73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

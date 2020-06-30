@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkHandler;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,10 +13,6 @@ namespace WebSocketForm.Helper
 {
     static class NetHelper
     {
-        /// <summary>
-        /// 单包大小
-        /// </summary>
-        private const int PACKAGE_SIZE = 4096;
 
         /// <summary>
         /// 获取本地ip地址,优先取内网ip
@@ -80,7 +77,7 @@ namespace WebSocketForm.Helper
             {
                 var dataBytes = data.ToBytes();
 
-                using (var client = new TcpClient(new IPEndPoint(ip, Setting.DATA_PORT)))
+                using (var client = new System.Net.Sockets.TcpClient(new IPEndPoint(ip, Setting.DATA_PORT)))
                 using (var stream = client.GetStream())
                 {
                     stream.Write(dataBytes, 0, dataBytes.Length);

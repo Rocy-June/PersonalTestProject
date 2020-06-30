@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebSocketForm.Enum
 {
-    public enum BroadcastActionType
+    public enum BroadcastType
     {
         /// <summary>
         /// 未知传送信息

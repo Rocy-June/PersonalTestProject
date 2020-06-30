@@ -109,7 +109,7 @@ namespace WebSocketForm.View
         {
             NetHelper.Send_TCP(ip, new UdpPackage()
             {
-                Action = BroadcastActionType.Login,
+                Action = BroadcastType.Login,
                 Data = ModelHelper.FileUserToDataUser(Setting.UserConfig),
                 IP = Setting.UserConfig.IP
             });
@@ -263,7 +263,7 @@ namespace WebSocketForm.View
             //}
             NetHelper.Send_TCP(new IPAddress(Setting.UserConfig.IP), new UdpPackage()
             {
-                Action = BroadcastActionType.StillOnline,
+                Action = BroadcastType.StillOnline,
                 Data = new byte[999999999],
                 IP = Setting.UserConfig.IP
             });

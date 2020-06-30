@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetworkHandler;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -14,6 +15,7 @@ using WebSocketForm.Enum;
 using WebSocketForm.Helper;
 using WebSocketForm.Model;
 using WebSocketForm.Model.Data;
+using WebSocketForm.Model.Enum;
 using WebSocketForm.View;
 
 namespace WebSocketForm.Function
@@ -22,51 +24,14 @@ namespace WebSocketForm.Function
     {
         #region Server
 
-        public static TcpListener tcpServer = new TcpListener(IPAddress.Any, Setting.DATA_PORT);
+        /// <summary>
+        /// 单包大小
+        /// </summary>
+        private const int BUFFER_SIZE = 1024;
 
-        public static UdpClient udpBroadcastServer = new UdpClient(new IPEndPoint(IPAddress.Broadcast, Setting.BROADCAST_PORT));
+        public static Server_TCP tcpServer = new Server_TCP(Setting.DATA_PORT, BUFFER_SIZE, TcpMessageReceived);
 
-        public static UdpClient udpServer = new UdpClient(new IPEndPoint(IPAddress.Any, Setting.DATA_PORT));
-
-        #endregion
-
-        #region GetDataRequestReceivedHandler
-
-        public delegate void GetDataRequestReceivedHandler<T>(T data, IPAddress ip);
-
-
-        private static event GetDataRequestReceivedHandler<BroadcastMessage> _GetUnknownDataReceived;
-
-        private static event GetDataRequestReceivedHandler<BroadcastMessage> _GetLoginDataReceived;
-
-        private static event GetDataRequestReceivedHandler<BroadcastMessage> _GetLogoutDataReceived;
-
-        private static event GetDataRequestReceivedHandler<BroadcastMessage> _GetStillOnlineDataReceived;
-
-
-        public static event GetDataRequestReceivedHandler<BroadcastMessage> GetUnknownDataReceived
-        {
-            add => _GetUnknownDataReceived += value;
-            remove => _GetUnknownDataReceived -= value;
-        }
-
-        public static event GetDataRequestReceivedHandler<BroadcastMessage> GetLoginDataReceived
-        {
-            add => _GetLoginDataReceived += value;
-            remove => _GetLoginDataReceived -= value;
-        }
-
-        public static event GetDataRequestReceivedHandler<BroadcastMessage> GetLogoutDataReceived
-        {
-            add => _GetLogoutDataReceived += value;
-            remove => _GetLogoutDataReceived -= value;
-        }
-
-        public static event GetDataRequestReceivedHandler<BroadcastMessage> GetStillOnlineDataReceived
-        {
-            add => _GetStillOnlineDataReceived += value;
-            remove => _GetStillOnlineDataReceived -= value;
-        }
+        public static UdpClient broadcastServer = new UdpClient(new IPEndPoint(IPAddress.Broadcast, Setting.BROADCAST_PORT));
 
         #endregion
 
@@ -151,7 +116,7 @@ namespace WebSocketForm.Function
             var receive_ipep = new IPEndPoint(IPAddress.Any, 0);
             while (true)
             {
-                var data = udpBroadcastServer.Receive(ref receive_ipep).ToObject<BroadcastMessage>();
+                var data = broadcastServer.Receive(ref receive_ipep).ToObject<BroadcastMessage>();
                 if (data.IsRequest)
                 {
                     if (data.NeedHandShake)
@@ -173,21 +138,14 @@ namespace WebSocketForm.Function
 
         }
 
-        private static void BroadcastEventDataSend(BroadcastMessage data, IPEndPoint ipep)
+        private static void TcpMessageReceived(string filePath, int packageSize, int type)
         {
-            switch (data.Action)
+            var enumType = (TcpMessageType)type;
+            switch (enumType)
             {
-                case BroadcastActionType.Unknown:
-                    _GetUnknownDataReceived?.Invoke(data, ipep.Address);
+                case TcpMessageType.TextMessage:
                     break;
-                case BroadcastActionType.Login:
-                    _GetLoginDataReceived?.Invoke(data, ipep.Address);
-                    break;
-                case BroadcastActionType.Logout:
-                    _GetLogoutDataReceived?.Invoke(data, ipep.Address);
-                    break;
-                case BroadcastActionType.StillOnline:
-                    _GetStillOnlineDataReceived?.Invoke(data, ipep.Address);
+                case TcpMessageType.File:
                     break;
                 default:
                     break;
@@ -198,16 +156,16 @@ namespace WebSocketForm.Function
         {
             switch (data.Action)
             {
-                case BroadcastActionType.Unknown:
+                case BroadcastType.Unknown:
                     _UnknownReceived?.Invoke(data, ipep.Address);
                     break;
-                case BroadcastActionType.Login:
+                case BroadcastType.Login:
                     _LoginReceived?.Invoke(data, ipep.Address);
                     break;
-                case BroadcastActionType.Logout:
+                case BroadcastType.Logout:
                     _LogoutReceived?.Invoke(data, ipep.Address);
                     break;
-                case BroadcastActionType.StillOnline:
+                case BroadcastType.StillOnline:
                     _StillOnlineReceived?.Invoke(data, ipep.Address);
                     break;
                 default:

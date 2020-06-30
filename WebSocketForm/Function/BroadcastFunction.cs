@@ -20,7 +20,7 @@ namespace WebSocketForm.Function
         {
             var postData = new BroadcastMessage()
             {
-                Action = BroadcastActionType.Login,
+                Action = BroadcastType.Login,
                 IP = new IPAddress(Setting.UserConfig.IP)
             };
 
@@ -38,7 +38,7 @@ namespace WebSocketForm.Function
 
                 var postData = new BroadcastMessage()
                 {
-                    Action = BroadcastActionType.StillOnline,
+                    Action = BroadcastType.StillOnline,
                     IP = new IPAddress(Setting.UserConfig.IP)
                 };
 
@@ -53,7 +53,7 @@ namespace WebSocketForm.Function
         {
             var postData = new BroadcastMessage()
             {
-                Action = BroadcastActionType.Logout,
+                Action = BroadcastType.Logout,
                 IP = new IPAddress(Setting.UserConfig.IP)
             };
 

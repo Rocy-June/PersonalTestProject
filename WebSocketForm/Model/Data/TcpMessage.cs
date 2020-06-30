@@ -14,7 +14,7 @@ namespace WebSocketForm.Model.Data
         /// <summary>
         /// 消息类型
         /// </summary>
-        public MessageActionType ActionType { get; set; }
+        public TcpMessageType ActionType { get; set; }
 
         /// <summary>
         /// 发送者IP

@@ -5,18 +5,18 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace NetHelper
+namespace NetworkHandler
 {
-    public class Client
+    public class Client_TCP
     {
         TcpClient client;
 
-        public Client()
+        public Client_TCP()
         {
             client = new TcpClient();
         }
 
-        ~Client()
+        ~Client_TCP()
         {
             client.Close();
         }

@@ -73,7 +73,7 @@
     <Compile Include="Model\Data\Data_User.cs" />
     <Compile Include="Model\Data\BroadcastMessage.cs" />
     <Compile Include="Model\Data\TcpMessage.cs" />
-    <Compile Include="Model\Enum\MessageActionType.cs" />
+    <Compile Include="Model\Enum\TcpMessageType.cs" />
     <Compile Include="Model\File\File_GroupChat.cs" />
     <Compile Include="Model\File\File_Menu.cs" />
     <Compile Include="Model\File\File_User.cs" />
@@ -91,9 +91,8 @@
     </Compile>
     <Compile Include="Model\View\Chat.cs" />
     <Compile Include="Model\Enum\MessageStatus.cs" />
-    <Compile Include="Model\Enum\ChatType.cs" />
     <Compile Include="Model\Enum\OnlineStatus.cs" />
-    <Compile Include="Model\Enum\BroadcastActionType.cs" />
+    <Compile Include="Model\Enum\BroadcastType.cs" />
     <Compile Include="Helper\ExtendFunctions.cs" />
     <Compile Include="Function\LocalServer.cs" />
     <Compile Include="Model\View\GroupChat.cs" />
@@ -141,6 +140,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="db\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetHelper\NetworkHandler.csproj">
+      <Project>{eaa5a2eb-2c06-4dcc-8c99-04743362ad73}</Project>
+      <Name>NetworkHandler</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.111.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.111.0\build\net46\System.Data.SQLite.Core.targets')" />
