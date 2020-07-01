@@ -11,53 +11,47 @@ using WebSocketForm.Model.Enum;
 
 namespace WebSocketForm.Function
 {
-    class BroadcastFunction
+    public static class Broadcast
     {
         /// <summary>
         /// 上线广播
         /// </summary>
-        public static void OnlineBroadcasting()
+        public static void SendOnlineBroadcasting()
         {
-            var postData = new BroadcastMessage()
+            NetHelper.Send_Broadcast(new BroadcastData()
             {
                 Action = BroadcastType.Login,
                 IP = new IPAddress(Setting.UserConfig.IP)
-            };
-
-            NetHelper.Send_UDP(IPAddress.Broadcast, postData);
+            });
         }
 
         /// <summary>
         /// 持续在线广播
         /// </summary>
-        public static void StillOnlineBroadcasting()
+        public static void SendStillOnlineBroadcasting()
         {
             while (true)
             {
                 Thread.Sleep(30000);
-
-                var postData = new BroadcastMessage()
+                
+                NetHelper.Send_Broadcast(new BroadcastData()
                 {
                     Action = BroadcastType.StillOnline,
                     IP = new IPAddress(Setting.UserConfig.IP)
-                };
-
-                NetHelper.Send_UDP(IPAddress.Broadcast, postData);
+                });
             }
         }
 
         /// <summary>
         /// 离线广播
         /// </summary>
-        public static void OfflineBroadcasting()
+        public static void SendOfflineBroadcasting()
         {
-            var postData = new BroadcastMessage()
+            NetHelper.Send_Broadcast(new BroadcastData()
             {
                 Action = BroadcastType.Logout,
                 IP = new IPAddress(Setting.UserConfig.IP)
-            };
-
-            NetHelper.Send_UDP(IPAddress.Broadcast, postData);
+            });
         }
     }
 }

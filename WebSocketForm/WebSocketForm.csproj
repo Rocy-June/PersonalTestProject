@@ -64,6 +64,7 @@
     </ApplicationDefinition>
     <Compile Include="AppData.cs" />
     <Compile Include="Function\ReceiveDataConverter.cs" />
+    <Compile Include="Function\TcpMessage.cs" />
     <Compile Include="Helper\NetHelper.cs" />
     <Compile Include="Helper\ImageHelper.cs" />
     <Compile Include="Helper\IoHelper.cs" />
@@ -71,8 +72,9 @@
     <Compile Include="Helper\ModelHelper.cs" />
     <Compile Include="Model\Data\Data_GroupChat.cs" />
     <Compile Include="Model\Data\Data_User.cs" />
-    <Compile Include="Model\Data\BroadcastMessage.cs" />
-    <Compile Include="Model\Data\TcpMessage.cs" />
+    <Compile Include="Model\Data\BroadcastData.cs" />
+    <Compile Include="Model\Data\TcpData.cs" />
+    <Compile Include="Model\Enum\ChatType.cs" />
     <Compile Include="Model\Enum\TcpMessageType.cs" />
     <Compile Include="Model\File\File_GroupChat.cs" />
     <Compile Include="Model\File\File_Menu.cs" />
@@ -80,6 +82,9 @@
     <Compile Include="Model\SQLiteModel\FilterCommand.cs" />
     <Compile Include="View\UserSetting.xaml.cs">
       <DependentUpon>UserSetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\StartInit.xaml.cs">
+      <DependentUpon>StartInit.xaml</DependentUpon>
     </Compile>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -105,9 +110,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\StartInit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Function\BroadcastFunction.cs" />
+    <Compile Include="Function\Broadcast.cs" />
     <Compile Include="Model\Enum\IconFont.cs" />
     <Compile Include="Model\View\Menu.cs" />
     <Compile Include="Setting.cs" />

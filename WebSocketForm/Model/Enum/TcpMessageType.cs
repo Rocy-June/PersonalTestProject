@@ -9,13 +9,13 @@ namespace WebSocketForm.Model.Enum
     public enum TcpMessageType
     {
         /// <summary>
-        /// 文字消息
+        /// 事件消息
         /// </summary>
-        TextMessage = 0,
+        EventMessage = 0,
 
         /// <summary>
         /// 文件消息
         /// </summary>
-        File = 1,
+        SendFile = 0x40000000 | 1,
     }
 }

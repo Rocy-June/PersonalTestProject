@@ -21,6 +21,7 @@ using WebSocketForm.Function;
 using WebSocketForm.Helper;
 using WebSocketForm.Model;
 using WebSocketForm.Model.Data;
+using WebSocketForm.Model.Enum;
 using WebSocketForm.Model.View;
 
 namespace WebSocketForm.View
@@ -58,37 +59,36 @@ namespace WebSocketForm.View
 
         private void Init()
         {
-            //读取设定
-            AppData.Load();
-
             //清空测试用列表项目
             OnlineUserList.Items.Clear();
 
             //重载控件
             OnlineUserList.ItemsSource = AppData.GetMenuList();
-
-            //绑定服务器事件
-            LocalServer.GetLoginDataReceived += LocalServer_GetLoginData;
-
-            LocalServer.LoginReceived += Other_LoginReceived;
-            LocalServer.LogoutReceived += Other_LogoutReceived;
-
-            LocalServer.OpenLocalServer();
-        }
-
-        private void LoadedInit()
-        {
-            UserHeadImage.Background = new ImageBrush(ImageHelper.BytesToBitmapImage(Setting.UserConfig.HeadImage));
         }
 
         private void StartOnlineThreads()
         {
             //上线广播
-            new Thread(BroadcastFunction.OnlineBroadcasting) { IsBackground = true }.Start();
+            Broadcast.SendOnlineBroadcasting();
+
             //持续在线广播线程
-            new Thread(BroadcastFunction.StillOnlineBroadcasting) { IsBackground = true }.Start();
+            StillOnlineBroadcastingThread = new Thread(Broadcast.SendStillOnlineBroadcasting)
+            {
+                IsBackground = true
+            };
+            StillOnlineBroadcastingThread.Start();
+
             //刷新在线状态线程
-            new Thread(AppData.UserStatusRefresh) { IsBackground = true }.Start();
+            UserStatusRefreshThread = new Thread(AppData.UserStatusRefresh)
+            {
+                IsBackground = true
+            };
+            UserStatusRefreshThread.Start();
+        }
+
+        private void LoadedInit()
+        {
+            UserHeadImage.Background = new ImageBrush(ImageHelper.BytesToBitmapImage(Setting.UserConfig.HeadImage));
         }
 
         #endregion
@@ -105,46 +105,20 @@ namespace WebSocketForm.View
 
         #region 服务器事件
 
-        private static void LocalServer_GetLoginData(BroadcastMessage data, IPAddress ip)
-        {
-            NetHelper.Send_TCP(ip, new UdpPackage()
-            {
-                Action = BroadcastType.Login,
-                Data = ModelHelper.FileUserToDataUser(Setting.UserConfig),
-                IP = Setting.UserConfig.IP
-            });
-        }
 
-        private void Other_LoginReceived(UdpPackage data, IPAddress ip)
-        {
-            var userData = (Data_User)data.Data;
-
-            AppData.AddUser(ModelHelper.DataUserToViewUser(userData));
-
-            OnlineUserList.ItemsSource = AppData.GetMenuList();
-            OnlineUserList.Items.Refresh();
-        }
-
-        private void Other_LogoutReceived(UdpPackage data, IPAddress ip)
-        {
-            var userData = (Data_User)data.Data;
-
-            AppData.AddUser(ModelHelper.DataUserToViewUser(userData));
-
-            OnlineUserList.ItemsSource = AppData.GetMenuList();
-            OnlineUserList.Items.Refresh();
-        }
 
         #endregion
 
         #region 窗体基础事件
         private void Window_Drag(object sender, MouseButtonEventArgs e)
         {
-            FrameworkElement c = (FrameworkElement)sender;
-            if (c.Name != "ControlBox")
-            {
-                DragMove();
-            }
+            DragMove();
+
+            //FrameworkElement c = (FrameworkElement)sender;
+            //if (c.Name != "ControlBox")
+            //{
+            //    DragMove();
+            //}
         }
 
         private void HideApplication(object sender, RoutedEventArgs e)
@@ -166,10 +140,7 @@ namespace WebSocketForm.View
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            new Thread(() =>
-            {
-                BroadcastFunction.OfflineBroadcasting();
-            }).Start();
+            Broadcast.SendOfflineBroadcasting();
         }
 
         private void MenuButton_Enter(object sender, MouseEventArgs e)
@@ -239,7 +210,7 @@ namespace WebSocketForm.View
             RefreshMenu();
         }
 
-        Thread t;
+        //Thread t;
 
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
@@ -261,11 +232,11 @@ namespace WebSocketForm.View
 
             //    t.Start();
             //}
-            NetHelper.Send_TCP(new IPAddress(Setting.UserConfig.IP), new UdpPackage()
+            NetHelper.Send_TCP(new IPAddress(Setting.UserConfig.IP), new TcpData()
             {
-                Action = BroadcastType.StillOnline,
+                ActionType = TcpMessageType.EventMessage,
                 Data = new byte[999999999],
-                IP = Setting.UserConfig.IP
+                SenderIP = new IPAddress(Setting.UserConfig.IP)
             });
         }
     }

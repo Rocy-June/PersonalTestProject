@@ -13,16 +13,20 @@ namespace WebSocketForm.Helper
 {
     static class NetHelper
     {
-
         /// <summary>
         /// 获取本地ip地址,优先取内网ip
         /// </summary>
-        /// <returns>本地IP字符串</returns>
+        /// <returns>本地IP</returns>
         public static IPAddress GetLocalIp(bool getIpv6 = false)
         {
-            var ips = GetLocalIpAddreses();
-
-            foreach (var ip in ips) if (ip.IsIPv6LinkLocal == getIpv6) return ip;
+            var hosts = GetLocalIpAddreses();
+            foreach (var ip in hosts)
+            {
+                if (ip.AddressFamily == (getIpv6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork))
+                {
+                    return ip;
+                }
+            }
 
             return null;
         }
@@ -33,25 +37,15 @@ namespace WebSocketForm.Helper
         /// <returns>本地IP字符串列表</returns>
         public static IPAddress[] GetLocalIpAddreses()
         {
-            var hostName = Dns.GetHostName();                   //获取主机名称  
-            var addresses = Dns.GetHostAddresses(hostName);     //解析主机IP地址  
-
-            return Dns.GetHostAddresses(hostName);
+            return Dns.GetHostEntry(Dns.GetHostName()).AddressList;  //解析主机IP地址
         }
 
-        public static void Send_UDP(IPAddress ip, object data)
+        public static void Send_TCP(IPAddress ip, TcpData data)
         {
             new Thread(() =>
             {
-                var id = Guid.NewGuid();
-
-
-                using (var udp = new UdpClient(new IPEndPoint(IPAddress.Any, 0)))
-                {
-                    var ipep = new IPEndPoint(ip, Setting.DATA_PORT);
-                    var bytes = data.ToBytes();
-                    udp.Send(bytes, bytes.Length, ipep);
-                }
+                var client = new Client_TCP();
+                client.SendData(ip, Setting.DATA_PORT, data.ToBytes(), (int)data.ActionType);
             })
             {
                 IsBackground = true
@@ -59,29 +53,12 @@ namespace WebSocketForm.Helper
             .Start();
         }
 
-        public static void Send_Broadcast(IPAddress ip, BroadcastMessage message)
+        public static void Send_Broadcast(BroadcastData message)
         {
             new Thread(() =>
             {
-
-            })
-            {
-                IsBackground = true
-            }
-            .Start();
-        }
-
-        public static void Send_TCP(IPAddress ip, TcpMessage data)
-        {
-            new Thread(() =>
-            {
-                var dataBytes = data.ToBytes();
-
-                using (var client = new System.Net.Sockets.TcpClient(new IPEndPoint(ip, Setting.DATA_PORT)))
-                using (var stream = client.GetStream())
-                {
-                    stream.Write(dataBytes, 0, dataBytes.Length);
-                }
+                var client = new Client_UDP();
+                client.Broadcast(Setting.BROADCAST_PORT, message.ToBytes());
             })
             {
                 IsBackground = true

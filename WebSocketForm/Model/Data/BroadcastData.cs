@@ -4,26 +4,20 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using WebSocketForm.Model.Enum;
+using WebSocketForm.Enum;
 
 namespace WebSocketForm.Model.Data
 {
     [Serializable]
-    public class TcpMessage
+    public class BroadcastData
     {
         /// <summary>
-        /// 消息类型
+        /// 广播类型
         /// </summary>
-        public TcpMessageType ActionType { get; set; }
-
+        public BroadcastType Action { get; set; }
         /// <summary>
         /// 发送者IP
         /// </summary>
-        public IPAddress SenderIP { get; set; }
-
-        /// <summary>
-        /// 数据
-        /// </summary>
-        public object Data { get; set; }
+        public IPAddress IP { get; set; }
     }
 }

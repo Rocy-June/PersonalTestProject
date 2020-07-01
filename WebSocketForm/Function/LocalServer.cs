@@ -31,59 +31,37 @@ namespace WebSocketForm.Function
 
         public static Server_TCP tcpServer = new Server_TCP(Setting.DATA_PORT, BUFFER_SIZE, TcpMessageReceived);
 
-        public static UdpClient broadcastServer = new UdpClient(new IPEndPoint(IPAddress.Broadcast, Setting.BROADCAST_PORT));
+        public static Server_UDP<BroadcastData> broadcastServer = new Server_UDP<BroadcastData>(Setting.BROADCAST_PORT, BroadcastEventRecived);
 
         #endregion
 
         #region DataReceivedHandler
 
-        public delegate void DataReceivedHandler<T>(T data, IPAddress ip);
+        public delegate void TcpMessageReceivedHandler<T>(T data, IPAddress ip);
 
 
-        private static event DataReceivedHandler<UdpPackage> _UnknownReceived;
-
-        private static event DataReceivedHandler<UdpPackage> _LoginReceived;
-
-        private static event DataReceivedHandler<UdpPackage> _LogoutReceived;
-
-        private static event DataReceivedHandler<UdpPackage> _StillOnlineReceived;
-
-
-        public static event DataReceivedHandler<UdpPackage> UnknownReceived
-        {
-            add => _UnknownReceived += value;
-            remove => _UnknownReceived -= value;
-        }
-
-        public static event DataReceivedHandler<UdpPackage> LoginReceived
-        {
-            add => _LoginReceived += value;
-            remove => _LoginReceived -= value;
-        }
-
-        public static event DataReceivedHandler<UdpPackage> LogoutReceived
-        {
-            add => _LogoutReceived += value;
-            remove => _LogoutReceived -= value;
-        }
-
-        public static event DataReceivedHandler<UdpPackage> StillOnlineReceived
-        {
-            add => _LogoutReceived += value;
-            remove => _LogoutReceived -= value;
-        }
+        public static event TcpMessageReceivedHandler<Data_User> UserProfileDataReceived;
 
         #endregion
 
+        #region BroadcastReceivedHandler
+
+        public delegate void BroadcastReceivedHandler(IPAddress ip);
+
+
+        public static event BroadcastReceivedHandler UnknownReceived;
+
+        public static event BroadcastReceivedHandler LoginReceived;
+
+        public static event BroadcastReceivedHandler LogoutReceived;
+
+        public static event BroadcastReceivedHandler StillOnlineReceived;
+
+        #endregion
 
         public static void OpenLocalServer()
         {
             new Thread(TCP_ServerReceive)
-            {
-                IsBackground = true
-            }.Start();
-
-            new Thread(UDP_ServerReceive)
             {
                 IsBackground = true
             }.Start();
@@ -97,76 +75,67 @@ namespace WebSocketForm.Function
         private static void TCP_ServerReceive()
         {
             tcpServer.Start();
-
-            while (true)
-            {
-                using (var tcpClient = tcpServer.AcceptTcpClient())
-                using (var ns = tcpClient.GetStream())
-                using (var sr = new StreamReader(ns))
-                {
-                    List<byte> bufferList = new List<byte>(tcpClient.ReceiveBufferSize);
-                    var i = 0;
-
-                }
-            }
-        }
-
-        private static void UDP_ServerReceive()
-        {
-            var receive_ipep = new IPEndPoint(IPAddress.Any, 0);
-            while (true)
-            {
-                var data = broadcastServer.Receive(ref receive_ipep).ToObject<BroadcastMessage>();
-                if (data.IsRequest)
-                {
-                    if (data.NeedHandShake)
-                    {
-                        data.NeedHandShake = false;
-                        data.IsRequest = false;
-                        NetHelper.Send_UDP(receive_ipep.Address, data);
-                    }
-                }
-                else
-                {
-                    BroadcastEventDataSend(data, receive_ipep);
-                }
-            }
         }
 
         private static void UDP_BroadcastServerReceive()
         {
-
+            broadcastServer.Start();
         }
 
         private static void TcpMessageReceived(string filePath, int packageSize, int type)
         {
             var enumType = (TcpMessageType)type;
-            switch (enumType)
+
+            if ((type & 0x40000000) == 0)
             {
-                case TcpMessageType.TextMessage:
-                    break;
-                case TcpMessageType.File:
+                using (var fs = new FileStream(filePath, FileMode.Open))
+                {
+                    var bytes = new byte[packageSize];
+                    fs.Read(bytes, 0, packageSize);
+                    TcpEventReceived(bytes.ToObject<TcpData>());
+                }
+            }
+            else
+            {
+                TcpFileReceived(filePath);
+            }
+
+        }
+
+        private static void TcpEventReceived(TcpData data)
+        {
+            switch (data.ActionType)
+            {
+                case TcpMessageType.EventMessage:
+                    UserProfileDataReceived((Data_User)data.Data, data.SenderIP);
                     break;
                 default:
                     break;
             }
         }
 
-        private static void BroadcastEventRecived(UdpPackage data, IPEndPoint ipep)
+        private static void TcpFileReceived(string filePath)
         {
+            //todo...
+        }
+
+        private static void BroadcastEventRecived(byte[] dataBytes)
+        {
+            var data = dataBytes.ToObject<BroadcastData>();
+
             switch (data.Action)
             {
                 case BroadcastType.Unknown:
-                    _UnknownReceived?.Invoke(data, ipep.Address);
+                    UnknownReceived.Invoke(data.IP);
                     break;
                 case BroadcastType.Login:
-                    _LoginReceived?.Invoke(data, ipep.Address);
+                    LoginReceived.Invoke(data.IP);
                     break;
                 case BroadcastType.Logout:
-                    _LogoutReceived?.Invoke(data, ipep.Address);
+                    LogoutReceived.Invoke(data.IP);
                     break;
                 case BroadcastType.StillOnline:
-                    _StillOnlineReceived?.Invoke(data, ipep.Address);
+                    StillOnlineReceived.Invoke(data.IP);
                     break;
                 default:
                     break;

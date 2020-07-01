@@ -1,0 +1,200 @@
+﻿<Window x:Class="WebSocketForm.View.StartInit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WebSocket通讯器"
+        Width="380" Height="220"
+        MinWidth="380" MinHeight="220"
+        MaxWidth="380" MaxHeight="220"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource WindowStyle}">
+    <Window.Resources>
+        <Storyboard x:Key="LoadingDotMove1" RepeatBehavior="Forever" BeginTime="0:0:0">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin">
+                <SplineThicknessKeyFrame KeyTime="0:0:0" Value="0,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:.4" Value="100,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:2.6" Value="252,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:3" Value="352,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:4" Value="352,0,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:.3" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:2.7" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="LoadingDotMove2" RepeatBehavior="Forever" BeginTime="0:0:.2">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin">
+                <SplineThicknessKeyFrame KeyTime="0:0:0" Value="0,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:.4" Value="100,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:2.6" Value="252,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:3" Value="352,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:4" Value="352,0,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:.3" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:2.7" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="LoadingDotMove3" RepeatBehavior="Forever" BeginTime="0:0:.4">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin">
+                <SplineThicknessKeyFrame KeyTime="0:0:0" Value="0,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:.4" Value="100,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:2.6" Value="252,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:3" Value="352,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:4" Value="352,0,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:.3" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:2.7" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="LoadingDotMove4" RepeatBehavior="Forever" BeginTime="0:0:.6">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin">
+                <SplineThicknessKeyFrame KeyTime="0:0:0" Value="0,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:.4" Value="100,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:2.6" Value="252,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:3" Value="352,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:4" Value="352,0,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:.3" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:2.7" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="LoadingDotMove5" RepeatBehavior="Forever" BeginTime="0:0:.8">
+            <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin">
+                <SplineThicknessKeyFrame KeyTime="0:0:0" Value="0,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:.4" Value="100,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:2.6" Value="252,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:3" Value="352,0,0,0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:4" Value="352,0,0,0"/>
+            </ThicknessAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:.3" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:2.7" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Style x:Key="LodingDotsGrid" TargetType="Grid">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="0,0,0,25"/>
+        </Style>
+        <Style x:Key="LoadingDot1" TargetType="Border">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource LoadingDotMove1}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Background" Value="DarkCyan"/>
+            <Setter Property="CornerRadius" Value="9"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Opacity" Value="0"/>
+        </Style>
+        <Style x:Key="LoadingDot2" TargetType="Border">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource LoadingDotMove2}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Background" Value="DarkCyan"/>
+            <Setter Property="CornerRadius" Value="9"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Opacity" Value="0"/>
+        </Style>
+        <Style x:Key="LoadingDot3" TargetType="Border">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource LoadingDotMove3}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Background" Value="DarkCyan"/>
+            <Setter Property="CornerRadius" Value="9"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Opacity" Value="0"/>
+        </Style>
+        <Style x:Key="LoadingDot4" TargetType="Border">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource LoadingDotMove4}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Background" Value="DarkCyan"/>
+            <Setter Property="CornerRadius" Value="9"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Opacity" Value="0"/>
+        </Style>
+        <Style x:Key="LoadingDot5" TargetType="Border">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource LoadingDotMove5}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Background" Value="DarkCyan"/>
+            <Setter Property="CornerRadius" Value="9"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Opacity" Value="0"/>
+        </Style>
+        <Style x:Key="LoadingGrid" TargetType="Grid">
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+    </Window.Resources>
+    
+    <Border Style="{StaticResource MainOuter}">
+        <Grid>
+            <Grid Style="{StaticResource LodingDotsGrid}">
+                <Border Style="{StaticResource LoadingDot1}"></Border>
+                <Border Style="{StaticResource LoadingDot2}"></Border>
+                <Border Style="{StaticResource LoadingDot3}"></Border>
+                <Border Style="{StaticResource LoadingDot4}"></Border>
+                <Border Style="{StaticResource LoadingDot5}"></Border>
+            </Grid>
+            <Grid Style="{StaticResource LoadingGrid}">
+                <Label x:Name="LoadingText">Loading...</Label>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

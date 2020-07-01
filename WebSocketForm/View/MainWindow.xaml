@@ -4,6 +4,7 @@
         Title="WebSocket通讯器" ResizeMode="CanResize"
         Width="920" Height="800"
         MinWidth="700" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         Style="{StaticResource WindowStyle}">
     <Window.Resources>
@@ -13,10 +14,10 @@
             <ColorAnimation Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)" To="#fff" Duration="0:0:.05"/>
         </Storyboard>
         <Storyboard x:Key="SearchBox_MouseEnter">
-            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#f5f5f5" Duration="0:0:.1"/>
+            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#eee" Duration="0:0:.1"/>
         </Storyboard>
         <Storyboard x:Key="SearchBox_MouseLeave">
-            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#fff" Duration="0:0:.1"/>
+            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#f8f8f8" Duration="0:0:.1"/>
         </Storyboard>
 
         <Style x:Key="LeftMenu" TargetType="Border">
@@ -75,13 +76,6 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
         <Style x:Key="SearchBoxOuter" TargetType="Border">
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Width" Value="180"/>
-            <Setter Property="Height" Value="32"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="10,0,0,0"/>
-            <Setter Property="Background" Value="#fff"/>
-            <Setter Property="CornerRadius" Value="3"/>
             <Style.Triggers>
                 <EventTrigger RoutedEvent="MouseEnter">
                     <EventTrigger.Actions>
@@ -94,6 +88,13 @@
                     </EventTrigger.Actions>
                 </EventTrigger>
             </Style.Triggers>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="235"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
+            <Setter Property="Background" Value="#f8f8f8"/>
+            <Setter Property="CornerRadius" Value="3"/>
         </Style>
         <Style x:Key="SearchIcon" TargetType="Label">
             <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
@@ -317,6 +318,7 @@
             <!--<Setter Property="Margin" Value="250,0,0,0"/>-->
         </Style>
     </Window.Resources>
+     
     <Border Style="{StaticResource MainOuter}">
         <Grid>
             <Border Style="{StaticResource LeftMenu}">
