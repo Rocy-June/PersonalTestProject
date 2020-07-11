@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WebSocketForm.Enum;
 
@@ -25,9 +26,9 @@ namespace WebSocketForm.Model.View
         /// </summary>
         public bool IsMuted { get; set; }
         /// <summary>
-        /// 状态图标列表
+        /// 头像背景笔刷
         /// </summary>
-        private List<IconFont> Status { get; }
+        public ImageBrush HeadImageBrush { get => new ImageBrush(HeadImage); }
         /// <summary>
         /// 标题
         /// </summary>
@@ -44,6 +45,10 @@ namespace WebSocketForm.Model.View
         /// 最后一条消息的时间字符串(HH:mm)
         /// </summary>
         public abstract string LastTimeStr { get; }
+        /// <summary>
+        /// 状态图标列表
+        /// </summary>
+        private List<IconFont> Status { get; } = new List<IconFont>();
         /// <summary>
         /// 添加一个图标状态
         /// </summary>

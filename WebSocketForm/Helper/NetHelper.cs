@@ -14,7 +14,7 @@ namespace WebSocketForm.Helper
     static class NetHelper
     {
         /// <summary>
-        /// 获取本地ip地址,优先取内网ip
+        /// 获取本地ip地址,只取局域网ip
         /// </summary>
         /// <returns>本地IP</returns>
         public static IPAddress GetLocalIp(bool getIpv6 = false)
@@ -22,7 +22,12 @@ namespace WebSocketForm.Helper
             var hosts = GetLocalIpAddreses();
             foreach (var ip in hosts)
             {
-                if (ip.AddressFamily == (getIpv6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork))
+                if (ip.AddressFamily != (getIpv6 ? AddressFamily.InterNetworkV6 : AddressFamily.InterNetwork))
+                {
+                    continue;
+                }
+                var ipBytes = ip.GetAddressBytes();
+                if (ipBytes[0] == 192 && ipBytes[1] == 168)
                 {
                     return ip;
                 }
@@ -44,7 +49,7 @@ namespace WebSocketForm.Helper
         {
             new Thread(() =>
             {
-                var client = new Client_TCP();
+                var client = new Client_TCP(Setting.BUFFER_SIZE);
                 client.SendData(ip, Setting.DATA_PORT, data.ToBytes(), (int)data.ActionType);
             })
             {

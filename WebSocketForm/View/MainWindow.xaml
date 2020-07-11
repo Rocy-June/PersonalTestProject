@@ -231,6 +231,12 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Background" Value="#f88"/>
         </Style>
+        <Style x:Key="UserBlock_HeadIamge" TargetType="Image">
+            <Setter Property="Width" Value="35"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
         <Style x:Key="UserBlock_Title" TargetType="Label">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
@@ -267,7 +273,7 @@
                                     <Border Name="UserBlockIsTop" Style="{StaticResource UserBlock_IsTop}" Visibility="{Binding Path=IsTopVisibilityStr}">
                                         <Polygon Stroke="#cce6ff" Fill="#cce6ff" StrokeThickness="1" Points="10,0 10,10 0,0"/>
                                     </Border>
-                                    <Border Name="UserBlockHeadIcon" Style="{StaticResource UserBlock_HeadIcon}"/>
+                                    <Border Name="UserBlockHeadIcon" Style="{StaticResource UserBlock_HeadIcon}" Background="{Binding Path=HeadImageBrush}"/>
                                     <Label Name="UserBlockTitle" Style="{StaticResource UserBlock_Title}" Content="{Binding Path=Title}"/>
                                     <Label Name="UserBlockLastTime" Style="{StaticResource UserBlock_LastTime}" Content="{Binding Path=LastTimeStr}"/>
                                     <Label Name="UserBlockLastSay" Style="{StaticResource UserBlock_LastSay}" Content="{Binding Path=LastSay}"/>

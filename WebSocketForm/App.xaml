@@ -32,7 +32,7 @@
         </Storyboard>
         <Storyboard x:Key="ControlBoxReturn">
             <ColorAnimation Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" To="#003e82f7" Duration="0:0:.05"/>
-            <ColorAnimation Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)" To="#0000" Duration="0:0:.05"/>
+            <ColorAnimation Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)" To="#000" Duration="0:0:.05"/>
         </Storyboard>
         <Style x:Key="CloseFormButton" TargetType="Button">
             <Style.Triggers>

@@ -178,27 +178,14 @@ namespace WebSocketForm.View
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() =>
-            {
-                var uc = new UdpClient();
-                var ipep = new IPEndPoint(IPAddress.Broadcast, 8009);
 
-                while (true)
-                {
-                    uc.SendAsync(new byte[264130], 264130, ipep);
-                    Thread.Sleep(10);
-                }
-            })
-            {
-                IsBackground = true
-            }.Start();
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
             Random rd = new Random();
 
-            var ip = "192.168.4." + rd.Next(255);
+            var ip = "192.168.1." + rd.Next(255);
 
             AppData.AddUser(new User()
             {
@@ -214,30 +201,7 @@ namespace WebSocketForm.View
 
         private void Button3_Click(object sender, RoutedEventArgs e)
         {
-            //if (t == null)
-            //{
-            //    t = new Thread(() =>
-            //    {
-            //        var i = 1;
-            //        while (true)
-            //        {
-            //            var data = new byte[i++];
-            //            NetHelper.UDP_Send(IPAddress.Broadcast, data);
-            //            Thread.Sleep(10);
-            //        }
-            //    })
-            //    {
-            //        IsBackground = true
-            //    };
 
-            //    t.Start();
-            //}
-            NetHelper.Send_TCP(new IPAddress(Setting.UserConfig.IP), new TcpData()
-            {
-                ActionType = TcpMessageType.EventMessage,
-                Data = new byte[999999999],
-                SenderIP = new IPAddress(Setting.UserConfig.IP)
-            });
         }
     }
 }

@@ -31,6 +31,11 @@ namespace WebSocketForm
         /// 广播端口
         /// </summary>
         public const int BROADCAST_PORT = 8010;
+        
+        /// <summary>
+        /// 单包大小
+        /// </summary>
+        public const int BUFFER_SIZE = 1024;
 
         /// <summary>
         /// 用户设定

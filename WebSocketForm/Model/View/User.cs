@@ -26,7 +26,7 @@ namespace WebSocketForm.Model.View
 
         public override DateTime LastChatTime => AppData.GetLastChat(IP)?.SendTime ?? new DateTime(0);
 
-        public override string LastTimeStr => LastChatTime.ToString("MM-DD HH:mm");
+        public override string LastTimeStr => LastChatTime.ToString("MM-dd HH:mm");
 
         public override string Title
         {

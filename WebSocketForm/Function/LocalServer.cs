@@ -24,12 +24,7 @@ namespace WebSocketForm.Function
     {
         #region Server
 
-        /// <summary>
-        /// 单包大小
-        /// </summary>
-        private const int BUFFER_SIZE = 1024;
-
-        public static Server_TCP tcpServer = new Server_TCP(Setting.DATA_PORT, BUFFER_SIZE, TcpMessageReceived);
+        public static Server_TCP tcpServer = new Server_TCP(Setting.DATA_PORT, Setting.BUFFER_SIZE, TcpMessageReceived);
 
         public static Server_UDP<BroadcastData> broadcastServer = new Server_UDP<BroadcastData>(Setting.BROADCAST_PORT, BroadcastEventRecived);
 
