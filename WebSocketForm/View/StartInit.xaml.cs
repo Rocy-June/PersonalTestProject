@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WebSocketForm.Function;
 using WebSocketForm.Helper;
-using WebSocketForm.Model.Data;
+using Model.Data;
 
 namespace WebSocketForm.View
 {
@@ -94,7 +94,9 @@ namespace WebSocketForm.View
         {
             Invoke(() =>
             {
-                AppData.AddUser(ModelHelper.DataUserToViewUser(data));
+                var userData = ModelHelper.DataUserToViewUser(data);
+                userData.LastResponsedTime = DateTime.Now;
+                AppData.AddUser(userData);
                 mainWindow.RefreshMenu();
             });
         }

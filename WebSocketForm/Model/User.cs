@@ -5,10 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using WebSocketForm.Enum;
-using WebSocketForm.Model.Enum;
+using Model.Enum;
+using WebSocketForm.Helper;
 
-namespace WebSocketForm.Model.View
+namespace WebSocketForm.Model
 {
     public class User : Menu
     {
@@ -24,9 +24,9 @@ namespace WebSocketForm.Model.View
 
         public override string LastSay => AppData.GetLastChat(IP)?.Message ?? "";
 
-        public override DateTime LastChatTime => AppData.GetLastChat(IP)?.SendTime ?? new DateTime(0);
+        public override DateTime LastChatTime => AppData.GetLastChat(IP)?.SendTime ?? LastResponsedTime;
 
-        public override string LastTimeStr => LastChatTime.ToString("MM-dd HH:mm");
+        public override string LastTimeStr => LastChatTime.ToMinimizeDateString();
 
         public override string Title
         {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSocketForm.Enum
+namespace Model.Enum
 {
     public enum BroadcastType
     {

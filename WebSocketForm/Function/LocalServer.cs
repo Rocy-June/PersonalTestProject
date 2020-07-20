@@ -1,5 +1,4 @@
-﻿using NetworkHandler;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -11,12 +10,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
-using WebSocketForm.Enum;
 using WebSocketForm.Helper;
 using WebSocketForm.Model;
-using WebSocketForm.Model.Data;
-using WebSocketForm.Model.Enum;
+using Model.Data;
+using Model.Enum;
 using WebSocketForm.View;
+using NetworkHandler;
 
 namespace WebSocketForm.Function
 {

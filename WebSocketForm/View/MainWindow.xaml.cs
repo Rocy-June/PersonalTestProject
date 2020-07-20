@@ -16,13 +16,11 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WebSocketForm.Enum;
 using WebSocketForm.Function;
 using WebSocketForm.Helper;
+using Model.Data;
+using Model.Enum;
 using WebSocketForm.Model;
-using WebSocketForm.Model.Data;
-using WebSocketForm.Model.Enum;
-using WebSocketForm.Model.View;
 
 namespace WebSocketForm.View
 {
@@ -45,10 +43,9 @@ namespace WebSocketForm.View
             InitializeComponent();
             Init();
 
-            if (Setting.UserConfig == null)
+            if (Setting.UserConfig == null || string.IsNullOrWhiteSpace(Setting.UserConfig.Name))
             {
-                var us = new UserSetting();
-                us.ShowDialog();
+                new UserSetting().ShowDialog();
             }
 
             StartOnlineThreads();
@@ -88,6 +85,9 @@ namespace WebSocketForm.View
 
         private void LoadedInit()
         {
+            UserName.Content = Setting.UserConfig.Name;
+            OnlineCount.Content = $@"当前在线人数: {AppData.UserList.Count}";
+            Personal_IP.Content = $@"个人局域网IP: {new IPAddress(Setting.UserConfig.IP).ToString()}";
             UserHeadImage.Background = new ImageBrush(ImageHelper.BytesToBitmapImage(Setting.UserConfig.HeadImage));
         }
 
@@ -112,13 +112,18 @@ namespace WebSocketForm.View
         #region 窗体基础事件
         private void Window_Drag(object sender, MouseButtonEventArgs e)
         {
-            DragMove();
+            if (e.MouseDevice.LeftButton != MouseButtonState.Pressed)
+            {
+                return;
+            }
 
-            //FrameworkElement c = (FrameworkElement)sender;
-            //if (c.Name != "ControlBox")
-            //{
-            //    DragMove();
-            //}
+            DragMove();
+        }
+
+        private void EditUserProfile(object sender, MouseButtonEventArgs e)
+        {
+            new UserSetting().ShowDialog();
+            LoadedInit();
         }
 
         private void HideApplication(object sender, RoutedEventArgs e)
@@ -141,6 +146,16 @@ namespace WebSocketForm.View
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Broadcast.SendOfflineBroadcasting();
+
+            new Thread(() =>
+            {
+                Thread.Sleep(1500);
+                Environment.Exit(0);
+            })
+            {
+                IsBackground = true
+            }
+            .Start();
         }
 
         private void MenuButton_Enter(object sender, MouseEventArgs e)

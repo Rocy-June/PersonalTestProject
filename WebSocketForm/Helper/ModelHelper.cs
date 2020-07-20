@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using WebSocketForm.Model.Data;
-using WebSocketForm.Model.Enum;
-using WebSocketForm.Model.File;
-using WebSocketForm.Model.View;
+using Model.Data;
+using Model.Enum;
+using Model.File;
+using WebSocketForm.Model;
 
 namespace WebSocketForm.Helper
 {

@@ -17,10 +17,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using WebSocketForm.Function;
 using WebSocketForm.Helper;
-using WebSocketForm.Model;
-using WebSocketForm.Model.File;
+using Model.File;
 
 namespace WebSocketForm.View
 {
@@ -37,8 +35,17 @@ namespace WebSocketForm.View
 
             if (Setting.UserConfig == null)
             {
+                Setting.UserConfig = new File_User();
+            }
+
+            Setting.UserConfig.IP = NetHelper.GetLocalIp().GetAddressBytes();
+
+            if (string.IsNullOrWhiteSpace(Setting.UserConfig.Name))
+            {
                 CloseFormButton.Visibility = Visibility.Collapsed;
             }
+
+            UserName.Text = Setting.UserConfig.Name;
 
             if (Setting.UserConfig?.HeadImage != null)
             {
@@ -88,14 +95,24 @@ namespace WebSocketForm.View
 
         private void SaveUserInfoClick(object sender, RoutedEventArgs e)
         {
-            if (Setting.UserConfig == null)
+
+            if (string.IsNullOrWhiteSpace(UserName.Text))
             {
-                Setting.UserConfig = new File_User();
+                if (MessageBox.Show("用户名为空时会默认使用IP作为用户名, 是否继续?", "提示", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.No)
+                {
+                    return;
+                }
+                Setting.UserConfig.Name = new IPAddress(Setting.UserConfig.IP).ToString();
+            }
+            else
+            {
+                Setting.UserConfig.Name = UserName.Text;
             }
 
-            Setting.UserConfig.IP = NetHelper.GetLocalIp().GetAddressBytes();
-            Setting.UserConfig.HeadImage = ImageHelper.BitmapToBytes(userHeadImage);
-            Setting.UserConfig.Name = UserName.Text;
+            if (userHeadImage != null)
+            {
+                Setting.UserConfig.HeadImage = ImageHelper.BitmapToBytes(userHeadImage);
+            }
 
             var ex = AppData.Save();
 

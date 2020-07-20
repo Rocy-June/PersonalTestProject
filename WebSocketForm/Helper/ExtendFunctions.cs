@@ -101,6 +101,35 @@ namespace WebSocketForm.Helper
         }
         #endregion
 
+        #region 时间转换
+
+        public static string ToMinimizeDateString(this DateTime dt)
+        {
+            var now = DateTime.Now;
+            if (dt.Year != now.Year)
+            {
+                return dt.ToString("yyyy-MM-dd");
+            }
+            else if (dt.DayOfYear == now.DayOfYear)
+            {
+                return dt.ToString("HH:mm:ss");
+            }
+            else if (dt.DayOfYear + 1 == now.DayOfYear)
+            {
+                return "昨天";
+            }
+            else if (dt.DayOfYear + 2 == now.DayOfYear)
+            {
+                return "前天";
+            }
+            else
+            {
+                return dt.ToString("MM-dd HH:mm");
+            }
+        }
+
+        #endregion
+
         #region 序列化
         /// <summary>
         /// 将对象转换为byte数组

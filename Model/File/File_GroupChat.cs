@@ -4,27 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSocketForm.Model.Data
+namespace Model.File
 {
     [Serializable]
-    class Data_GroupChat
+    public class File_GroupChat : File_Menu
     {
         /// <summary>
         /// 
         /// </summary>
         /// <remarks>群所有者IP</remarks>
-        public long OwnerID { get; set; }
-        /// <summary>
-        /// 头像
-        /// </summary>
-        public byte[] HeadImage { get; set; }
+        public byte[] OwnerID { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
         /// <remarks>DateTimeTicks</remarks>
         public long ID { get; set; }
 
-        public List<Data_User> Members { get; set; }
+        public List<File_User> Members { get; set; }
 
         public string Name { get; set; }
     }

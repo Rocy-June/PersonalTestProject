@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using WebSocketForm.Function;
 using WebSocketForm.Helper;
-using WebSocketForm.Model.Data;
-using WebSocketForm.Model.Enum;
-using WebSocketForm.Model.File;
-using WebSocketForm.Model.View;
+using Model.Data;
+using Model.Enum;
+using Model.File;
+using WebSocketForm.Model;
 
 namespace WebSocketForm
 {
@@ -113,7 +113,7 @@ namespace WebSocketForm
 {ex.StackTrace}");
             }
 
-            if (Setting.UserConfig != null )
+            if (Setting.UserConfig != null)
             {
                 if (File.Exists(HEAD_IMAGE_URI))
                 {
@@ -125,7 +125,7 @@ namespace WebSocketForm
 
                 Setting.UserConfig.IP = NetHelper.GetLocalIp()?.GetAddressBytes();
             }
-            
+
             try
             {
                 IoHelper.PathCheckAndCreate(SETTING_USER_DATA_URI);
@@ -191,7 +191,7 @@ namespace WebSocketForm
             menuList.AddRange(UserList);
             menuList.AddRange(GroupList);
 
-            return menuList.OrderByDescending(e => e.LastChatTime).ToList();
+            return menuList.OrderByDescending(e => e.IsTop).ThenByDescending(e => e.LastChatTime).ToList();
         }
 
         #endregion

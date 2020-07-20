@@ -182,19 +182,17 @@
             <Setter Property="VerticalAlignment" Value="Bottom" />
         </Style>
     </Window.Resources>
-    
-    <Border Style="{StaticResource MainOuter}">
-        <Grid>
-            <Grid Style="{StaticResource LodingDotsGrid}">
-                <Border Style="{StaticResource LoadingDot1}"></Border>
-                <Border Style="{StaticResource LoadingDot2}"></Border>
-                <Border Style="{StaticResource LoadingDot3}"></Border>
-                <Border Style="{StaticResource LoadingDot4}"></Border>
-                <Border Style="{StaticResource LoadingDot5}"></Border>
-            </Grid>
-            <Grid Style="{StaticResource LoadingGrid}">
-                <Label x:Name="LoadingText">Loading...</Label>
-            </Grid>
+
+    <Grid>
+        <Grid Style="{StaticResource LodingDotsGrid}">
+            <Border Style="{StaticResource LoadingDot1}"></Border>
+            <Border Style="{StaticResource LoadingDot2}"></Border>
+            <Border Style="{StaticResource LoadingDot3}"></Border>
+            <Border Style="{StaticResource LoadingDot4}"></Border>
+            <Border Style="{StaticResource LoadingDot5}"></Border>
         </Grid>
-    </Border>
+        <Grid Style="{StaticResource LoadingGrid}">
+            <Label x:Name="LoadingText">Loading...</Label>
+        </Grid>
+    </Grid>
 </Window>

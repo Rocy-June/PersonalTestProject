@@ -142,25 +142,23 @@
         </Style>
     </Window.Resources>
 
-    <Border Style="{StaticResource MainOuter}">
-        <Grid>
-            <Border Style="{StaticResource TitleBar}">
-                <Grid>
-                    <Label Style="{StaticResource Title}">个人信息设置</Label>
-                    <Button x:Name="CloseFormButton" Style="{StaticResource CloseFormButton}"/>
-                </Grid>
-            </Border>
-            <Border Style="{StaticResource SettingArea}">
-                <Grid>
-                    <Border x:Name="UserHeadImage" Style="{StaticResource UserHeadImage}"/>
-                    <Border x:Name="UserNameBorder" Style="{StaticResource UserNameBorder}">
-                        <TextBox x:Name="UserName" Style="{StaticResource UserName}"></TextBox>
-                    </Border>
-                    <Border Style="{StaticResource SaveButtonBorder}">
-                        <Button Style="{StaticResource SaveButton}" Content="保存"/>
-                    </Border>
-                </Grid>
-            </Border>
-        </Grid>
-    </Border>
+    <Grid>
+        <Border Style="{StaticResource TitleBar}">
+            <Grid>
+                <Label Style="{StaticResource Title}">个人信息设置</Label>
+                <Button x:Name="CloseFormButton" Style="{StaticResource CloseFormButton}"/>
+            </Grid>
+        </Border>
+        <Border Style="{StaticResource SettingArea}">
+            <Grid>
+                <Border x:Name="UserHeadImage" Style="{StaticResource UserHeadImage}"/>
+                <Border x:Name="UserNameBorder" Style="{StaticResource UserNameBorder}">
+                    <TextBox x:Name="UserName" Style="{StaticResource UserName}"></TextBox>
+                </Border>
+                <Border Style="{StaticResource SaveButtonBorder}">
+                    <Button Style="{StaticResource SaveButton}" Content="保存"/>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>

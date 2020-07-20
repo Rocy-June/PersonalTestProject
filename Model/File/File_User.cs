@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSocketForm.Model.File
+namespace Model.File
 {
     [Serializable]
     public class File_User : File_Menu

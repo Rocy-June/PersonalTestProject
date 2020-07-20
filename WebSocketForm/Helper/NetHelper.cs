@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WebSocketForm.Model.Data;
+using Model.Data;
 
 namespace WebSocketForm.Helper
 {

@@ -3,11 +3,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using WebSocketForm.Enum;
+using Model.Enum;
 using WebSocketForm.Helper;
 using WebSocketForm.Model;
-using WebSocketForm.Model.Data;
-using WebSocketForm.Model.Enum;
+using Model.Data;
 
 namespace WebSocketForm.Function
 {

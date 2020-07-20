@@ -1,4 +1,4 @@
-﻿ <Window x:Class="WebSocketForm.View.MainWindow"
+﻿<Window x:Class="WebSocketForm.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="WebSocket通讯器" ResizeMode="CanResize"
@@ -8,18 +8,6 @@
         Closing="Window_Closing"
         Style="{StaticResource WindowStyle}">
     <Window.Resources>
-
-        <Storyboard x:Key="ControlBoxBlueBackGround">
-            <ColorAnimation Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)" To="#ff3e82f7" Duration="0:0:.05"/>
-            <ColorAnimation Storyboard.TargetProperty="(Label.Foreground).(SolidColorBrush.Color)" To="#fff" Duration="0:0:.05"/>
-        </Storyboard>
-        <Storyboard x:Key="SearchBox_MouseEnter">
-            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#eee" Duration="0:0:.1"/>
-        </Storyboard>
-        <Storyboard x:Key="SearchBox_MouseLeave">
-            <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="#f8f8f8" Duration="0:0:.1"/>
-        </Storyboard>
-
         <Style x:Key="LeftMenu" TargetType="Border">
             <Setter Property="Width" Value="65"/>
             <Setter Property="CornerRadius" Value="5,0,0,5"/>
@@ -38,7 +26,7 @@
             <Setter Property="Width" Value="50"/>
             <Setter Property="Height" Value="50"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="28"/>
@@ -51,7 +39,7 @@
             <Setter Property="Width" Value="50"/>
             <Setter Property="Height" Value="50"/>
             <Setter Property="VerticalAlignment" Value="Bottom"/>
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="28"/>
@@ -79,12 +67,12 @@
             <Style.Triggers>
                 <EventTrigger RoutedEvent="MouseEnter">
                     <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource SearchBox_MouseEnter}" />
+                        <BeginStoryboard Storyboard="{StaticResource Gray_MouseEnter}" />
                     </EventTrigger.Actions>
                 </EventTrigger>
                 <EventTrigger RoutedEvent="MouseLeave">
                     <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource SearchBox_MouseLeave}" />
+                        <BeginStoryboard Storyboard="{StaticResource LightGray_MouseLeave}" />
                     </EventTrigger.Actions>
                 </EventTrigger>
             </Style.Triggers>
@@ -97,7 +85,7 @@
             <Setter Property="CornerRadius" Value="3"/>
         </Style>
         <Style x:Key="SearchIcon" TargetType="Label">
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -110,9 +98,41 @@
             <Setter Property="Margin" Value="28,0,0,0"/>
             <Setter Property="Background" Value="Transparent"/>
         </Style>
+        <Style x:Key="ForceAddPlusButton" TargetType="Border">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource Gray_MouseEnter}" />
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource LightGray_MouseLeave}" />
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="250,0,0,0"/>
+            <Setter Property="Background" Value="#f8f8f8"/>
+            <Setter Property="CornerRadius" Value="3"/>
+        </Style>
+        <Style x:Key="ForceAddPlus" TargetType="Label">
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="0,0,1,1"/>
+        </Style>
         <Style x:Key="FunctionBox" TargetType="Border">
-            <Setter Property="Width" Value="150"/>
+            <Setter Property="Width" Value="250"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style x:Key="UserName" TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0,12,75,0"/>
         </Style>
         <Style x:Key="HeadIcon" TargetType="Border">
             <Setter Property="Width" Value="30"/>
@@ -124,6 +144,7 @@
             <Setter Property="BorderBrush" Value="#eee"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand" />
+            <EventSetter Event="MouseDown" Handler="EditUserProfile"/>
         </Style>
         <Style x:Key="LoginStatusIcon" TargetType="Border">
             <Setter Property="Width" Value="15"/>
@@ -142,69 +163,41 @@
             <Setter Property="Height" Value="8"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="Margin" Value="0,0,17,0"/>
-        </Style>
-        <Style x:Key="ControlBox" TargetType="Border">
-            <Setter Property="Width" Value="130"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="BorderBrush" Value="#eee"/>
-            <Setter Property="BorderThickness" Value="1,0,0,1"/>
-
-        </Style>
-        <Style x:Key="ControlBoxButton" TargetType="Button">
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="#000"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
-                            <ContentPresenter  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                               Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"
-                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <EventTrigger RoutedEvent="MouseEnter">
-                    <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource ControlBoxBlueBackGround}" />
-                    </EventTrigger.Actions>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="MouseLeave">
-                    <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource ControlBoxReturn}" />
-                    </EventTrigger.Actions>
-                </EventTrigger>
-            </Style.Triggers>
+            <Setter Property="Cursor" Value="Hand" />
+            <EventSetter Event="MouseDown" Handler="EditUserProfile"/>
         </Style>
         <Style x:Key="MainFunctionBox" TargetType="Border">
             <Setter Property="Margin" Value="65,50,0,0"/>
         </Style>
         <Style x:Key="LeftListBox" TargetType="Border">
-            <!--<Setter Property="Width" Value="100"/>-->
             <Setter Property="BorderBrush" Value="#eee"/>
-            <!--<Setter Property="BorderThickness" Value="0,0,1,0"/>-->
             <Setter Property="Background" Value="#fff"/>
-            <!--<Setter Property="HorizontalAlignment" Value="Left"/>-->
         </Style>
         <Style x:Key="TipStateBox" TargetType="Border">
             <Setter Property="Height" Value="40"/>
             <Setter Property="BorderBrush" Value="#eee"/>
             <Setter Property="BorderThickness" Value="0,0,0,1"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+        <Style x:Key="TipStateLeftTips" TargetType="Grid">
+            <Setter Property="Margin" Value="0,0,40,0"/>
+        </Style>
+        <Style x:Key="TipStateBox_TipUp" TargetType="Label">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Padding" Value="5,2,0,2"/>
+        </Style>
+        <Style x:Key="TipStateBox_TipBottom" TargetType="Label">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Padding" Value="5,2,0,2"/>
+            <Setter Property="Foreground" Value="#ccc"/>
+        </Style>
+        <Style x:Key="TipStateRightButton" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Background" Value="#fff"/>
+            <Setter Property="BorderThickness" Value="0"/>
         </Style>
         <Style x:Key="OnlineUserListOuter" TargetType="Grid">
             <Setter Property="Margin" Value="0,40,0,0"/>
@@ -225,7 +218,7 @@
             <Setter Property="Width" Value="35"/>
             <Setter Property="Height" Value="35"/>
             <Setter Property="CornerRadius" Value="99"/>
-            <Setter Property="Margin" Value="15,0,0,0"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="BorderBrush" Value="#eee"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -240,7 +233,7 @@
         <Style x:Key="UserBlock_Title" TargetType="Label">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Margin" Value="60,8,45,0"/>
+            <Setter Property="Margin" Value="50,8,45,0"/>
             <Setter Property="TextOptions.TextFormattingMode" Value="Ideal"/>
         </Style>
         <Style x:Key="UserBlock_LastTime" TargetType="Label">
@@ -248,6 +241,7 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="Margin" Value="0,8,10,0"/>
+            <Setter Property="Background" Value="#fff"/>
         </Style>
         <Style x:Key="UserBlock_LastSay" TargetType="Label">
             <Setter Property="Foreground" Value="#888"/>
@@ -256,7 +250,7 @@
             <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
         </Style>
         <Style x:Key="UserBlock_Status" TargetType="Label">
-            <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+            <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Foreground" Value="#888"/>
             <Setter Property="VerticalAlignment" Value="Bottom"/>
@@ -320,94 +314,157 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="ChatBox" TargetType="Border">
-            <!--<Setter Property="Margin" Value="250,0,0,0"/>-->
+        <Style x:Key="ListSplitter" TargetType="GridSplitter">
+            <Setter Property="Width" Value="3"/>
+        </Style>
+        <Style x:Key="ChatHeadImage" TargetType="Border">
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="CornerRadius" Value="99"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="15,0,0,-30"/>
+            <Setter Property="Background" Value="#f3f3f3"/>
+            <Setter Property="BorderBrush" Value="#eee"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style x:Key="ChatNameOuter" TargetType="Border">
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="90,5,0,5"/>
+        </Style>
+        <Style x:Key="ChatName" TargetType="TextBox">
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource Gray_MouseEnter}" />
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource White_MouseLeave}" />
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
         </Style>
     </Window.Resources>
-     
-    <Border Style="{StaticResource MainOuter}">
-        <Grid>
-            <Border Style="{StaticResource LeftMenu}">
-                <Grid>
-                    <Label Style="{StaticResource LeftTopMenuButton}" Margin="0,55,0,0" Opacity="1"></Label>
-                    <!--<Label Style="{StaticResource LeftTopMenuButton}" Margin="0,115,0,0"></Label>-->
-                    <!--<Label Style="{StaticResource LeftTopMenuButton}" Margin="0,175,0,0"></Label>-->
-                    <!--<Label Style="{StaticResource LeftTopMenuButton}" Margin="0,235,0,0"></Label>-->
-                    <!--<Label Style="{StaticResource LeftTopMenuButton}" Margin="0,295,0,0"></Label>-->
-                    <Label Style="{StaticResource LeftBottomMenuButton}" Margin="0,0,0,85" Opacity=".6"></Label>
-                    <Label Style="{StaticResource LeftBottomMenuButton}" Margin="0,0,0,25" Opacity=".6"></Label>
 
-                    <Button Content="BTN1" HorizontalAlignment="Left" Margin="10,270,0,0" VerticalAlignment="Top" Width="45" Click="Button_Click"/>
-                    <Button Content="BTN2" HorizontalAlignment="Left" Margin="10,294,0,0" VerticalAlignment="Top" Width="45" Click="Button2_Click"/>
-                    <Button Content="BTN3" HorizontalAlignment="Left" Margin="10,318,0,0" VerticalAlignment="Top" Width="45" Click="Button3_Click"/>
-                </Grid>
-            </Border>
-            <Border Style="{StaticResource TopBar}">
-                <Grid>
-                    <Border Style="{StaticResource SearchBox}">
+    <Grid>
+        <Border Style="{StaticResource LeftMenu}">
+            <Grid>
+                <Label Style="{StaticResource LeftTopMenuButton}" Margin="0,55,0,0" Opacity="1"></Label>
+                <!--<Label Style="{StaticResource LeftTopMenuButton}" Margin="0,115,0,0"></Label>-->
+                <!--<Label Style="{StaticResource LeftTopMenuButton}" Margin="0,175,0,0"></Label>-->
+                <!--<Label Style="{StaticResource LeftTopMenuButton}" Margin="0,235,0,0"></Label>-->
+                <!--<Label Style="{StaticResource LeftTopMenuButton}" Margin="0,295,0,0"></Label>-->
+                <Label Style="{StaticResource LeftBottomMenuButton}" Margin="0,0,0,85" Opacity=".6"></Label>
+                <Label Style="{StaticResource LeftBottomMenuButton}" Margin="0,0,0,25" Opacity=".6"></Label>
+
+                <Button Content="BTN1" HorizontalAlignment="Left" Margin="10,270,0,0" VerticalAlignment="Top" Width="45" Click="Button_Click"/>
+                <Button Content="BTN2" HorizontalAlignment="Left" Margin="10,294,0,0" VerticalAlignment="Top" Width="45" Click="Button2_Click"/>
+                <Button Content="BTN3" HorizontalAlignment="Left" Margin="10,318,0,0" VerticalAlignment="Top" Width="45" Click="Button3_Click"/>
+            </Grid>
+        </Border>
+        <Border Style="{StaticResource TopBar}">
+            <Grid>
+                <Border Style="{StaticResource SearchBox}">
+                    <Grid>
                         <Border Style="{StaticResource SearchBoxOuter}">
                             <Grid>
-                                <Label Style="{StaticResource SearchIcon}"></Label>
+                                <Label Style="{StaticResource SearchIcon}"></Label>
                                 <TextBox Name="test" Style="{StaticResource SearchInput}"/>
                             </Grid>
                         </Border>
-                    </Border>
-                    <Border Style="{StaticResource FunctionBox}">
-                        <Grid>
-                            <Border Name="UserHeadImage" Style="{StaticResource HeadIcon}"/>
-                            <Border Style="{StaticResource LoginStatusIcon}"/>
-                            <Border Style="{StaticResource HeadTriangle}">
-                                <Polygon Stroke="#888" Fill="#888" StrokeThickness="1" Points="0,4 8,4 4,8"/>
-                            </Border>
-                        </Grid>
-                    </Border>
-                </Grid>
-            </Border>
-            <Border Style="{StaticResource ControlBox}">
-                <Grid>
-                    <Button Style="{StaticResource ControlBoxButton}" Margin="0,0,90,0" Click="HideApplication" Content=""/>
-                    <Button Style="{StaticResource ControlBoxButton}" Margin="0,0,50,0" Click="FullSizeOrMinApplication" Content=""/>
-                    <Button Style="{StaticResource CloseFormButton}" />
-                </Grid>
-            </Border>
-            <Border Style="{StaticResource MainFunctionBox}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="250" Width="200" MaxWidth="500"/>
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0" Style="{StaticResource LeftListBox}">
-                        <Grid>
-                            <Border Style="{StaticResource TipStateBox}">
-                                <Grid></Grid>
-                            </Border>
-                            <Grid Style="{StaticResource OnlineUserListOuter}">
-                                <ListBox Name="OnlineUserList" Style="{StaticResource OnlineUserList}">
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                    <RadioButton/>
-                                </ListBox>
+                        <Border Style="{StaticResource ForceAddPlusButton}">
+                            <Label Style="{StaticResource ForceAddPlus}"></Label>
+                        </Border>
+                    </Grid>
+                </Border>
+                <Border Style="{StaticResource FunctionBox}">
+                    <Grid>
+                        <Label Name="UserName" Style="{StaticResource UserName}">- User Name -</Label>
+                        <Border Name="UserHeadImage" Style="{StaticResource HeadIcon}"/>
+                        <Border Style="{StaticResource LoginStatusIcon}"/>
+                        <Border Style="{StaticResource HeadTriangle}">
+                            <Polygon Stroke="#888" Fill="#888" StrokeThickness="1" Points="0,4 8,4 4,8"/>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+        <Border Style="{StaticResource ControlBox}">
+            <Grid>
+                <Button Style="{StaticResource ControlBoxButton}" Margin="0,0,90,0" Click="HideApplication" Content=""/>
+                <Button Style="{StaticResource ControlBoxButton}" Margin="0,0,50,0" Click="FullSizeOrMinApplication" Content=""/>
+                <Button Style="{StaticResource CloseFormButton}" />
+            </Grid>
+        </Border>
+        <Border Style="{StaticResource MainFunctionBox}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="210" Width="30*" MaxWidth="500"/>
+                    <ColumnDefinition Width="70*" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Style="{StaticResource LeftListBox}">
+                    <Grid>
+                        <Border Style="{StaticResource TipStateBox}">
+                            <Grid>
+                                <Grid Style="{StaticResource TipStateLeftTips}">
+                                    <Label Name="OnlineCount" Style="{StaticResource TipStateBox_TipUp}">当前在线人数: 0</Label>
+                                    <Label Name="Personal_IP" Style="{StaticResource TipStateBox_TipBottom}">个人局域网IP: 000.000.000.000</Label>
+                                </Grid>
+                                <Button Style="{StaticResource TipStateRightButton}" FontFamily="{StaticResource FontAwesome}" Content=""/>
                             </Grid>
+                        </Border>
+                        <Grid Style="{StaticResource OnlineUserListOuter}">
+                            <ListBox Name="OnlineUserList" Style="{StaticResource OnlineUserList}">
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                                <RadioButton/>
+                            </ListBox>
                         </Grid>
-                    </Border>
-                    <GridSplitter Width="1"/>
-                    <Border Grid.Column="1" Style="{StaticResource ChatBox}">
-                        <Grid>
+                    </Grid>
+                </Border>
+                <GridSplitter Style="{StaticResource ListSplitter}"/>
+                <Border Grid.Column="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="75*"/>
+                            <RowDefinition MinHeight="130" Height="25*" MaxHeight="350"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Border Style="{StaticResource TipStateBox}">
+                                <Grid>
+                                    <Border Style="{StaticResource ChatHeadImage}"></Border>
+                                    <Border Style="{StaticResource ChatNameOuter}">
+                                        <TextBox Style="{StaticResource ChatName}">- Chating Name -</TextBox>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <GridSplitter Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"></GridSplitter>
+                        <Grid Grid.Row="1">
 
                         </Grid>
-                    </Border>
-                </Grid>
-            </Border>
-        </Grid>
-    </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>

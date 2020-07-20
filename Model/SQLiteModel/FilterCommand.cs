@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSocketForm.Model.SQLiteModel
+namespace Model.SQLiteModel
 {
     class FilterCommand
     {

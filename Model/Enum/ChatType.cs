@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebSocketForm.Model.Enum
+namespace Model.Enum
 {
-    public enum MessageStatus
+    public enum ChatType
     {
-        Sending = 0,
-        Success = 200,
-        SendFail = 503
+        ToUser = 0,
+        ToGroup = 1
     }
 }

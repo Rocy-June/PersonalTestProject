@@ -5,8 +5,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using WebSocketForm.Helper;
-using WebSocketForm.Model.Data;
-using WebSocketForm.Model.Enum;
+using Model.Data;
+using Model.Enum;
 
 namespace WebSocketForm.Function
 {
