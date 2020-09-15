@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace WebSocketForm.Helper
 {
-    class SQLite<T> where T : new()
+    class SQLite
     {
         /// <summary>
         /// 创建SQLite.db文件
@@ -17,27 +17,34 @@ namespace WebSocketForm.Helper
         /// <param name="fileName">db文件名</param>
         public static void CreateBDFile()
         {
-            var path = Environment.CurrentDirectory + @"\Data\";
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(AppData.DATABASE_DIRECTORY_PATH))
             {
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(AppData.DATABASE_DIRECTORY_PATH);
             }
 
-            var dbFileName = path + typeof(T).Name + ".db";
-            if (!File.Exists(dbFileName))
+            if (!File.Exists(AppData.DATABASE_FILE_PATH))
             {
-                SQLiteConnection.CreateFile(dbFileName);
+                SQLiteConnection.CreateFile(AppData.DATABASE_FILE_PATH);
             }
         }
 
         /// <summary>
-        /// 获取给定SQLite.db的连接字符串
+        /// SQLite 连接
         /// </summary>
-        /// <param name="fileName">db文件名</param>
-        /// <returns>db的连接字符串</returns>
-        public static string CreateConnectionString()
+        private SQLiteConnection conn;
+
+        /// <summary>
+        /// 实例化一个 SQLite 连接
+        /// </summary>
+        public SQLite()
         {
-            return new SQLiteConnectionStringBuilder() { DataSource = $@"Data\{typeof(T).Name}.db" }.ToString();
+            conn = new SQLiteConnection(new SQLiteConnectionStringBuilder() { DataSource = AppData.DATABASE_FILE_PATH }.ToString());
+            conn.Open();
+        }
+
+        private SQLiteCommand SQLiteCommand(string sqlStr)
+        {
+            return new SQLiteCommand(sqlStr, conn);
         }
 
         /// <summary>
@@ -46,16 +53,12 @@ namespace WebSocketForm.Helper
         /// <param name="sqlStr">SQL语句</param>
         /// <param name="args">参数</param>
         /// <returns>受影响行数</returns>
-        public static int ExcuteNonQuery(string sqlStr, params SQLiteParameter[] args)
+        public int ExcuteNonQuery(string sqlStr, params SQLiteParameter[] args)
         {
-            using (var con = new SQLiteConnection(CreateConnectionString()))
+            using (var cmd = SQLiteCommand(sqlStr))
             {
-                con.Open();
-                using (var cmd = new SQLiteCommand() { CommandText = sqlStr })
-                {
-                    cmd.Parameters.AddRange(args);
-                    return cmd.ExecuteNonQuery();
-                }
+                cmd.Parameters.AddRange(args);
+                return cmd.ExecuteNonQuery();
             }
         }
 
@@ -65,15 +68,32 @@ namespace WebSocketForm.Helper
         /// <param name="sqlStr">SQL语句</param>
         /// <param name="args">参数</param>
         /// <returns>查询结果的第一行第一列</returns>
-        public static object ExecuteScalar(string sqlStr, params SQLiteParameter[] args)
+        public object ExecuteScalar(string sqlStr, params SQLiteParameter[] args)
         {
-            using (var con = new SQLiteConnection(CreateConnectionString()))
+            using (var cmd = SQLiteCommand(sqlStr))
             {
-                con.Open();
-                using (var cmd = new SQLiteCommand() { CommandText = sqlStr })
+                cmd.Parameters.AddRange(args);
+                return cmd.ExecuteScalar();
+            }
+        }
+
+        /// <summary>
+        /// 查询表是否存在
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool CheckTableExists(string name) 
+        {
+            using (var cmd = SQLiteCommand($"SELECT 1 FROM {name}")) 
+            {
+                try
                 {
-                    cmd.Parameters.AddRange(args);
-                    return cmd.ExecuteScalar();
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
                 }
             }
         }
@@ -84,22 +104,18 @@ namespace WebSocketForm.Helper
         /// <param name="sqlStr">SQL语句</param>
         /// <param name="args">参数</param>
         /// <returns>查询的数据表</returns>
-        public static DataTable GetDataTable(string sqlStr, params SQLiteParameter[] args)
+        public DataTable GetDataTable(string sqlStr, params SQLiteParameter[] args)
         {
-            using (var con = new SQLiteConnection(CreateConnectionString()))
+            using (var cmd = SQLiteCommand(sqlStr))
             {
-                con.Open();
-                using (var cmd = new SQLiteCommand() { CommandText = sqlStr })
-                {
-                    cmd.Parameters.AddRange(args);
+                cmd.Parameters.AddRange(args);
 
-                    var ds = new DataSet();
-                    var adapter = new SQLiteDataAdapter(cmd);
+                var ds = new DataSet();
+                var adapter = new SQLiteDataAdapter(cmd);
 
-                    adapter.Fill(ds);
+                adapter.Fill(ds);
 
-                    return ds.Tables[0];
-                }
+                return ds.Tables[0];
             }
         }
 

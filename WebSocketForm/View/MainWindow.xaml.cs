@@ -103,12 +103,6 @@ namespace WebSocketForm.View
 
         #endregion
 
-        #region 服务器事件
-
-
-
-        #endregion
-
         #region 窗体基础事件
         private void Window_Drag(object sender, MouseButtonEventArgs e)
         {
@@ -188,6 +182,11 @@ namespace WebSocketForm.View
 
                 storyBord.Begin();
             }
+        }
+
+        private void OnlineUserList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
         #endregion
 

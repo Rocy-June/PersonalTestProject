@@ -291,7 +291,6 @@
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#000"/>
                 </Trigger>
-
             </Style.Triggers>
         </Style>
         <Style x:Key="OnlineUserList" TargetType="ListBox">
@@ -423,7 +422,7 @@
                             </Grid>
                         </Border>
                         <Grid Style="{StaticResource OnlineUserListOuter}">
-                            <ListBox Name="OnlineUserList" Style="{StaticResource OnlineUserList}">
+                            <ListBox Name="OnlineUserList" Style="{StaticResource OnlineUserList}" SelectionChanged="OnlineUserList_SelectionChanged">
                                 <RadioButton/>
                                 <RadioButton/>
                                 <RadioButton/>

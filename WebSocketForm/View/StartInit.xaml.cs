@@ -31,9 +31,15 @@ namespace WebSocketForm.View
         private List<string> loadingText = new List<string>
         {
             "Loading APP settings.",
+            "Initializing SQLite connection.",
             "Binding server events.",
             "Opening local server."
         };
+
+        private List<Type> sqlite_init_table = new List<Type> 
+        {
+            Data_User,
+        }; 
 
         public StartInit()
         {
@@ -55,6 +61,9 @@ namespace WebSocketForm.View
             //读取设定
             RefreshText();
             AppData.Load();
+
+            //初始化数据库
+            InitSQL();
 
             //绑定服务器事件
             RefreshText();
@@ -88,6 +97,13 @@ namespace WebSocketForm.View
             {
                 LoadingText.Content = $@"( {loadingPart + 1} / {loadingText.Count} ) {loadingText[loadingPart++]}";
             });
+        }
+
+        private void InitSQL()
+        {
+            SQLite.CreateBDFile();
+            AppData.SQL = new SQLite();
+            AppData.SQL.CheckTableExists("Data_User");
         }
 
         private void LocalServer_UserProfileDataReceived(Data_User data, IPAddress ip)

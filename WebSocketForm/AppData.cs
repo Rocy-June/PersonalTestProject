@@ -35,6 +35,12 @@ namespace WebSocketForm
 
         public static readonly string SETTING_GROUP_DATA_URI = PATH + "setting\\group.dat";
 
+        public static readonly string DATABASE_DIRECTORY_PATH = PATH + "data\\";
+
+        public static readonly string DATABASE_FILE_PATH = DATABASE_DIRECTORY_PATH + "localdata.db";
+
+        public static SQLite SQL;
+
         #endregion
 
         /// <summary>
