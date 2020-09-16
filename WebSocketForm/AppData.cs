@@ -20,29 +20,6 @@ namespace WebSocketForm
     static class AppData
     {
 
-        #region Consts
-
-        /// <summary>
-        /// 运行路径
-        /// </summary>
-        public static readonly string PATH = AppDomain.CurrentDomain.BaseDirectory;
-
-        public static readonly string HEAD_IMAGE_URI = PATH + "setting\\HeadImage.png";
-
-        public static readonly string SETTING_DATA_URI = PATH + "setting\\setting.dat";
-
-        public static readonly string SETTING_USER_DATA_URI = PATH + "setting\\user.dat";
-
-        public static readonly string SETTING_GROUP_DATA_URI = PATH + "setting\\group.dat";
-
-        public static readonly string DATABASE_DIRECTORY_PATH = PATH + "data\\";
-
-        public static readonly string DATABASE_FILE_PATH = DATABASE_DIRECTORY_PATH + "localdata.db";
-
-        public static SQLite SQL;
-
-        #endregion
-
         /// <summary>
         /// 用户列表
         /// </summary>
@@ -64,26 +41,26 @@ namespace WebSocketForm
         {
             try
             {
-                IoHelper.PathCheckAndCreate(SETTING_DATA_URI);
-                using (var fs = new FileStream(SETTING_DATA_URI, FileMode.Create, FileAccess.Write))
-                {
-                    var bytesData = Setting.UserConfig.ToBytes();
-                    fs.Write(bytesData, 0, bytesData.Length);
-                }
+                //IoHelper.PathCheckAndCreate(SETTING_DATA_URI);
+                //using (var fs = new FileStream(SETTING_DATA_URI, FileMode.Create, FileAccess.Write))
+                //{
+                //    var bytesData = Setting.UserConfig.ToBytes();
+                //    fs.Write(bytesData, 0, bytesData.Length);
+                //}
 
-                IoHelper.PathCheckAndCreate(SETTING_USER_DATA_URI);
-                using (var fs = new FileStream(SETTING_USER_DATA_URI, FileMode.Create, FileAccess.Write))
-                {
-                    var bytesData = UserList.Select(e => ModelHelper.ViewUserToFileUser(e)).ToList().ToBytes();
-                    fs.Write(bytesData, 0, bytesData.Length);
-                }
+                //IoHelper.PathCheckAndCreate(SETTING_USER_DATA_URI);
+                //using (var fs = new FileStream(SETTING_USER_DATA_URI, FileMode.Create, FileAccess.Write))
+                //{
+                //    var bytesData = UserList.Select(e => ModelHelper.ViewUserToFileUser(e)).ToList().ToBytes();
+                //    fs.Write(bytesData, 0, bytesData.Length);
+                //}
 
-                IoHelper.PathCheckAndCreate(SETTING_GROUP_DATA_URI);
-                using (var fs = new FileStream(SETTING_GROUP_DATA_URI, FileMode.Create, FileAccess.Write))
-                {
-                    var bytesData = GroupList.Select(e => ModelHelper.ViewGroupChatToFileGroupChat(e)).ToList().ToBytes();
-                    fs.Write(bytesData, 0, bytesData.Length);
-                }
+                //IoHelper.PathCheckAndCreate(SETTING_GROUP_DATA_URI);
+                //using (var fs = new FileStream(SETTING_GROUP_DATA_URI, FileMode.Create, FileAccess.Write))
+                //{
+                //    var bytesData = GroupList.Select(e => ModelHelper.ViewGroupChatToFileGroupChat(e)).ToList().ToBytes();
+                //    fs.Write(bytesData, 0, bytesData.Length);
+                //}
             }
             catch (Exception ex)
             {
@@ -98,89 +75,89 @@ namespace WebSocketForm
         /// <returns>读取错误信息</returns>
         public static void Load()
         {
-            try
-            {
-                IoHelper.PathCheckAndCreate(SETTING_DATA_URI);
-                using (var fs = new FileStream(SETTING_DATA_URI, FileMode.OpenOrCreate, FileAccess.Read))
-                {
-                    var streamBytes = new byte[fs.Length];
-                    fs.Read(streamBytes, 0, fs.Length.ToIntWithEx());
-                    if (streamBytes.Length > 0)
-                    {
-                        Setting.UserConfig = streamBytes.ToObject<File_User>();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                File.Delete(SETTING_DATA_URI);
-                MessageBox.Show($@"用户设定存档出错并已将其重置，请重新设定
-{ex.Message}
-{ex.StackTrace}");
-            }
+//            try
+//            {
+//                IoHelper.PathCheckAndCreate(SETTING_DATA_URI);
+//                using (var fs = new FileStream(SETTING_DATA_URI, FileMode.OpenOrCreate, FileAccess.Read))
+//                {
+//                    var streamBytes = new byte[fs.Length];
+//                    fs.Read(streamBytes, 0, fs.Length.ToIntWithEx());
+//                    if (streamBytes.Length > 0)
+//                    {
+//                        Setting.UserConfig = streamBytes.ToObject<File_User>();
+//                    }
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                File.Delete(SETTING_DATA_URI);
+//                MessageBox.Show($@"用户设定存档出错并已将其重置，请重新设定
+//{ex.Message}
+//{ex.StackTrace}");
+//            }
 
             if (Setting.UserConfig != null)
             {
-                if (File.Exists(HEAD_IMAGE_URI))
-                {
-                    using (var bm = new Bitmap(HEAD_IMAGE_URI))
-                    {
-                        Setting.UserConfig.HeadImage = ImageHelper.BitmapToBytes(bm);
-                    }
-                }
+                //if (File.Exists(HEAD_IMAGE_URI))
+                //{
+                //    using (var bm = new Bitmap(HEAD_IMAGE_URI))
+                //    {
+                //        Setting.UserConfig.HeadImage = ImageHelper.BitmapToBytes(bm);
+                //    }
+                //}
 
                 Setting.UserConfig.IP = NetHelper.GetLocalIp()?.GetAddressBytes();
             }
 
-            try
-            {
-                IoHelper.PathCheckAndCreate(SETTING_USER_DATA_URI);
-                using (var fs = new FileStream(SETTING_USER_DATA_URI, FileMode.OpenOrCreate, FileAccess.Read))
-                {
-                    var streamBytes = new byte[fs.Length];
-                    fs.Read(streamBytes, 0, fs.Length.ToIntWithEx());
-                    if (streamBytes.Length > 0)
-                    {
-                        var dataList = streamBytes.ToObject<List<File_User>>();
-                        foreach (var user in dataList)
-                        {
-                            AddUser(ModelHelper.FileUserToViewUser(user));
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                File.Delete(SETTING_USER_DATA_URI);
-                MessageBox.Show($@"通讯用户集存档出错并已将其重置
-{ex.Message}
-{ex.StackTrace}");
-            }
+//            try
+//            {
+//                IoHelper.PathCheckAndCreate(SETTING_USER_DATA_URI);
+//                using (var fs = new FileStream(SETTING_USER_DATA_URI, FileMode.OpenOrCreate, FileAccess.Read))
+//                {
+//                    var streamBytes = new byte[fs.Length];
+//                    fs.Read(streamBytes, 0, fs.Length.ToIntWithEx());
+//                    if (streamBytes.Length > 0)
+//                    {
+//                        var dataList = streamBytes.ToObject<List<File_User>>();
+//                        foreach (var user in dataList)
+//                        {
+//                            AddUser(ModelHelper.FileUserToViewUser(user));
+//                        }
+//                    }
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                File.Delete(SETTING_USER_DATA_URI);
+//                MessageBox.Show($@"通讯用户集存档出错并已将其重置
+//{ex.Message}
+//{ex.StackTrace}");
+//            }
 
-            try
-            {
-                IoHelper.PathCheckAndCreate(SETTING_GROUP_DATA_URI);
-                using (var fs = new FileStream(SETTING_GROUP_DATA_URI, FileMode.OpenOrCreate, FileAccess.Read))
-                {
-                    var streamBytes = new byte[fs.Length];
-                    fs.Read(streamBytes, 0, fs.Length.ToIntWithEx());
-                    if (streamBytes.Length > 0)
-                    {
-                        var dataList = streamBytes.ToObject<List<File_GroupChat>>();
-                        foreach (var group in dataList)
-                        {
-                            AddGroupChat(ModelHelper.FileGroupChatToViewGroupChat(group));
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                File.Delete(SETTING_GROUP_DATA_URI);
-                MessageBox.Show($@"通讯用户群集存档出错并已将其重置
-{ex.Message}
-{ex.StackTrace}");
-            }
+//            try
+//            {
+//                IoHelper.PathCheckAndCreate(SETTING_GROUP_DATA_URI);
+//                using (var fs = new FileStream(SETTING_GROUP_DATA_URI, FileMode.OpenOrCreate, FileAccess.Read))
+//                {
+//                    var streamBytes = new byte[fs.Length];
+//                    fs.Read(streamBytes, 0, fs.Length.ToIntWithEx());
+//                    if (streamBytes.Length > 0)
+//                    {
+//                        var dataList = streamBytes.ToObject<List<File_GroupChat>>();
+//                        foreach (var group in dataList)
+//                        {
+//                            AddGroupChat(ModelHelper.FileGroupChatToViewGroupChat(group));
+//                        }
+//                    }
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                File.Delete(SETTING_GROUP_DATA_URI);
+//                MessageBox.Show($@"通讯用户群集存档出错并已将其重置
+//{ex.Message}
+//{ex.StackTrace}");
+//            }
         }
 
         #endregion

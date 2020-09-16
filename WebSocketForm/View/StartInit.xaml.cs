@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using WebSocketForm.Function;
 using WebSocketForm.Helper;
 using Model.Data;
+using EventHandler;
 
 namespace WebSocketForm.View
 {
@@ -28,6 +29,8 @@ namespace WebSocketForm.View
 
         private MainWindow mainWindow;
 
+        private InitFormEvent handler;
+
         private List<string> loadingText = new List<string>
         {
             "Loading APP settings.",
@@ -35,11 +38,6 @@ namespace WebSocketForm.View
             "Binding server events.",
             "Opening local server."
         };
-
-        private List<Type> sqlite_init_table = new List<Type> 
-        {
-            Data_User,
-        }; 
 
         public StartInit()
         {
@@ -58,12 +56,14 @@ namespace WebSocketForm.View
 
         private void InitThreadMethod()
         {
+            handler = new InitFormEvent();
+
             //读取设定
             RefreshText();
             AppData.Load();
 
             //初始化数据库
-            InitSQL();
+            handler.InitSQL();
 
             //绑定服务器事件
             RefreshText();
@@ -97,13 +97,6 @@ namespace WebSocketForm.View
             {
                 LoadingText.Content = $@"( {loadingPart + 1} / {loadingText.Count} ) {loadingText[loadingPart++]}";
             });
-        }
-
-        private void InitSQL()
-        {
-            SQLite.CreateBDFile();
-            AppData.SQL = new SQLite();
-            AppData.SQL.CheckTableExists("Data_User");
         }
 
         private void LocalServer_UserProfileDataReceived(Data_User data, IPAddress ip)

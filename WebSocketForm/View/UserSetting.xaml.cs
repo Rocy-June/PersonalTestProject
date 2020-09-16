@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WebSocketForm.Helper;
 using Model.File;
+using EventHandler;
 
 namespace WebSocketForm.View
 {
@@ -71,7 +72,7 @@ namespace WebSocketForm.View
                 return;
             }
 
-            var headImagePath = $@"{AppData.PATH}setting\\HeadImage.png";
+            var headImagePath = $@"{Config.PATH}setting\\HeadImage.png";
             using (var image = new Bitmap(ofd.FileName))
             {
                 userHeadImage?.Dispose();
