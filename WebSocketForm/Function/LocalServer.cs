@@ -25,7 +25,7 @@ namespace WebSocketForm.Function
 
         public static Server_TCP tcpServer = new Server_TCP(Setting.DATA_PORT, Setting.BUFFER_SIZE, TcpMessageReceived);
 
-        public static Server_UDP<BroadcastData> broadcastServer = new Server_UDP<BroadcastData>(Setting.BROADCAST_PORT, BroadcastEventRecived);
+        public static Server_UDP broadcastServer = new Server_UDP(Setting.BROADCAST_PORT, BroadcastEventRecived);
 
         #endregion
 

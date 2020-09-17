@@ -192,7 +192,12 @@ namespace WebSocketForm.View
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            NetHelper.Send_TCP(new IPAddress(Setting.UserConfig.IP), new TcpData()
+            {
+                ActionType = TcpMessageType.EventMessage,
+                Data = new byte[test.Text.ToInt()],
+                SenderIP = new IPAddress(Setting.UserConfig.IP)
+            });
         }
 
         private void Button2_Click(object sender, RoutedEventArgs e)

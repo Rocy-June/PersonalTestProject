@@ -7,7 +7,7 @@ using System.Text;
 
 namespace NetworkHandler
 {
-    public class Server_UDP<T> where T : new()
+    public class Server_UDP
     {
         private readonly UdpClient listener;
 

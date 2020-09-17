@@ -17,9 +17,9 @@ namespace WebSocketForm.Helper
         /// </summary>
         /// <param name="obj">任意变量</param>
         /// <returns>值</returns>
-        public static int Int(this object obj)
+        public static int ToInt(this object obj)
         {
-            return (int)obj.Double();
+            return (int)obj.ToDouble();
         }
         /// <summary>
         /// 将变量转换为int32, 但无法转换会报错
@@ -45,9 +45,9 @@ namespace WebSocketForm.Helper
         /// </summary>
         /// <param name="obj">任意变量</param>
         /// <returns>值</returns>
-        public static long Long(this object obj)
+        public static long ToLong(this object obj)
         {
-            return (long)obj.Double();
+            return (long)obj.ToDouble();
         }
         /// <summary>
         /// 将变量转换为int64, 但无法转换会报错
@@ -73,7 +73,7 @@ namespace WebSocketForm.Helper
         /// </summary>
         /// <param name="obj">任意变量</param>
         /// <returns>值</returns>
-        public static double Double(this object obj)
+        public static double ToDouble(this object obj)
         {
             try { return Convert.ToDouble(obj); }
             catch { return 0; }

@@ -12,6 +12,8 @@ namespace SqlHandler.Model
 
         public string Name { get; set; }
 
+        public string HeadImageUrl { get; set; }
+
         public string NickName { get; set; }
 
         public long FirstConnectTime { get; set; }
